@@ -31,9 +31,18 @@ jobs:
           curl -L --fail --retry 3 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/5d29a0f4-3dc9-4bbe-9b60-7fb854317e19/BJ001___1_____.mp3?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiMTM2YWEzYzI2NGNkNzBjNSIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc4OTg5MDI0Mn0.H6O0eIbEqWyvcbub8pjgkJQa03C6L0Mwp8-NrNhDgkk' -o assets/audio/bj001-voice1.mp3
           curl -L --fail --retry 3 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/016b5747-ab50-4a4b-9575-8c77d3a995fa/BJ001___2_____.mp3?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiYzZmY2Q1MGRhODNhNDllYiIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc4OTkxMTE4MX0.lFAmmFqIWF6gAeOIkZ5c2zkTmZRaXdFC-I4SeODtKFU' -o assets/audio/bj001-voice2.mp3
           curl -L --fail --retry 3 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/cb0ea6d4-8274-4a3d-be45-9e870ce1968d/BJ001___3_______.mp3?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiOGM5OTQ5Njk3NTMwYjlhOSIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc4OTgyNTY0MX0.0kbLpDgR0C7T5OooV2ub1TewNIYvrqJ1ZHKM0SBg5mY' -o assets/audio/bj001-voice3.mp3
+          echo 'aHR0cHM6Ly9kbnpucnZzMDVwbXphLmNsb3VkZnJvbnQubmV0L3RleHRfdG9fc3BlZWNoLzljMWNhNzhjLWFlZDAtNGRlOS05YzQ4LWJjODA0NzExMWM1ZC9CSjAwMl9fXzFfX19fXy5tcDM/X2p3dD1leUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKclpYbElZWE5vSWpvaU5URm1Zek0xTmpCa01qSmtaVEJqT1NJc0ltSjFZMnRsZENJNkluSjFibmRoZVMxMFlYTnJMV0Z5ZEdsbVlXTjBjeUlzSW5OMFlXZGxJam9pY0hKdlpDSXNJbVY0Y0NJNk1UYzRPVGcxTnpZek1uMC42UzJoX3doN1BhcjFKY0lmdkc3WDF2dk84eWxGWnBNWW55S3FRWGdyQXZ3' | base64 -d > /tmp/bj002v1.url
+          curl -L --fail --retry 3 "$(cat /tmp/bj002v1.url)" -o assets/audio/bj002-voice1.mp3
+          echo 'aHR0cHM6Ly9kbnpucnZzMDVwbXphLmNsb3VkZnJvbnQubmV0L3RleHRfdG9fc3BlZWNoLzFmYTdmMWJiLTRmYjMtNDc3MS05ZjIyLWQ4NmE4OTNiMmNhOS9CSjAwMl9fXzJfX19fXy5tcDM/X2p3dD1leUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKclpYbElZWE5vSWpvaU1tWmpOV1JpWWpFd1pHRTVORFExTnlJc0ltSjFZMnRsZENJNkluSjFibmRoZVMxMFlYTnJMV0Z5ZEdsbVlXTjBjeUlzSW5OMFlXZGxJam9pY0hKdlpDSXNJbVY0Y0NJNk1UYzRPVGt4TVRrNE5YMC5ZbUxwU0RiRW1GcXpnZHBPMUlsRC1fV2dhbXR0eEswTGhWaXVneGVSWjFV' | base64 -d > /tmp/bj002v2.url
+          curl -L --fail --retry 3 "$(cat /tmp/bj002v2.url)" -o assets/audio/bj002-voice2.mp3
+          echo 'aHR0cHM6Ly9kbnpucnZzMDVwbXphLmNsb3VkZnJvbnQubmV0L3RleHRfdG9fc3BlZWNoL2RmZTZhYWU4LTEwNmMtNGNkNy04MTg2LTg3NmU5ZWQ4ZTA1ZC9CSjAwMl9fXzNfX19fX19fLm1wMz9fand0PWV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpyWlhsSVlYTm9Jam9pWlRGaE9HTm1NRE15WlROak9EY3dOeUlzSW1KMVkydGxkQ0k2SW5KMWJuZGhlUzEwWVhOckxXRnlkR2xtWVdOMGN5SXNJbk4wWVdkbElqb2ljSEp2WkNJc0ltVjRjQ0k2TVRjNE9UZ3pOelEwTTMwLndxX2FPR3k5QjQ4QlZSSUFTZktzRURkUXJmTk55VWg4YURSQ3ZkU3RjV1k=' | base64 -d > /tmp/bj002v3.url
+          curl -L --fail --retry 3 "$(cat /tmp/bj002v3.url)" -o assets/audio/bj002-voice3.mp3
           test -s assets/audio/bj001-voice1.mp3
           test -s assets/audio/bj001-voice2.mp3
           test -s assets/audio/bj001-voice3.mp3
+          test -s assets/audio/bj002-voice1.mp3
+          test -s assets/audio/bj002-voice2.mp3
+          test -s assets/audio/bj002-voice3.mp3
           ls -lh assets/audio
 
       - name: Configure Pages
