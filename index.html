@@ -33,6 +33,15 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
 .film{background:#020507;overflow:hidden}.filmBg{position:absolute;inset:-3%;background-size:cover;background-position:center;filter:saturate(.75) contrast(1.06);transform:scale(1.02)}.filmBg.playing{animation:kenburns 7.5s ease-out forwards}.filmShade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.18) 45%,rgba(0,0,0,.86) 88%,#020507)}
 @keyframes kenburns{from{transform:scale(1.02)}to{transform:scale(1.12)}}
 .filmTop{position:absolute;left:15px;right:15px;top:16px;z-index:4;display:flex;justify-content:space-between;align-items:center}.filmRound{border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.35);color:#fff;border-radius:999px;padding:10px 13px;font-size:12px;backdrop-filter:blur(8px)}.filmCopy{position:absolute;left:24px;right:24px;bottom:74px;z-index:4}.filmEyebrow{color:#efd29b;font-size:11px;letter-spacing:.12em;margin-bottom:9px}.filmTitle{font-size:31px;font-weight:850;line-height:1.35;text-shadow:0 2px 18px rgba(0,0,0,.8)}.filmSub{margin-top:8px;color:#d2d7d9;font-size:13px;line-height:1.6}.filmProgress{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.12);z-index:5}.filmBar{height:100%;width:0;background:#e1b76c}.filmBadge{position:absolute;top:67px;right:16px;z-index:4;font-size:9px;background:rgba(0,0,0,.5);padding:6px 8px;border-radius:999px;color:#cfd5d7}
+.layerTools{position:absolute;top:62px;left:14px;right:14px;z-index:4;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.layerGroup{display:flex;gap:6px;background:rgba(0,0,0,.42);backdrop-filter:blur(10px);padding:5px;border-radius:999px;border:1px solid rgba(255,255,255,.09)}
+.layerBtn{border:0;background:transparent;color:#d7dcdf;border-radius:999px;padding:7px 10px;font-size:10px;font-weight:700}
+.layerBtn.on{background:#ead7af;color:#201810}
+.factBtn{border:1px solid rgba(255,255,255,.13);background:rgba(0,0,0,.42);backdrop-filter:blur(10px);color:#fff;border-radius:999px;padding:9px 11px;font-size:10px;font-weight:700}
+.factSheet{position:fixed;left:0;right:0;bottom:-650px;max-width:470px;margin:auto;background:#0e151b;color:#f6f1e7;border-radius:28px 28px 0 0;padding:15px 20px 28px;z-index:31;transition:.28s;box-shadow:0 -20px 70px rgba(0,0,0,.45);max-height:78vh;overflow:auto}
+.factSheet.open{bottom:0}.factBack{display:none;position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:30}.factBack.open{display:block}
+.factRow{padding:13px 0;border-bottom:1px solid rgba(255,255,255,.08)}.factRow:last-child{border-bottom:0}.factLabel{font-size:10px;letter-spacing:.1em;color:#e3b96f;font-weight:800;margin-bottom:5px}.factValue{font-size:14px;line-height:1.65;color:#d9dee1}.archiveNote{font-size:11px;line-height:1.6;color:#aab4ba;margin-top:10px}.archiveNote a{color:#e0c18a}
+.archiveStamp{position:absolute;right:14px;bottom:44%;z-index:3;background:rgba(0,0,0,.55);padding:6px 8px;border-radius:999px;font-size:9px;color:#d9dddf;display:none}.archiveStamp.show{display:block}
 </style>
 </head>
 <body>
@@ -90,7 +99,15 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
 <section class="screen storyScreen" id="story">
   <div class="progress"><div class="bar" id="bar"></div></div>
   <div class="sceneArt" id="sceneArt"></div><div class="sceneShade"></div>
-  <div class="sceneRef">地点参考影像 · 非历史复原</div>
+  <div class="sceneRef" id="sceneRef">地点参考影像 · 非历史复原</div>
+  <div class="archiveStamp" id="archiveStamp">历史影像 · 约1900–1906</div>
+  <div class="layerTools">
+    <div class="layerGroup">
+      <button class="layerBtn on" id="storyModeBtn" onclick="setVisualMode('story')">故事画面</button>
+      <button class="layerBtn" id="archiveModeBtn" onclick="setVisualMode('archive')">历史影像</button>
+    </div>
+    <button class="factBtn" onclick="openFacts()">这一幕依据</button>
+  </div>
   <div class="top" style="background:transparent;border:0;position:absolute;left:0;right:0"><button class="back" onclick="show('beijing')">‹</button><span class="small" id="count"></span><span></span></div>
   <div class="scenePanel">
     <div class="sceneName" id="sceneName"></div>
@@ -115,6 +132,15 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
     <div class="card"><div class="tag">TIME</div><h3>晨钟暮鼓</h3><p>钟与鼓曾经参与城市时间秩序。本故事使用少量钟声作为电影化表达，不声称完整复原历史报时程序。</p></div>
     <div class="card"><div class="tag">LIFE</div><h3>胡同与早点</h3><p>真正的城市生活常常藏在小事里：院门、脚步、早点、热气、邻居和清晨的第一位客人。</p></div>
     <div class="card"><div class="tag">FACT LOCK</div><h3>哪些是真的？</h3><p><b>真实背景：</b>北京钟鼓楼、胡同、时代与城市报时文化。<br><b>虚构创作：</b>小安、舅舅、脚夫、对白与这个清晨的具体事件。</p></div>
+    <div class="card"><div class="tag">ARCHIVE · 历史影像</div><h3>从故事切回史料</h3>
+      <p>故事页右上可以切换“故事画面 / 历史影像”。历史影像包括约1900–1906年的北京钟楼、鼓楼及中轴线北段街景，用来帮助理解时代环境，而不是证明故事中的具体情节。</p>
+      <p class="credit">
+        1906年前北京钟楼照片：Sanshichiro Yamamoto，Public Domain。<br>
+        <a href="https://commons.wikimedia.org/wiki/File:Bell_Tower,_from_Peking_(1906).jpg" target="_blank" rel="noopener">查看钟楼历史照片</a><br><br>
+        1900–1901年鼓楼方向街景：capitaine Tissier，Public Domain。<br>
+        <a href="https://commons.wikimedia.org/wiki/File:Rue_centrale_au_nord_du_Palais_Imp%C3%A9rial_%C3%A0_P%C3%A9kin_%3B_au_fond_on_aper%C3%A7oit_la_Tour_du_Tambour_qui_date_du_milieu_du_xiiie_si%C3%A8cle.jpg" target="_blank" rel="noopener">查看历史街景</a>
+      </p>
+    </div>
     <div class="card"><div class="tag">IMAGE CREDITS</div><h3>地点参考影像</h3>
       <p class="credit">
         钟鼓楼：そらみみ，Wikimedia Commons，CC BY-SA 4.0。<br>
@@ -137,11 +163,24 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
 
 <div class="sheetBack" id="sheetBack" onclick="closeWord()"></div>
 <div class="sheet" id="sheet"><div class="handle"></div><div class="wordTitle" id="wordTitle"></div><div class="pinyin" id="wordPinyin"></div><div class="def" id="wordDef"></div></div>
+<div class="factBack" id="factBack" onclick="closeFacts()"></div>
+<div class="factSheet" id="factSheet">
+  <div class="handle"></div>
+  <div class="tag">FACT LAYERS · 场景依据</div>
+  <h2 id="factTitle" style="font-size:25px;margin:7px 0 5px"></h2>
+  <div class="factRow"><div class="factLabel">HISTORICAL FACT · 历史事实</div><div class="factValue" id="factHistory"></div></div>
+  <div class="factRow"><div class="factLabel">REAL PLACE · 真实地点</div><div class="factValue" id="factPlace"></div></div>
+  <div class="factRow"><div class="factLabel">STORY RECONSTRUCTION · 故事化复原</div><div class="factValue" id="factReconstruction"></div></div>
+  <div class="factRow"><div class="factLabel">FICTION · 虚构内容</div><div class="factValue" id="factFiction"></div></div>
+  <div class="archiveNote">“历史影像”用于帮助理解时代与地点，不代表照片中发生了本故事情节。故事人物与具体对白仍为虚构。</div>
+</div>
 </div>
 
 <script>
 const IMG_HUTONG='https://commons.wikimedia.org/wiki/Special:Redirect/file/Hutong_beijing.JPG?width=1280';
 const IMG_TOWERS='https://commons.wikimedia.org/wiki/Special:Redirect/file/Beijing_Drum_Tower_and_Beijing_Bell_Tower_20160822.jpg?width=1280';
+const ARCHIVE_BELL='https://commons.wikimedia.org/wiki/Special:Redirect/file/Bell_Tower,_from_Peking_(1906).jpg?width=1280';
+const ARCHIVE_STREET='https://commons.wikimedia.org/wiki/Special:Redirect/file/Rue_centrale_au_nord_du_Palais_Imp%C3%A9rial_%C3%A0_P%C3%A9kin_%3B_au_fond_on_aper%C3%A7oit_la_Tour_du_Tambour_qui_date_du_milieu_du_xiiie_si%C3%A8cle.jpg?width=1280';
 
 const scenes=[
 {n:"01 · 夜还没退",img:IMG_HUTONG,c:"#14212a",zh:"天还没亮，北京城还安安静静的。风从胡同里慢慢吹过，带着一点秋天的凉意。远远望去，高高的钟楼立在灰蓝色的天边。",py:"Tiān hái méi liàng, Běijīng chéng hái ān ān jìng jìng de. Fēng cóng hútòng lǐ màn man chuī guò.",en:"Before dawn, Beijing was still quiet. A cool autumn wind moved through the hutongs, and the Bell Tower stood against the gray-blue sky.",vi:"Trời vẫn chưa sáng, Bắc Kinh còn rất yên tĩnh. Gió thu len qua những con hutong, còn Chung Lâu đứng dưới bầu trời xanh xám."},
@@ -154,6 +193,17 @@ const scenes=[
 {n:"08 · 天亮以前的钟楼",img:IMG_TOWERS,c:"#a87949",zh:"舅舅在后面叫他：“小安，别发呆了，快来帮忙！”“来了！”小安转身跑过去。每一天的钟声，都像在告诉他：只要天亮了，日子就会继续往前走。",py:"Jiùjiu zài hòumiàn jiào tā: Xiǎo Ān, bié fādāi le, kuài lái bāngmáng!",en:"His uncle called from behind. “Xiao An, stop daydreaming and come help!” Every morning bell seemed to tell him: as long as dawn comes, life will keep moving forward.",vi:"Cậu mình gọi từ phía sau: “Tiểu An, đừng ngẩn người nữa, mau lại giúp đi!” Mỗi tiếng chuông dường như đều nói: chỉ cần trời sáng, cuộc sống sẽ tiếp tục bước về phía trước."}
 ];
 
+const sceneFacts=[
+{history:"清末北京已有成熟的城市报时传统；本幕只建立“天亮前的北京”氛围，不声称照片中的具体街景就是小安所在胡同。",place:"故事设定在北京钟楼、鼓楼附近胡同。钟鼓楼为真实地点。",reconstruction:"清晨风、秋凉、远望钟楼的画面顺序属于叙事组织。",fiction:"小安及其观察、感受为虚构。"},
+{history:"清末北京普通居民清晨劳作、早点经营属于合理生活背景。",place:"钟鼓楼周边胡同为真实城市空间。",reconstruction:"舅舅熬粥、小安搬柴、生火与摆碗是故事化生活复原，不对应某个可考家庭。",fiction:"小安、舅舅及其家庭关系为虚构。"},
+{history:"胡同作为北京传统街巷空间真实存在。",place:"故事发生在钟楼附近胡同，但没有指定某一条可考门牌。",reconstruction:"抱柴出门、狗叫、灯光、脚步声属于场景复原。",fiction:"“舅舅，快到时候了吗？”这段对话为虚构。"},
+{history:"钟鼓楼曾承担北京城市报时功能；现存钟楼建成于清乾隆十二年（1747），因此清末设定可成立。",place:"北京钟楼为真实地点。",reconstruction:"故事只表现两三次电影化钟声，不等同于完整历史报时程序。",fiction:"小安与舅舅此刻恰好经过、停步聆听属于虚构。"},
+{history:"清代北京存在早点、粥食与街头小贩等日常生活形态。",place:"胡同与钟鼓楼周边为真实城市环境。",reconstruction:"卖烧饼者挑担经过、街上逐渐有人等是合成式生活场景。",fiction:"具体路人和发生顺序为虚构。"},
+{history:"脚夫是旧时以搬运、挑担等体力劳动谋生的人群。",place:"早点摊位没有对应现实可考地址。",reconstruction:"热粥、陶碗、蒸汽与清晨摊位用于呈现生活质感。",fiction:"第一位客人及“还是热粥最暖人”的对白为虚构。"},
+{history:"钟楼、鼓楼与周边街巷共同构成北京中轴线北端的重要城市景观。",place:"钟鼓楼是真实地点。",reconstruction:"晨光逐渐照亮屋顶与街道是叙事性的时间推进。",fiction:"小安说“北京，又开始新的一天了”为虚构对白。"},
+{history:"本幕没有新增历史事实，重点是故事主题收束。",place:"钟楼、胡同仍为真实背景。",reconstruction:"钟声被赋予“日子继续往前走”的象征意义，属于文学表达。",fiction:"舅舅喊小安、人物动作与最后心理感受均为虚构。"}
+];
+
 const words={
 "胡同":["hú tòng","北京传统的小街小巷，也是许多日常生活发生的空间。"],
 "钟楼":["zhōng lóu","古代城市中与敲钟、报时有关的高大建筑。"],
@@ -163,6 +213,7 @@ const words={
 };
 
 let idx=0;
+let visualMode='story';
 function show(id){
   if(document.getElementById('film').classList.contains('active') && id!=='film') stopFilm();
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
@@ -179,7 +230,11 @@ function render(){
  const s=scenes[idx];
  const art=document.getElementById('sceneArt');
  art.style.backgroundColor=s.c;
- art.style.backgroundImage='linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.28)),url("'+s.img+'")';
+ const archiveImg=(idx===3||idx===6||idx===7)?ARCHIVE_BELL:ARCHIVE_STREET;
+ const useImg=visualMode==='archive'?archiveImg:s.img;
+ art.style.backgroundImage='linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.28)),url("'+useImg+'")';
+ document.getElementById('sceneRef').textContent=visualMode==='archive'?'历史影像 · 约1900–1906':'地点参考影像 · 非历史复原';
+ document.getElementById('archiveStamp').classList.toggle('show',visualMode==='archive');
  document.getElementById('sceneName').textContent=s.n;
  document.getElementById('sceneText').innerHTML=mark(s.zh);
  document.getElementById('count').textContent=(idx+1)+' / 8';
@@ -204,6 +259,26 @@ function openWord(w){
 function closeWord(){document.getElementById('sheetBack').classList.remove('open');document.getElementById('sheet').classList.remove('open')}
 function finishStory(){localStorage.setItem('earth-bj001-progress','0');refreshResume();show('beijing')}
 function refreshResume(){const n=Number(localStorage.getItem('earth-bj001-progress')||0);document.getElementById('resumeBtn').classList.toggle('show',n>0&&n<8)}
+function setVisualMode(mode){
+  visualMode=mode;
+  document.getElementById('storyModeBtn').classList.toggle('on',mode==='story');
+  document.getElementById('archiveModeBtn').classList.toggle('on',mode==='archive');
+  render();
+}
+function openFacts(){
+  const f=sceneFacts[idx];
+  document.getElementById('factTitle').textContent=scenes[idx].n;
+  document.getElementById('factHistory').textContent=f.history;
+  document.getElementById('factPlace').textContent=f.place;
+  document.getElementById('factReconstruction').textContent=f.reconstruction;
+  document.getElementById('factFiction').textContent=f.fiction;
+  document.getElementById('factBack').classList.add('open');
+  document.getElementById('factSheet').classList.add('open');
+}
+function closeFacts(){
+  document.getElementById('factBack').classList.remove('open');
+  document.getElementById('factSheet').classList.remove('open');
+}
 
 /* lightweight cinematic intro */
 const filmSlides=[
