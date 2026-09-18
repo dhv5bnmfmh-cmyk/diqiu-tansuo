@@ -1,4 +1,4 @@
-const CACHE="diqiu-shell-v2";
+const CACHE="diqiu-shell-v3";
 const SHELL=[
   "./manifest.webmanifest",
   "./assets/app-icon.svg",
@@ -10,7 +10,15 @@ const SHELL=[
   "./assets/scenes/s05-wake.svg",
   "./assets/scenes/s06-porridge.svg",
   "./assets/scenes/s07-city.svg",
-  "./assets/scenes/s08-end.svg"
+  "./assets/scenes/s08-end.svg",
+  "./assets/scenes/bj002/s01-arrival.svg",
+  "./assets/scenes/bj002/s02-qianmen.svg",
+  "./assets/scenes/bj002/s03-street.svg",
+  "./assets/scenes/bj002/s04-dashilar.svg",
+  "./assets/scenes/bj002/s05-ask.svg",
+  "./assets/scenes/bj002/s06-clothshop.svg",
+  "./assets/scenes/bj002/s07-firstwork.svg",
+  "./assets/scenes/bj002/s08-night.svg"
 ];
 
 self.addEventListener("install",event=>{
