@@ -25,6 +25,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Download narration audio into site
+        run: |
+          mkdir -p assets/audio
+          curl -L --fail --retry 3 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/5d29a0f4-3dc9-4bbe-9b60-7fb854317e19/BJ001___1_____.mp3?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiMTM2YWEzYzI2NGNkNzBjNSIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc4OTg5MDI0Mn0.H6O0eIbEqWyvcbub8pjgkJQa03C6L0Mwp8-NrNhDgkk' -o assets/audio/bj001-voice1.mp3
+          curl -L --fail --retry 3 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/016b5747-ab50-4a4b-9575-8c77d3a995fa/BJ001___2_____.mp3?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiYzZmY2Q1MGRhODNhNDllYiIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc4OTkxMTE4MX0.lFAmmFqIWF6gAeOIkZ5c2zkTmZRaXdFC-I4SeODtKFU' -o assets/audio/bj001-voice2.mp3
+          curl -L --fail --retry 3 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/cb0ea6d4-8274-4a3d-be45-9e870ce1968d/BJ001___3_______.mp3?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiOGM5OTQ5Njk3NTMwYjlhOSIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc4OTgyNTY0MX0.0kbLpDgR0C7T5OooV2ub1TewNIYvrqJ1ZHKM0SBg5mY' -o assets/audio/bj001-voice3.mp3
+          test -s assets/audio/bj001-voice1.mp3
+          test -s assets/audio/bj001-voice2.mp3
+          test -s assets/audio/bj001-voice3.mp3
+          ls -lh assets/audio
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
