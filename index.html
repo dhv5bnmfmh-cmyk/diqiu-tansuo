@@ -51,6 +51,14 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
 .charRule{margin-top:14px;padding:13px;border-radius:15px;background:#121b22;font-size:12px;line-height:1.65;color:#cbd2d6}
 .soundHint{font-size:10px;color:#9eaaaf;margin-top:8px;line-height:1.5}
 #continuousReadBtn{grid-column:1/-1}
+.simpleMoreBtn{border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.38);backdrop-filter:blur(10px);color:#fff;border-radius:999px;padding:9px 12px;font-size:11px;font-weight:750}
+.simpleControl{margin-top:15px}
+.simpleControl .actionBtn{width:100%;padding:14px 12px;font-size:14px}
+.moreBack{display:none;position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:38}.moreBack.open{display:block}
+.moreSheet{position:fixed;left:0;right:0;bottom:-760px;max-width:470px;margin:auto;background:#0d141a;color:#f7f2e8;border-radius:28px 28px 0 0;padding:15px 20px 28px;z-index:39;transition:.28s;max-height:82vh;overflow:auto;box-shadow:0 -20px 70px rgba(0,0,0,.5)}
+.moreSheet.open{bottom:0}.moreSection{padding:13px 0;border-top:1px solid rgba(255,255,255,.08)}.moreSection:first-of-type{border-top:0}.moreTitle{font-size:10px;letter-spacing:.1em;color:#e3b96f;font-weight:800;margin-bottom:9px}.moreRow{display:flex;gap:8px;flex-wrap:wrap}.moreRow .chip,.moreRow .actionBtn{flex:1;min-width:86px}
+.storyCard{cursor:pointer}
+.storyCard:active{transform:scale(.995)}
 </style>
 </head>
 <body>
@@ -71,18 +79,15 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
   <div class="pad">
     <div class="cityHero"><div><div class="kicker">CHINA · 北京</div><h2>一座城，很多种时间。</h2></div></div>
     <p class="sub">从中轴线、胡同、早点和普通人的一天开始。第一篇不是讲帝王，而是讲天亮之前，一个十五岁少年的清晨。</p>
-    <div class="card storyCard">
+    <div class="card storyCard" onclick="startExperience()">
       <div class="storyArt"></div>
       <div class="storyBody">
         <div class="tag">BJ-001 · 北京故事</div>
         <div class="storyTitle">《天亮以前的钟楼》</div>
         <p class="sub">北京醒来之前，一个普通少年的清晨。</p>
         <div class="meta"><span class="pill">清末背景</span><span class="pill">人物虚构</span><span class="pill">地点真实</span></div>
-        <div class="twoBtns">
-          <button class="btn primary" onclick="startFilm()">🎬 电影开场</button>
-          <button class="btn secondary" onclick="openStory()">直接读故事</button>
-        </div>
-        <div class="referenceNote">默认“故事画面”为本地场景复原插画，用来建立光线、空间和人物关系。它不是历史照片。进入故事后可随时切换“历史影像”，对照真实史料。</div>
+        <button class="btn primary" onclick="event.stopPropagation();startExperience()">开始故事</button>
+        <div class="referenceNote">点一下就开始：电影开场后自动进入故事并连续朗读。</div>
       </div>
     </div>
     <div class="card" style="opacity:.58"><div class="tag">COMING NEXT</div><div class="storyTitle">《前门来了一个外乡人》</div><p class="sub">BJ-002 · 下一篇正在准备。</p></div>
@@ -93,8 +98,8 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
   <div class="filmBg" id="filmBg"></div><div class="filmShade"></div>
   <div class="filmTop">
     <button class="filmRound" onclick="leaveFilm()">‹ 返回</button>
-    <button class="filmRound" id="soundBtn" onclick="toggleFilmSound()">🔊 声音开</button>
-    <button class="filmRound" onclick="finishFilm()">跳过 →</button>
+    <span></span>
+    <button class="filmRound" onclick="finishFilm()">跳过</button>
   </div>
   <div class="filmBadge">场景复原插画 · 非史料影像</div>
   <div class="filmCopy">
@@ -110,31 +115,14 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
   <div class="sceneArt" id="sceneArt"></div><div class="sceneShade"></div>
   <div class="sceneRef" id="sceneRef">场景复原插画 · 非史料影像</div>
   <div class="archiveStamp" id="archiveStamp">历史影像 · 约1900–1906</div>
-  <div class="layerTools">
-    <div class="layerGroup">
-      <button class="layerBtn on" id="storyModeBtn" onclick="setVisualMode('story')">故事画面</button>
-      <button class="layerBtn" id="archiveModeBtn" onclick="setVisualMode('archive')">历史影像</button>
-    </div>
-    <button class="factBtn" onclick="openFacts()">这一幕依据</button>
-  </div>
-  <div class="top" style="background:transparent;border:0;position:absolute;left:0;right:0"><button class="back" onclick="show('beijing')">‹</button><span class="small" id="count"></span><span></span></div>
+  <div class="top" style="background:transparent;border:0;position:absolute;left:0;right:0"><button class="back" onclick="show('beijing')">‹</button><span class="small" id="count"></span><button class="simpleMoreBtn" onclick="openMore()">更多</button></div>
   <div class="scenePanel">
     <div class="sceneName" id="sceneName"></div>
     <div class="sceneText" id="sceneText"></div>
     <div class="trans" id="trans"></div>
-    <div class="langs">
-      <button class="chip on" data-lang="zh" onclick="setLang('zh',this)">中文</button>
-      <button class="chip" data-lang="py" onclick="setLang('py',this)">拼音</button>
-      <button class="chip" data-lang="en" onclick="setLang('en',this)">EN</button>
-      <button class="chip" data-lang="vi" onclick="setLang('vi',this)">VI</button>
+    <div class="simpleControl">
+      <button class="actionBtn" id="continuousReadBtn" onclick="toggleContinuousRead()">▶ 继续朗读</button>
     </div>
-    <div class="storyActions">
-      <button class="actionBtn" id="sceneAudioBtn" onclick="toggleSceneAudio()">🔊 朗读这一幕</button>
-      <button class="actionBtn" onclick="openCharacters()">👤 角色</button>
-      <button class="actionBtn" id="continuousReadBtn" onclick="toggleContinuousRead()">▶ 连续朗读 · 从这一幕开始</button>
-    </div>
-    <div class="soundHint" id="soundHint">朗读正文与屏幕文字一致；角色对白使用独立声线，环境声只做背景。</div>
-    <div class="sceneNav"><button class="navBtn" onclick="prevScene()">上一幕</button><button class="navBtn next" onclick="nextScene()">下一幕</button></div>
   </div>
 </section>
 
@@ -205,6 +193,39 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
     <div class="charCard" id="char-porter"><img src="assets/characters/porter.svg" alt="脚夫角色基准"><div class="charMeta"><div class="charName">脚夫</div><div class="charRole">成年 · 深褐灰衣 · 较低声线</div></div></div>
   </div>
   <div class="charRule">三人均为虚构人物。角色卡用于保证故事镜头的一致性，不代表任何真实历史人物。</div>
+</div>
+<div class="moreBack" id="moreBack" onclick="closeMore()"></div>
+<div class="moreSheet" id="moreSheet">
+  <div class="handle"></div>
+  <div class="tag">MORE · 更多</div>
+  <h2 style="font-size:24px;margin:7px 0 10px">阅读设置</h2>
+  <div class="moreSection">
+    <div class="moreTitle">语言</div>
+    <div class="moreRow">
+      <button class="chip on" data-lang="zh" onclick="setLang('zh',this)">中文</button>
+      <button class="chip" data-lang="py" onclick="setLang('py',this)">拼音</button>
+      <button class="chip" data-lang="en" onclick="setLang('en',this)">EN</button>
+      <button class="chip" data-lang="vi" onclick="setLang('vi',this)">VI</button>
+    </div>
+  </div>
+  <div class="moreSection">
+    <div class="moreTitle">画面与资料</div>
+    <div class="moreRow">
+      <button class="actionBtn" id="storyModeBtn" onclick="setVisualMode('story')">故事画面</button>
+      <button class="actionBtn" id="archiveModeBtn" onclick="setVisualMode('archive')">历史影像</button>
+    </div>
+    <div class="moreRow" style="margin-top:8px">
+      <button class="actionBtn" onclick="closeMore();openFacts()">这一幕依据</button>
+      <button class="actionBtn" onclick="closeMore();openCharacters()">角色</button>
+    </div>
+  </div>
+  <div class="moreSection">
+    <div class="moreTitle">手动翻页</div>
+    <div class="moreRow">
+      <button class="actionBtn" onclick="closeMore();prevScene()">上一幕</button>
+      <button class="actionBtn" onclick="closeMore();nextScene()">下一幕</button>
+    </div>
+  </div>
 </div>
 </div>
 
@@ -320,7 +341,10 @@ function openStory(){
   if(idx<0||idx>7)idx=0;
   render();show('story');
 }
-function resumeStory(){openStory()}
+function resumeStory(){
+  openStory();
+  setTimeout(()=>{continuousRead=true;beginSceneReading(true)},250);
+}
 function render(keepReading=false){
  if(!keepReading) stopSceneAudio();
  const s=scenes[idx];
@@ -357,8 +381,9 @@ function finishStory(){localStorage.setItem('earth-bj001-progress','0');refreshR
 function refreshResume(){const n=Number(localStorage.getItem('earth-bj001-progress')||0);document.getElementById('resumeBtn').classList.toggle('show',n>0&&n<8)}
 function setVisualMode(mode){
   visualMode=mode;
-  document.getElementById('storyModeBtn').classList.toggle('on',mode==='story');
-  document.getElementById('archiveModeBtn').classList.toggle('on',mode==='archive');
+  const s=document.getElementById('storyModeBtn'),a=document.getElementById('archiveModeBtn');
+  if(s)s.classList.toggle('playing',mode==='story');
+  if(a)a.classList.toggle('playing',mode==='archive');
   render();
 }
 function openFacts(){
@@ -384,6 +409,17 @@ function openCharacters(){
 function closeCharacters(){
   document.getElementById('charBack').classList.remove('open');
   document.getElementById('charSheet').classList.remove('open');
+}
+function openMore(){
+  const s=document.getElementById('storyModeBtn'),a=document.getElementById('archiveModeBtn');
+  if(s)s.classList.toggle('playing',visualMode==='story');
+  if(a)a.classList.toggle('playing',visualMode==='archive');
+  document.getElementById('moreBack').classList.add('open');
+  document.getElementById('moreSheet').classList.add('open');
+}
+function closeMore(){
+  document.getElementById('moreBack').classList.remove('open');
+  document.getElementById('moreSheet').classList.remove('open');
 }
 
 let sceneSoundOn=false,sceneSoundTimers=[],sceneSoundNodes=[];
@@ -452,17 +488,13 @@ function speakScript(parts,i=0,onDone=null){
   speechSynthesis.speak(u);
 }
 function setReadingButtons(){
-  const sceneBtn=document.getElementById('sceneAudioBtn');
   const continuousBtn=document.getElementById('continuousReadBtn');
-  if(sceneBtn){
-    sceneBtn.classList.toggle('playing',sceneSoundOn&&!continuousRead);
-    sceneBtn.textContent=sceneSoundOn&&!continuousRead?'■ 停止朗读':'🔊 朗读这一幕';
-  }
   if(continuousBtn){
-    continuousBtn.classList.toggle('playing',continuousRead);
-    continuousBtn.textContent=continuousRead?'■ 停止连续朗读':'▶ 连续朗读 · 从这一幕开始';
+    continuousBtn.classList.toggle('playing',continuousRead&&sceneSoundOn);
+    continuousBtn.textContent=(continuousRead&&sceneSoundOn)?'⏸ 暂停故事':'▶ 继续朗读';
   }
 }
+
 let continuousRead=false;
 function beginSceneReading(asContinuous=false){
   clearScenePlayback(true);
@@ -516,17 +548,23 @@ function stopSceneAudio(){
 
 /* lightweight cinematic intro */
 const filmSlides=[
- {img:STORY_IMAGES[0],title:'天还没亮，北京还没醒。',sub:'风从胡同里慢慢吹过，秋天的凉意还留在空气里。',ms:6500},
- {img:STORY_IMAGES[3],title:'“等钟声一响，这城就活了。”',sub:'高高的钟楼，曾经参与这座城市的时间秩序。',ms:7000,bell:true},
- {img:STORY_IMAGES[4],title:'钟声过后，街上慢慢有了人。',sub:'脚步、院门、早点和热气，把清晨一点一点填满。',ms:7000},
- {img:STORY_IMAGES[7],title:'北京，又开始新的一天了。',sub:'只要天亮了，日子就会继续往前走。',ms:7500}
+ {img:STORY_IMAGES[0],title:'天还没亮，北京还没醒。',sub:'风从胡同里慢慢吹过，秋天的凉意还留在空气里。',ms:4000},
+ {img:STORY_IMAGES[3],title:'“等钟声一响，这城就活了。”',sub:'高高的钟楼，曾经参与这座城市的时间秩序。',ms:4000,bell:true},
+ {img:STORY_IMAGES[4],title:'钟声过后，街上慢慢有了人。',sub:'脚步、院门、早点和热气，把清晨一点一点填满。',ms:4000},
+ {img:STORY_IMAGES[7],title:'北京，又开始新的一天了。',sub:'只要天亮了，日子就会继续往前走。',ms:4000}
 ];
 let filmTimers=[],filmProgressTimer=null,filmStartAt=0,filmTotal=filmSlides.reduce((a,s)=>a+s.ms,0),filmSound=true;
 let audioCtx=null,windSource=null,windGain=null;
 
+function startExperience(){
+  idx=0;
+  localStorage.setItem('earth-bj001-progress','0');
+  try{ if('speechSynthesis' in window) speechSynthesis.getVoices(); }catch(e){}
+  startFilm();
+}
 function startFilm(){
   show('film');
-  filmSound=true;document.getElementById('soundBtn').textContent='🔊 声音开';
+  filmSound=true;
   startAmbient();
   filmStartAt=Date.now();
   playFilmSlide(0);
@@ -551,7 +589,13 @@ function playFilmSlide(i){
 }
 function finishFilm(){
   stopFilm();
-  idx=0;render();show('story');
+  idx=0;
+  render();
+  show('story');
+  setTimeout(()=>{
+    continuousRead=true;
+    beginSceneReading(true);
+  },280);
 }
 function leaveFilm(){stopFilm();show('beijing')}
 function stopFilm(){
@@ -562,7 +606,6 @@ function stopFilm(){
 }
 function toggleFilmSound(){
   filmSound=!filmSound;
-  document.getElementById('soundBtn').textContent=filmSound?'🔊 声音开':'🔇 声音关';
   if(filmSound) startAmbient(); else stopAmbient();
 }
 function startAmbient(){
