@@ -50,6 +50,7 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
 .charSheet.open{bottom:0}.charGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}.charCard{border:1px solid rgba(255,255,255,.08);background:#131d24;border-radius:17px;overflow:hidden;opacity:.58;transition:.2s}.charCard.active{opacity:1;border-color:rgba(226,185,111,.55);box-shadow:0 0 0 1px rgba(226,185,111,.15) inset}.charCard img{width:100%;aspect-ratio:3/3.8;object-fit:cover;display:block}.charMeta{padding:9px}.charName{font-size:13px;font-weight:850}.charRole{font-size:10px;color:#aeb8c0;margin-top:3px;line-height:1.4}
 .charRule{margin-top:14px;padding:13px;border-radius:15px;background:#121b22;font-size:12px;line-height:1.65;color:#cbd2d6}
 .soundHint{font-size:10px;color:#9eaaaf;margin-top:8px;line-height:1.5}
+#continuousReadBtn{grid-column:1/-1}
 </style>
 </head>
 <body>
@@ -128,10 +129,11 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
       <button class="chip" data-lang="vi" onclick="setLang('vi',this)">VI</button>
     </div>
     <div class="storyActions">
-      <button class="actionBtn" id="sceneAudioBtn" onclick="toggleSceneAudio()">🎧 播放这一幕</button>
+      <button class="actionBtn" id="sceneAudioBtn" onclick="toggleSceneAudio()">🔊 朗读这一幕</button>
       <button class="actionBtn" onclick="openCharacters()">👤 角色</button>
+      <button class="actionBtn" id="continuousReadBtn" onclick="toggleContinuousRead()">▶ 连续朗读 · 从这一幕开始</button>
     </div>
-    <div class="soundHint" id="soundHint">声音为网页实时生成：环境声 + 固定角色声线参数。</div>
+    <div class="soundHint" id="soundHint">朗读正文与屏幕文字一致；角色对白使用独立声线，环境声只做背景。</div>
     <div class="sceneNav"><button class="navBtn" onclick="prevScene()">上一幕</button><button class="navBtn next" onclick="nextScene()">下一幕</button></div>
   </div>
 </section>
@@ -243,17 +245,54 @@ const sceneFacts=[
 ];
 
 const sceneAudio=[
-{type:"wind",chars:[],lines:[]},
-{type:"prep",chars:["xiao","uncle"],lines:[["uncle","动作快一点。再过一会儿，城里的人就都起来了。"]]},
-{type:"footsteps",chars:["xiao","uncle"],lines:[["xiao","舅舅，快到时候了吗？"],["uncle","快了。等钟声一响，这城就活了。"]]},
-{type:"bell",chars:["xiao","uncle"],lines:[]},
-{type:"street",chars:["xiao","uncle"],lines:[]},
-{type:"stall",chars:["xiao","porter"],lines:[["porter","来一碗热的。"],["xiao","好。"],["porter","这天儿啊，还是热粥最暖人。"]]},
-{type:"morning",chars:["xiao"],lines:[["xiao","北京，又开始新的一天了。"]]},
-{type:"morning",chars:["xiao","uncle"],lines:[["uncle","小安，别发呆了，快来帮忙！"],["xiao","来了！"]]}
+{type:"wind",chars:[]},
+{type:"prep",chars:["xiao","uncle"]},
+{type:"footsteps",chars:["xiao","uncle"]},
+{type:"bell",chars:["xiao","uncle"]},
+{type:"street",chars:["xiao","uncle"]},
+{type:"stall",chars:["xiao","porter"]},
+{type:"morning",chars:["xiao"]},
+{type:"morning",chars:["xiao","uncle"]}
+];
+
+const sceneScripts=[
+[
+ ["narrator","天还没亮，北京城还安安静静的。风从胡同里慢慢吹过，带着一点秋天的凉意。远远望去，高高的钟楼立在灰蓝色的天边。"]
+],
+[
+ ["narrator","小安已经醒了。他今年十五岁，住在钟楼附近的一条小胡同里。他跟着舅舅一起做早点生意，每天清晨都要早早出门。"]
+],
+[
+ ["narrator","小安抱着一小捆柴，跟在舅舅后面走出院门。胡同很窄，脚步声在安静的清晨里听得格外清楚。小安问："],
+ ["xiao","舅舅，快到时候了吗？"]
+],
+[
+ ["uncle","快了。等钟声一响，这城就活了。"],
+ ["narrator","他们刚走到钟楼附近，钟声就响了。咚，一声，又一声。声音沉稳、悠长，慢慢传进清冷的空气里。"]
+],
+[
+ ["narrator","钟声过后，街上开始慢慢有了人。一个卖烧饼的人挑着担子从胡同口经过。天色一点一点亮起来，空气里也慢慢有了热气和米粥的香味。"]
+],
+[
+ ["narrator","第一位客人是一个挑担的脚夫。"],
+ ["porter","来一碗热的。"],
+ ["narrator","小安小心地盛了一碗粥，双手递过去。那人笑着说："],
+ ["porter","这天儿啊，还是热粥最暖人。"]
+],
+[
+ ["narrator","太阳还没有真正升起来，可天已经比刚才亮了很多。钟楼、屋顶、胡同口，还有远处的街道，都慢慢有了颜色。小安轻轻地说："],
+ ["xiao","北京，又开始新的一天了。"]
+],
+[
+ ["narrator","舅舅在后面叫他："],
+ ["uncle","小安，别发呆了，快来帮忙！"],
+ ["xiao","来了！"],
+ ["narrator","小安转身跑过去。每一天的钟声，都像在告诉他：只要天亮了，日子就会继续往前走。"]
+]
 ];
 
 const roleVoice={
+ narrator:{rate:.88,pitch:.94,volume:1},
  xiao:{rate:.95,pitch:1.12,volume:1},
  uncle:{rate:.88,pitch:.82,volume:1},
  porter:{rate:.86,pitch:.72,volume:1}
@@ -282,8 +321,8 @@ function openStory(){
   render();show('story');
 }
 function resumeStory(){openStory()}
-function render(){
- stopSceneAudio();
+function render(keepReading=false){
+ if(!keepReading) stopSceneAudio();
  const s=scenes[idx];
  const art=document.getElementById('sceneArt');
  art.style.backgroundColor=s.c;
@@ -391,28 +430,89 @@ function chineseVoice(){
   const vs=speechSynthesis.getVoices();
   return vs.find(v=>/^zh-CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||null;
 }
-function speakLines(lines,i=0){
-  if(!sceneSoundOn||i>=lines.length||!('speechSynthesis' in window))return;
-  const [role,txt]=lines[i],cfg=roleVoice[role]||roleVoice.xiao,u=new SpeechSynthesisUtterance(txt);
+function voiceFor(role){
+  const cfg=roleVoice[role]||roleVoice.narrator;
+  const ucfg={...cfg};
+  return ucfg;
+}
+function speakScript(parts,i=0,onDone=null){
+  if(!sceneSoundOn||i>=parts.length){
+    if(onDone)onDone();
+    return;
+  }
+  if(!('speechSynthesis' in window)){
+    if(onDone)onDone();
+    return;
+  }
+  const [role,txt]=parts[i],cfg=voiceFor(role),u=new SpeechSynthesisUtterance(txt);
   u.lang='zh-CN';u.rate=cfg.rate;u.pitch=cfg.pitch;u.volume=cfg.volume;
   const v=chineseVoice();if(v)u.voice=v;
-  u.onend=()=>{if(sceneSoundOn)sceneSoundTimers.push(setTimeout(()=>speakLines(lines,i+1),260))};
+  u.onend=()=>{if(sceneSoundOn)sceneSoundTimers.push(setTimeout(()=>speakScript(parts,i+1,onDone),170))};
+  u.onerror=()=>{if(sceneSoundOn)sceneSoundTimers.push(setTimeout(()=>speakScript(parts,i+1,onDone),80))};
   speechSynthesis.speak(u);
+}
+function setReadingButtons(){
+  const sceneBtn=document.getElementById('sceneAudioBtn');
+  const continuousBtn=document.getElementById('continuousReadBtn');
+  if(sceneBtn){
+    sceneBtn.classList.toggle('playing',sceneSoundOn&&!continuousRead);
+    sceneBtn.textContent=sceneSoundOn&&!continuousRead?'■ 停止朗读':'🔊 朗读这一幕';
+  }
+  if(continuousBtn){
+    continuousBtn.classList.toggle('playing',continuousRead);
+    continuousBtn.textContent=continuousRead?'■ 停止连续朗读':'▶ 连续朗读 · 从这一幕开始';
+  }
+}
+let continuousRead=false;
+function beginSceneReading(asContinuous=false){
+  clearScenePlayback(true);
+  sceneSoundOn=true;
+  if(asContinuous)continuousRead=true;
+  setReadingButtons();
+  const a=sceneAudio[idx];
+  sceneAmbience(a.type);
+  sceneSoundTimers.push(setTimeout(()=>{
+    speakScript(sceneScripts[idx],0,()=>{
+      if(!sceneSoundOn)return;
+      if(continuousRead && idx<scenes.length-1){
+        sceneSoundTimers.push(setTimeout(()=>{
+          clearScenePlayback(true);
+          idx++;
+          render(true);
+          beginSceneReading(true);
+        },520));
+      }else{
+        const keepContinuous=continuousRead;
+        clearScenePlayback(true);
+        sceneSoundOn=false;
+        if(idx>=scenes.length-1)continuousRead=false;
+        else continuousRead=keepContinuous;
+        setReadingButtons();
+      }
+    });
+  },320));
 }
 function toggleSceneAudio(){
   if(sceneSoundOn){stopSceneAudio();return}
-  sceneSoundOn=true;
-  const b=document.getElementById('sceneAudioBtn');b.classList.add('playing');b.textContent='■ 停止这一幕';
-  const a=sceneAudio[idx];sceneAmbience(a.type);
-  if(a.lines.length)sceneSoundTimers.push(setTimeout(()=>speakLines(a.lines),420));
+  continuousRead=false;
+  beginSceneReading(false);
 }
-function stopSceneAudio(){
-  sceneSoundOn=false;
+function toggleContinuousRead(){
+  if(continuousRead||sceneSoundOn){stopSceneAudio();return}
+  continuousRead=true;
+  beginSceneReading(true);
+}
+function clearScenePlayback(keepMode=false){
   sceneSoundTimers.forEach(clearTimeout);sceneSoundTimers=[];
   sceneSoundNodes.forEach(n=>{try{n.stop()}catch(e){}});sceneSoundNodes=[];
   if('speechSynthesis' in window)try{speechSynthesis.cancel()}catch(e){}
-  const b=document.getElementById('sceneAudioBtn');if(b){b.classList.remove('playing');b.textContent='🎧 播放这一幕'}
+  if(!keepMode){sceneSoundOn=false;continuousRead=false}
 }
+function stopSceneAudio(){
+  clearScenePlayback(false);
+  setReadingButtons();
+}
+
 
 /* lightweight cinematic intro */
 const filmSlides=[
