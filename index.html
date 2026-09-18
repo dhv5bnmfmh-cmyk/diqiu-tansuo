@@ -74,8 +74,11 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
 <section class="screen" id="beijing">
   <div class="header"><button class="back" onclick="show('home')">‹</button><div class="brand">北京</div><div class="blank"></div></div>
   <div class="list">
-    <div class="row" onclick="startStory()">天亮以前的钟楼</div>
-    <div class="row disabled">前门来了一个外乡人</div>
+    <div class="row" onclick="startStory('bj001')">天亮以前的钟楼</div>
+    <div class="row" onclick="startStory('bj002')">前门来了一个外乡人</div>
+    <div class="row disabled">城南的第一场雪</div>
+    <div class="row disabled">什刹海边的夏夜</div>
+    <div class="row disabled">一封从琉璃厂寄出的信</div>
   </div>
 </section>
 
@@ -83,7 +86,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
   <div class="storyBg" id="storyBg"></div><div class="storyShade"></div>
   <div class="storyTop">
     <button class="back" onclick="leaveStory()">‹</button>
-    <div class="title">天亮以前的钟楼</div>
+    <div class="title" id="storyTitle">天亮以前的钟楼</div>
     <div class="count" id="count">1 / 8</div>
   </div>
   <div class="status" id="status">声音 1 · 沉稳男声</div>
@@ -108,181 +111,268 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
 </div>
 
 <script>
-const VOICES=[
-"assets/audio/bj001-voice1.mp3",
-"assets/audio/bj001-voice2.mp3",
-"assets/audio/bj001-voice3.mp3"
-];
 const VOICE_NAMES=["声音 1 · 沉稳男声","声音 2 · 温和女声","声音 3 · 年轻平静男声"];
-const images=[
-'assets/scenes/s01-night.svg','assets/scenes/s02-home.svg','assets/scenes/s03-leave.svg','assets/scenes/s04-bell.svg',
-'assets/scenes/s05-wake.svg','assets/scenes/s06-porridge.svg','assets/scenes/s07-city.svg','assets/scenes/s08-end.svg'
-];
-const scenes=[
-{n:"01 · 夜还没退",t:"天还没亮，北京城还安安静静的。风从胡同里慢慢吹过，带着一点秋天的凉意。远远望去，高高的钟楼立在灰蓝色的天边。"},
-{n:"02 · 小安起床",t:"小安已经醒了。他今年十五岁，住在钟楼附近的一条小胡同里。他跟着舅舅一起做早点生意，每天清晨都要早早出门。"},
-{n:"03 · 出门",t:"小安抱着一小捆柴，跟在舅舅后面走出院门。胡同很窄，脚步声在安静的清晨里听得格外清楚。小安问：“舅舅，快到时候了吗？”"},
-{n:"04 · 钟声",t:"“快了。等钟声一响，这城就活了。”他们刚走到钟楼附近，钟声就响了。咚，一声，又一声。声音沉稳、悠长，慢慢传进清冷的空气里。"},
-{n:"05 · 北京慢慢醒了",t:"钟声过后，街上开始慢慢有了人。一个卖烧饼的人挑着担子从胡同口经过。天色一点一点亮起来，空气里也慢慢有了热气和米粥的香味。"},
-{n:"06 · 第一位客人",t:"第一位客人是一个挑担的脚夫。“来一碗热的。”小安小心地盛了一碗粥，双手递过去。那人笑着说：“这天儿啊，还是热粥最暖人。”"},
-{n:"07 · 看着这座城",t:"太阳还没有真正升起来，可天已经比刚才亮了很多。钟楼、屋顶、胡同口，还有远处的街道，都慢慢有了颜色。小安轻轻地说：“北京，又开始新的一天了。”"},
-{n:"08 · 天亮以前的钟楼",t:"舅舅在后面叫他：“小安，别发呆了，快来帮忙！”“来了！”小安转身跑过去。每一天的钟声，都像在告诉他：只要天亮了，日子就会继续往前走。"}
-];
-const weights=scenes.map(s=>s.t.replace(/[\s“”。，！？：；、]/g,"").length+10);
-const totalWeight=weights.reduce((a,b)=>a+b,0);
+
+const STORIES={
+  bj001:{
+    id:"BJ-001",
+    title:"天亮以前的钟楼",
+    city:"北京",
+    voices:[
+      "assets/audio/bj001-voice1.mp3",
+      "assets/audio/bj001-voice2.mp3",
+      "assets/audio/bj001-voice3.mp3"
+    ],
+    images:[
+      "assets/scenes/s01-night.svg","assets/scenes/s02-home.svg","assets/scenes/s03-leave.svg","assets/scenes/s04-bell.svg",
+      "assets/scenes/s05-wake.svg","assets/scenes/s06-porridge.svg","assets/scenes/s07-city.svg","assets/scenes/s08-end.svg"
+    ],
+    scenes:[
+      {n:"01 · 夜还没退",t:"天还没亮，北京城还安安静静的。风从胡同里慢慢吹过，带着一点秋天的凉意。远远望去，高高的钟楼立在灰蓝色的天边。"},
+      {n:"02 · 小安起床",t:"小安已经醒了。他今年十五岁，住在钟楼附近的一条小胡同里。他跟着舅舅一起做早点生意，每天清晨都要早早出门。"},
+      {n:"03 · 出门",t:"小安抱着一小捆柴，跟在舅舅后面走出院门。胡同很窄，脚步声在安静的清晨里听得格外清楚。小安问：“舅舅，快到时候了吗？”"},
+      {n:"04 · 钟声",t:"“快了。等钟声一响，这城就活了。”他们刚走到钟楼附近，钟声就响了。咚，一声，又一声。声音沉稳、悠长，慢慢传进清冷的空气里。"},
+      {n:"05 · 北京慢慢醒了",t:"钟声过后，街上开始慢慢有了人。一个卖烧饼的人挑着担子从胡同口经过。天色一点一点亮起来，空气里也慢慢有了热气和米粥的香味。"},
+      {n:"06 · 第一位客人",t:"第一位客人是一个挑担的脚夫。“来一碗热的。”小安小心地盛了一碗粥，双手递过去。那人笑着说：“这天儿啊，还是热粥最暖人。”"},
+      {n:"07 · 看着这座城",t:"太阳还没有真正升起来，可天已经比刚才亮了很多。钟楼、屋顶、胡同口，还有远处的街道，都慢慢有了颜色。小安轻轻地说：“北京，又开始新的一天了。”"},
+      {n:"08 · 天亮以前的钟楼",t:"舅舅在后面叫他：“小安，别发呆了，快来帮忙！”“来了！”小安转身跑过去。每一天的钟声，都像在告诉他：只要天亮了，日子就会继续往前走。"}
+    ]
+  },
+  bj002:{
+    id:"BJ-002",
+    title:"前门来了一个外乡人",
+    city:"北京",
+    voices:[
+      "assets/audio/bj002-voice1.mp3",
+      "assets/audio/bj002-voice2.mp3",
+      "assets/audio/bj002-voice3.mp3"
+    ],
+    images:[
+      "assets/scenes/bj002/s01-arrival.svg","assets/scenes/bj002/s02-qianmen.svg","assets/scenes/bj002/s03-street.svg","assets/scenes/bj002/s04-dashilar.svg",
+      "assets/scenes/bj002/s05-ask.svg","assets/scenes/bj002/s06-clothshop.svg","assets/scenes/bj002/s07-firstwork.svg","assets/scenes/bj002/s08-night.svg"
+    ],
+    scenes:[
+      {n:"01 · 到站",t:"火车慢慢停在正阳门东站。汽笛拖着长长的一声，白汽从车轮旁边散开。阿顺抱紧怀里的布包，跟着人群走下车。他十七岁，第一次离开家乡，也是第一次来到北京。临走前，母亲只塞给他一张写着铺子地址的纸，还有一句话：“到了地方，先把路认清楚。”"},
+      {n:"02 · 第一次看见前门",t:"站台上比他想象得热闹。有人提箱子，有人扛行李，还有人在大声招呼客人。阿顺站了一会儿，抬头就看见远处高大的城门。旁边的人告诉他：“那就是前门。”他把这个名字在心里默念了一遍，好像只要记住它，就不会在这座大城里走丢。"},
+      {n:"03 · 出站",t:"出了车站，声音一下子全涌了过来。车轮压过石路，挑担的人从身边经过，卖吃食的吆喝声从街边传来。阿顺下意识地把布包抱得更紧。他以前也赶过集，可眼前的人流像一直没有尽头。他低头看看手里的地址，又抬头看看街口，忽然不知道该往哪边走。"},
+      {n:"04 · 大栅栏",t:"有人告诉他，要找绸布铺，就往大栅栏方向去。阿顺顺着人流往前走。街两边的招牌一块接一块，有卖布的，有卖茶的，也有药铺和鞋铺。伙计们站在门口招呼客人，算盘声、说话声、脚步声混在一起。阿顺第一次明白，原来一条街也可以忙得像一座城。"},
+      {n:"05 · 问路",t:"可越往里走，他越拿不准方向。纸上的几个字他认识，街上的名字却越看越乱。他只好走到一家茶铺门口，小声问：“劳驾，这个地方怎么走？”年轻伙计看了看纸，抬手往前一指：“再过两个口子，往右。别急，你已经走对一半了。”阿顺连忙道谢。那句“走对一半了”，让他心里一下安稳了许多。"},
+      {n:"06 · 绸布庄",t:"天快黑的时候，他终于找到了那家小绸布庄。门面不大，柜台后面堆着一匹一匹的布。掌柜接过他带来的信，看了很久，又抬头看看他：“你就是阿顺？”阿顺赶紧点头。掌柜没多说，只把一捆布往旁边挪了挪：“先把这个搬到后院。手脚勤快，慢慢就能学会。”"},
+      {n:"07 · 第一份活",t:"那是阿顺在北京做的第一件事。他抱起布匹的时候，胳膊有些发酸，可心里却比刚下火车时踏实。前门、大栅栏、铺子、后院，这几个原本陌生的地方，忽然有了一点顺序。掌柜又交代了几件小事，他一件一件记在心里，生怕第二天醒来就忘了。"},
+      {n:"08 · 夜里的汽笛",t:"夜里，阿顺睡在铺子后院的小屋里。街上的声音慢慢少了，远处忽然又传来一声火车汽笛。他躺在黑暗里，想起早上离开家时母亲说的话。他今天没有把整座北京认清楚，只认清了一条路，一家铺子，还有明天该做的几件事。可这已经够了。对一个刚到北京的外乡人来说，新日子，就是这样从第一条认得的路开始的。"}
+    ]
+  }
+};
+
 const audio=document.getElementById("audio");
-let voiceIndex=0,speedIndex=1,sceneIndex=-1;
 const speeds=[.8,1,1.2,1.5];
+let storyKey="bj001",voiceIndex=0,speedIndex=1,sceneIndex=-1;
+
+function story(){return STORIES[storyKey]}
+function weights(){return story().scenes.map(s=>s.t.replace(/[\s“”。，！？：；、]/g,"").length+10)}
 
 function ensurePlaybackSession(){
   try{
-    if("audioSession" in navigator){
-      navigator.audioSession.type="playback";
-    }
+    if("audioSession" in navigator)navigator.audioSession.type="playback";
   }catch(e){}
 }
 ensurePlaybackSession();
 
 function show(id){
- document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
- document.getElementById(id).classList.add("active");
- document.documentElement.style.overflow=id==="story"?"hidden":"";
- document.body.style.overflow=id==="story"?"hidden":"";
+  document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.documentElement.style.overflow=id==="story"?"hidden":"";
+  document.body.style.overflow=id==="story"?"hidden":"";
 }
-function startStory(){
- ensurePlaybackSession();
- voiceIndex=0;speedIndex=1;sceneIndex=-1;
- audio.pause();
- audio.src=VOICES[voiceIndex];
- audio.preload="auto";
- audio.load();
- audio.playbackRate=speeds[speedIndex];
- show("story");updateVoiceUI();setupMedia();
- audio.play().catch(()=>{document.getElementById("play").textContent="▶"});
+
+function startStory(key){
+  ensurePlaybackSession();
+  storyKey=key;
+  voiceIndex=0;
+  speedIndex=1;
+  sceneIndex=-1;
+  const s=story();
+
+  audio.pause();
+  audio.src=s.voices[voiceIndex];
+  audio.preload="auto";
+  audio.load();
+  audio.playbackRate=speeds[speedIndex];
+
+  document.getElementById("storyTitle").textContent=s.title;
+  document.getElementById("speed").textContent="1.0×";
+  renderScene(0);
+  show("story");
+  updateVoiceUI();
+  setupMedia();
+  audio.play().catch(()=>{document.getElementById("play").textContent="▶"});
 }
+
 function leaveStory(){audio.pause();show("beijing")}
+
 function resumePlayback(){
- ensurePlaybackSession();
- if(audio.ended)audio.currentTime=0;
- const p=audio.play();
- if(p&&typeof p.catch==="function"){
-   p.catch(()=>{document.getElementById("play").textContent="▶"});
- }
- return p;
+  ensurePlaybackSession();
+  if(audio.ended)audio.currentTime=0;
+  const p=audio.play();
+  if(p&&typeof p.catch==="function")p.catch(()=>{document.getElementById("play").textContent="▶"});
+  return p;
 }
+
 function togglePlay(){
- if(audio.ended||(!audio.currentTime&&audio.duration&&audio.currentTime===audio.duration))audio.currentTime=0;
- if(audio.paused){
-   resumePlayback();
- }else{
-   audio.pause();
- }
+  if(audio.ended)audio.currentTime=0;
+  if(audio.paused)resumePlayback();else audio.pause();
 }
-function cycleSpeed(){speedIndex=(speedIndex+1)%speeds.length;audio.playbackRate=speeds[speedIndex];document.getElementById("speed").textContent=speeds[speedIndex].toFixed(1)+"×"}
+
+function cycleSpeed(){
+  speedIndex=(speedIndex+1)%speeds.length;
+  audio.playbackRate=speeds[speedIndex];
+  document.getElementById("speed").textContent=speeds[speedIndex].toFixed(1)+"×";
+}
+
 function cycleVoice(){
- const ratio=(audio.duration&&isFinite(audio.duration))?audio.currentTime/audio.duration:0;
- const wasPlaying=!audio.paused;
- voiceIndex=(voiceIndex+1)%VOICES.length;
- audio.src=VOICES[voiceIndex];
- audio.preload="auto";
- audio.load();
- audio.playbackRate=speeds[speedIndex];
- updateVoiceUI();setupMedia();
- audio.addEventListener("loadedmetadata",function once(){
-   audio.removeEventListener("loadedmetadata",once);
-   if(audio.duration&&isFinite(audio.duration))audio.currentTime=ratio*audio.duration;
-   if(wasPlaying)audio.play();
- },{once:true});
+  const s=story();
+  const ratio=(audio.duration&&isFinite(audio.duration))?audio.currentTime/audio.duration:0;
+  const wasPlaying=!audio.paused;
+  voiceIndex=(voiceIndex+1)%s.voices.length;
+  audio.src=s.voices[voiceIndex];
+  audio.preload="auto";
+  audio.load();
+  audio.playbackRate=speeds[speedIndex];
+  updateVoiceUI();
+  setupMedia();
+  audio.addEventListener("loadedmetadata",function once(){
+    audio.removeEventListener("loadedmetadata",once);
+    if(audio.duration&&isFinite(audio.duration))audio.currentTime=ratio*audio.duration;
+    if(wasPlaying)resumePlayback();
+  },{once:true});
 }
+
 function updateVoiceUI(){
- document.getElementById("voice").textContent="声音 "+(voiceIndex+1);
- const s=document.getElementById("status");s.textContent=VOICE_NAMES[voiceIndex];s.classList.add("show");setTimeout(()=>s.classList.remove("show"),1300);
+  document.getElementById("voice").textContent="声音 "+(voiceIndex+1);
+  const s=document.getElementById("status");
+  s.textContent=VOICE_NAMES[voiceIndex];
+  s.classList.add("show");
+  setTimeout(()=>s.classList.remove("show"),1300);
 }
+
 function sceneStarts(){
- if(!audio.duration||!isFinite(audio.duration))return [0];
- let acc=0;const out=[0];
- for(let i=0;i<weights.length-1;i++){acc+=weights[i];out.push(audio.duration*(acc/totalWeight))}
- return out;
+  if(!audio.duration||!isFinite(audio.duration))return [0];
+  const ws=weights();
+  const total=ws.reduce((a,b)=>a+b,0);
+  let acc=0;
+  const out=[0];
+  for(let i=0;i<ws.length-1;i++){
+    acc+=ws[i];
+    out.push(audio.duration*(acc/total));
+  }
+  return out;
 }
+
 function sceneForTime(t){
- const starts=sceneStarts();let i=0;
- for(let n=0;n<starts.length;n++){if(t>=starts[n])i=n;else break}
- return i;
+  const starts=sceneStarts();
+  let i=0;
+  for(let n=0;n<starts.length;n++){if(t>=starts[n])i=n;else break}
+  return i;
 }
+
 function renderScene(i){
- if(i===sceneIndex)return;sceneIndex=i;
- document.getElementById("storyBg").style.backgroundImage='url("'+images[i]+'")';
- document.getElementById("scene").textContent=scenes[i].n;
- document.getElementById("body").textContent=scenes[i].t;
- document.getElementById("count").textContent=(i+1)+" / "+scenes.length;
- if("mediaSession" in navigator){
-   navigator.mediaSession.metadata=new MediaMetadata({
-     title:"天亮以前的钟楼",
-     artist:"地球探索 · 北京",
-     album:scenes[i].n,
-     artwork:[{src:new URL(images[i],location.href).href,sizes:"512x512",type:"image/svg+xml"}]
-   });
- }
+  const s=story();
+  if(i<0||i>=s.scenes.length)return;
+  if(i===sceneIndex && document.getElementById("body").textContent)return;
+  sceneIndex=i;
+  document.getElementById("storyBg").style.backgroundImage='url("'+s.images[i]+'")';
+  document.getElementById("scene").textContent=s.scenes[i].n;
+  document.getElementById("body").textContent=s.scenes[i].t;
+  document.getElementById("count").textContent=(i+1)+" / "+s.scenes.length;
+  if("mediaSession" in navigator){
+    navigator.mediaSession.metadata=new MediaMetadata({
+      title:s.title,
+      artist:"地球探索 · "+s.city,
+      album:s.scenes[i].n,
+      artwork:[{src:new URL(s.images[i],location.href).href,sizes:"512x512",type:"image/svg+xml"}]
+    });
+  }
 }
+
 function seekScene(delta){
- const target=Math.max(0,Math.min(scenes.length-1,sceneForTime(audio.currentTime)+delta));
- const starts=sceneStarts();if(starts[target]!=null)audio.currentTime=starts[target]+.05;
+  const s=story();
+  const target=Math.max(0,Math.min(s.scenes.length-1,sceneForTime(audio.currentTime)+delta));
+  const starts=sceneStarts();
+  if(starts[target]!=null)audio.currentTime=starts[target]+.05;
 }
+
 function setupMedia(){
- if(!("mediaSession" in navigator))return;
- ensurePlaybackSession();
- navigator.mediaSession.metadata=new MediaMetadata({
-   title:"天亮以前的钟楼",
-   artist:"地球探索 · 北京",
-   album:VOICE_NAMES[voiceIndex]
- });
- const handlers={
-  play:()=>{
-    ensurePlaybackSession();
-    resumePlayback();
-  },
-  pause:()=>audio.pause(),
-  previoustrack:()=>seekScene(-1),
-  nexttrack:()=>seekScene(1),
-  seekbackward:(d)=>audio.currentTime=Math.max(0,audio.currentTime-(d.seekOffset||10)),
-  seekforward:(d)=>audio.currentTime=Math.min(audio.duration||Infinity,audio.currentTime+(d.seekOffset||10))
- };
- Object.entries(handlers).forEach(([k,v])=>{
-   try{navigator.mediaSession.setActionHandler(k,v)}catch(e){}
- });
+  if(!("mediaSession" in navigator))return;
+  ensurePlaybackSession();
+  const s=story();
+  navigator.mediaSession.metadata=new MediaMetadata({
+    title:s.title,
+    artist:"地球探索 · "+s.city,
+    album:VOICE_NAMES[voiceIndex]
+  });
+  const handlers={
+    play:()=>{ensurePlaybackSession();resumePlayback()},
+    pause:()=>audio.pause(),
+    previoustrack:()=>seekScene(-1),
+    nexttrack:()=>seekScene(1),
+    seekbackward:(d)=>audio.currentTime=Math.max(0,audio.currentTime-(d.seekOffset||10)),
+    seekforward:(d)=>audio.currentTime=Math.min(audio.duration||Infinity,audio.currentTime+(d.seekOffset||10))
+  };
+  Object.entries(handlers).forEach(([k,v])=>{try{navigator.mediaSession.setActionHandler(k,v)}catch(e){}});
 }
-function fmt(s){if(!isFinite(s)||s<0)s=0;const m=Math.floor(s/60),r=Math.floor(s%60);return m+":"+String(r).padStart(2,"0")}
+
+function fmt(s){
+  if(!isFinite(s)||s<0)s=0;
+  const m=Math.floor(s/60),r=Math.floor(s%60);
+  return m+":"+String(r).padStart(2,"0");
+}
+
 audio.addEventListener("loadedmetadata",()=>{
   audio.playbackRate=speeds[speedIndex];
   renderScene(sceneForTime(audio.currentTime||0));
   setupMedia();
 });
-audio.addEventListener("canplay",()=>{
-  document.getElementById("status").classList.remove("show");
-});
+
+audio.addEventListener("canplay",()=>document.getElementById("status").classList.remove("show"));
+
 audio.addEventListener("waiting",()=>{
   const s=document.getElementById("status");
   s.textContent="正在缓冲…";
   s.classList.add("show");
 });
+
 audio.addEventListener("stalled",()=>{
   const s=document.getElementById("status");
   s.textContent="网络较慢，正在恢复…";
   s.classList.add("show");
 });
+
 audio.addEventListener("timeupdate",()=>{
- const d=audio.duration||0,t=audio.currentTime||0;
- document.getElementById("timelineBar").style.width=(d?t/d*100:0)+"%";
- document.getElementById("elapsed").textContent=fmt(t);
- document.getElementById("remaining").textContent="-"+fmt(Math.max(0,d-t));
- renderScene(sceneForTime(t));
- if("mediaSession" in navigator && navigator.mediaSession.setPositionState && d&&isFinite(d)){
-  try{navigator.mediaSession.setPositionState({duration:d,playbackRate:audio.playbackRate,position:Math.min(t,d)})}catch(e){}
- }
+  const d=audio.duration||0,t=audio.currentTime||0;
+  document.getElementById("timelineBar").style.width=(d?t/d*100:0)+"%";
+  document.getElementById("elapsed").textContent=fmt(t);
+  document.getElementById("remaining").textContent="-"+fmt(Math.max(0,d-t));
+  renderScene(sceneForTime(t));
+  if("mediaSession" in navigator && navigator.mediaSession.setPositionState && d&&isFinite(d)){
+    try{navigator.mediaSession.setPositionState({duration:d,playbackRate:audio.playbackRate,position:Math.min(t,d)})}catch(e){}
+  }
 });
-audio.addEventListener("play",()=>{document.getElementById("play").textContent="⏸";if("mediaSession" in navigator)navigator.mediaSession.playbackState="playing"});
-audio.addEventListener("pause",()=>{document.getElementById("play").textContent="▶";if("mediaSession" in navigator)navigator.mediaSession.playbackState="paused"});
-audio.addEventListener("ended",()=>{document.getElementById("play").textContent="↻";audio.currentTime=0;renderScene(0)});
+
+audio.addEventListener("play",()=>{
+  document.getElementById("play").textContent="⏸";
+  if("mediaSession" in navigator)navigator.mediaSession.playbackState="playing";
+});
+audio.addEventListener("pause",()=>{
+  document.getElementById("play").textContent="▶";
+  if("mediaSession" in navigator)navigator.mediaSession.playbackState="paused";
+});
+audio.addEventListener("ended",()=>{
+  document.getElementById("play").textContent="↻";
+  audio.currentTime=0;
+  sceneIndex=-1;
+  renderScene(0);
+});
+
 document.addEventListener("visibilitychange",()=>{
   ensurePlaybackSession();
   if(!document.hidden){
@@ -290,20 +380,21 @@ document.addEventListener("visibilitychange",()=>{
     audio.playbackRate=speeds[speedIndex];
   }
 });
+
 window.addEventListener("pageshow",()=>{
   ensurePlaybackSession();
   document.getElementById("play").textContent=audio.paused?"▶":"⏸";
   audio.playbackRate=speeds[speedIndex];
 });
+
 try{
   if("audioSession" in navigator && navigator.audioSession.addEventListener){
     navigator.audioSession.addEventListener("statechange",()=>ensurePlaybackSession());
   }
 }catch(e){}
+
 if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("./sw.js").catch(()=>{});
-  });
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 }
 </script>
 </body>
