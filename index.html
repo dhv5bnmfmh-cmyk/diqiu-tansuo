@@ -42,6 +42,14 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
 .factSheet.open{bottom:0}.factBack{display:none;position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:30}.factBack.open{display:block}
 .factRow{padding:13px 0;border-bottom:1px solid rgba(255,255,255,.08)}.factRow:last-child{border-bottom:0}.factLabel{font-size:10px;letter-spacing:.1em;color:#e3b96f;font-weight:800;margin-bottom:5px}.factValue{font-size:14px;line-height:1.65;color:#d9dee1}.archiveNote{font-size:11px;line-height:1.6;color:#aab4ba;margin-top:10px}.archiveNote a{color:#e0c18a}
 .archiveStamp{position:absolute;right:14px;bottom:44%;z-index:3;background:rgba(0,0,0,.55);padding:6px 8px;border-radius:999px;font-size:9px;color:#d9dddf;display:none}.archiveStamp.show{display:block}
+.storyActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}
+.actionBtn{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.075);color:#f5f2eb;border-radius:14px;padding:11px 10px;font-size:12px;font-weight:750}
+.actionBtn.playing{background:#ead7af;color:#211a11;border-color:transparent}
+.charBack{display:none;position:fixed;inset:0;background:rgba(0,0,0,.64);z-index:34}.charBack.open{display:block}
+.charSheet{position:fixed;left:0;right:0;bottom:-760px;max-width:470px;margin:auto;background:#0d141a;color:#f7f2e8;border-radius:28px 28px 0 0;padding:15px 20px 30px;z-index:35;transition:.28s;max-height:84vh;overflow:auto;box-shadow:0 -20px 70px rgba(0,0,0,.5)}
+.charSheet.open{bottom:0}.charGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}.charCard{border:1px solid rgba(255,255,255,.08);background:#131d24;border-radius:17px;overflow:hidden;opacity:.58;transition:.2s}.charCard.active{opacity:1;border-color:rgba(226,185,111,.55);box-shadow:0 0 0 1px rgba(226,185,111,.15) inset}.charCard img{width:100%;aspect-ratio:3/3.8;object-fit:cover;display:block}.charMeta{padding:9px}.charName{font-size:13px;font-weight:850}.charRole{font-size:10px;color:#aeb8c0;margin-top:3px;line-height:1.4}
+.charRule{margin-top:14px;padding:13px;border-radius:15px;background:#121b22;font-size:12px;line-height:1.65;color:#cbd2d6}
+.soundHint{font-size:10px;color:#9eaaaf;margin-top:8px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -119,6 +127,11 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
       <button class="chip" data-lang="en" onclick="setLang('en',this)">EN</button>
       <button class="chip" data-lang="vi" onclick="setLang('vi',this)">VI</button>
     </div>
+    <div class="storyActions">
+      <button class="actionBtn" id="sceneAudioBtn" onclick="toggleSceneAudio()">🎧 播放这一幕</button>
+      <button class="actionBtn" onclick="openCharacters()">👤 角色</button>
+    </div>
+    <div class="soundHint" id="soundHint">声音为网页实时生成：环境声 + 固定角色声线参数。</div>
     <div class="sceneNav"><button class="navBtn" onclick="prevScene()">上一幕</button><button class="navBtn next" onclick="nextScene()">下一幕</button></div>
   </div>
 </section>
@@ -132,6 +145,14 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
     <div class="card"><div class="tag">TIME</div><h3>晨钟暮鼓</h3><p>钟与鼓曾经参与城市时间秩序。本故事使用少量钟声作为电影化表达，不声称完整复原历史报时程序。</p></div>
     <div class="card"><div class="tag">LIFE</div><h3>胡同与早点</h3><p>真正的城市生活常常藏在小事里：院门、脚步、早点、热气、邻居和清晨的第一位客人。</p></div>
     <div class="card"><div class="tag">FACT LOCK</div><h3>哪些是真的？</h3><p><b>真实背景：</b>北京钟鼓楼、胡同、时代与城市报时文化。<br><b>虚构创作：</b>小安、舅舅、脚夫、对白与这个清晨的具体事件。</p></div>
+    <div class="card"><div class="tag">CHARACTERS · 角色锁定</div><h3>小安、舅舅、脚夫</h3>
+      <div class="charGrid" style="margin-top:12px">
+        <div class="charCard active"><img src="assets/characters/xiao-an.svg" alt="小安"><div class="charMeta"><div class="charName">小安</div><div class="charRole">15岁 · 虚构</div></div></div>
+        <div class="charCard active"><img src="assets/characters/uncle.svg" alt="舅舅"><div class="charMeta"><div class="charName">舅舅</div><div class="charRole">中年 · 虚构</div></div></div>
+        <div class="charCard active"><img src="assets/characters/porter.svg" alt="脚夫"><div class="charMeta"><div class="charName">脚夫</div><div class="charRole">成年 · 虚构</div></div></div>
+      </div>
+      <p class="credit">本篇角色已锁定外形色系和声线参数，后续 Story Cinema 镜头继续沿用。</p>
+    </div>
     <div class="card"><div class="tag">ARCHIVE · 历史影像</div><h3>从故事切回史料</h3>
       <p>故事页右上可以切换“故事画面 / 历史影像”。历史影像包括约1900–1906年的北京钟楼、鼓楼及中轴线北段街景，用来帮助理解时代环境，而不是证明故事中的具体情节。</p>
       <p class="credit">
@@ -169,6 +190,19 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
   <div class="factRow"><div class="factLabel">STORY RECONSTRUCTION · 故事化复原</div><div class="factValue" id="factReconstruction"></div></div>
   <div class="factRow"><div class="factLabel">FICTION · 虚构内容</div><div class="factValue" id="factFiction"></div></div>
   <div class="archiveNote">“历史影像”用于帮助理解时代与地点，不代表照片中发生了本故事情节。故事人物与具体对白仍为虚构。</div>
+</div>
+<div class="charBack" id="charBack" onclick="closeCharacters()"></div>
+<div class="charSheet" id="charSheet">
+  <div class="handle"></div>
+  <div class="tag">CHARACTER LOCK · 角色锁定</div>
+  <h2 style="font-size:25px;margin:7px 0 4px">这一篇的人</h2>
+  <div class="sub" style="font-size:12px">角色外形、衣色和声线参数固定，后续镜头继续沿用。</div>
+  <div class="charGrid">
+    <div class="charCard" id="char-xiao"><img src="assets/characters/xiao-an.svg" alt="小安角色基准"><div class="charMeta"><div class="charName">小安</div><div class="charRole">15岁 · 深蓝灰短褂 · 年轻声线</div></div></div>
+    <div class="charCard" id="char-uncle"><img src="assets/characters/uncle.svg" alt="舅舅角色基准"><div class="charMeta"><div class="charName">舅舅</div><div class="charRole">中年 · 棕灰衣 · 沉稳声线</div></div></div>
+    <div class="charCard" id="char-porter"><img src="assets/characters/porter.svg" alt="脚夫角色基准"><div class="charMeta"><div class="charName">脚夫</div><div class="charRole">成年 · 深褐灰衣 · 较低声线</div></div></div>
+  </div>
+  <div class="charRule">三人均为虚构人物。角色卡用于保证故事镜头的一致性，不代表任何真实历史人物。</div>
 </div>
 </div>
 
@@ -208,6 +242,23 @@ const sceneFacts=[
 {history:"本幕没有新增历史事实，重点是故事主题收束。",place:"钟楼、胡同仍为真实背景。",reconstruction:"钟声被赋予“日子继续往前走”的象征意义，属于文学表达。",fiction:"舅舅喊小安、人物动作与最后心理感受均为虚构。"}
 ];
 
+const sceneAudio=[
+{type:"wind",chars:[],lines:[]},
+{type:"prep",chars:["xiao","uncle"],lines:[["uncle","动作快一点。再过一会儿，城里的人就都起来了。"]]},
+{type:"footsteps",chars:["xiao","uncle"],lines:[["xiao","舅舅，快到时候了吗？"],["uncle","快了。等钟声一响，这城就活了。"]]},
+{type:"bell",chars:["xiao","uncle"],lines:[]},
+{type:"street",chars:["xiao","uncle"],lines:[]},
+{type:"stall",chars:["xiao","porter"],lines:[["porter","来一碗热的。"],["xiao","好。"],["porter","这天儿啊，还是热粥最暖人。"]]},
+{type:"morning",chars:["xiao"],lines:[["xiao","北京，又开始新的一天了。"]]},
+{type:"morning",chars:["xiao","uncle"],lines:[["uncle","小安，别发呆了，快来帮忙！"],["xiao","来了！"]]}
+];
+
+const roleVoice={
+ xiao:{rate:.95,pitch:1.12,volume:1},
+ uncle:{rate:.88,pitch:.82,volume:1},
+ porter:{rate:.86,pitch:.72,volume:1}
+};
+
 const words={
 "胡同":["hú tòng","北京传统的小街小巷，也是许多日常生活发生的空间。"],
 "钟楼":["zhōng lóu","古代城市中与敲钟、报时有关的高大建筑。"],
@@ -219,6 +270,7 @@ const words={
 let idx=0;
 let visualMode='story';
 function show(id){
+  if(id!=='story') stopSceneAudio();
   if(document.getElementById('film').classList.contains('active') && id!=='film') stopFilm();
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -231,6 +283,7 @@ function openStory(){
 }
 function resumeStory(){openStory()}
 function render(){
+ stopSceneAudio();
  const s=scenes[idx];
  const art=document.getElementById('sceneArt');
  art.style.backgroundColor=s.c;
@@ -282,6 +335,83 @@ function openFacts(){
 function closeFacts(){
   document.getElementById('factBack').classList.remove('open');
   document.getElementById('factSheet').classList.remove('open');
+}
+function openCharacters(){
+  const active=sceneAudio[idx].chars||[];
+  ["xiao","uncle","porter"].forEach(k=>document.getElementById("char-"+k).classList.toggle("active",active.includes(k)));
+  document.getElementById('charBack').classList.add('open');
+  document.getElementById('charSheet').classList.add('open');
+}
+function closeCharacters(){
+  document.getElementById('charBack').classList.remove('open');
+  document.getElementById('charSheet').classList.remove('open');
+}
+
+let sceneSoundOn=false,sceneSoundTimers=[],sceneSoundNodes=[];
+function ensureAudio(){
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC)return null;
+    if(!audioCtx)audioCtx=new AC();
+    if(audioCtx.state==='suspended')audioCtx.resume();
+    return audioCtx;
+  }catch(e){return null}
+}
+function noiseBurst(duration=.8,gain=.02,cutoff=700){
+  const ac=ensureAudio(); if(!ac)return;
+  const len=Math.max(1,Math.floor(ac.sampleRate*duration));
+  const b=ac.createBuffer(1,len,ac.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<len;i++)d[i]=(Math.random()*2-1);
+  const s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();
+  s.buffer=b;f.type='lowpass';f.frequency.value=cutoff;g.gain.value=gain;
+  s.connect(f).connect(g).connect(ac.destination);s.start();
+  sceneSoundNodes.push(s);
+}
+function tone(freq,duration=.14,gain=.035,type='sine',delay=0){
+  const ac=ensureAudio();if(!ac)return;
+  const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+delay;
+  o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(.0001,t+duration);
+  o.connect(g).connect(ac.destination);o.start(t);o.stop(t+duration+.05);sceneSoundNodes.push(o);
+}
+function playFootsteps(){
+  [0,.42,.86,1.28,1.72].forEach((d,i)=>{tone(88+i%2*9,.12,.035,'sine',d);tone(155,.07,.012,'triangle',d+.02)});
+}
+function playBowl(){tone(920,.18,.025,'sine',.1);tone(1320,.12,.012,'sine',.16)}
+function sceneAmbience(type){
+  if(type==='wind'){noiseBurst(5.5,.018,480)}
+  if(type==='prep'){noiseBurst(4.5,.014,620);tone(210,.12,.018,'triangle',.8);tone(240,.1,.014,'triangle',2.1)}
+  if(type==='footsteps'){noiseBurst(4.8,.012,500);playFootsteps()}
+  if(type==='bell'){noiseBurst(5.5,.012,450);sceneSoundTimers.push(setTimeout(()=>bellStrike(true),420));sceneSoundTimers.push(setTimeout(()=>bellStrike(true),2300))}
+  if(type==='street'){noiseBurst(5.6,.025,1050);[.7,2.1,3.5].forEach(d=>tone(270,.1,.009,'triangle',d))}
+  if(type==='stall'){noiseBurst(5.4,.02,1500);playBowl();sceneSoundTimers.push(setTimeout(playBowl,2300))}
+  if(type==='morning'){noiseBurst(4.8,.011,750);tone(520,.16,.008,'sine',1.2)}
+}
+function chineseVoice(){
+  if(!('speechSynthesis' in window))return null;
+  const vs=speechSynthesis.getVoices();
+  return vs.find(v=>/^zh-CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||null;
+}
+function speakLines(lines,i=0){
+  if(!sceneSoundOn||i>=lines.length||!('speechSynthesis' in window))return;
+  const [role,txt]=lines[i],cfg=roleVoice[role]||roleVoice.xiao,u=new SpeechSynthesisUtterance(txt);
+  u.lang='zh-CN';u.rate=cfg.rate;u.pitch=cfg.pitch;u.volume=cfg.volume;
+  const v=chineseVoice();if(v)u.voice=v;
+  u.onend=()=>{if(sceneSoundOn)sceneSoundTimers.push(setTimeout(()=>speakLines(lines,i+1),260))};
+  speechSynthesis.speak(u);
+}
+function toggleSceneAudio(){
+  if(sceneSoundOn){stopSceneAudio();return}
+  sceneSoundOn=true;
+  const b=document.getElementById('sceneAudioBtn');b.classList.add('playing');b.textContent='■ 停止这一幕';
+  const a=sceneAudio[idx];sceneAmbience(a.type);
+  if(a.lines.length)sceneSoundTimers.push(setTimeout(()=>speakLines(a.lines),420));
+}
+function stopSceneAudio(){
+  sceneSoundOn=false;
+  sceneSoundTimers.forEach(clearTimeout);sceneSoundTimers=[];
+  sceneSoundNodes.forEach(n=>{try{n.stop()}catch(e){}});sceneSoundNodes=[];
+  if('speechSynthesis' in window)try{speechSynthesis.cancel()}catch(e){}
+  const b=document.getElementById('sceneAudioBtn');if(b){b.classList.remove('playing');b.textContent='🎧 播放这一幕'}
 }
 
 /* lightweight cinematic intro */
@@ -353,8 +483,8 @@ function startAmbient(){
 function stopAmbient(){
   try{if(windGain&&audioCtx)windGain.gain.setTargetAtTime(0,audioCtx.currentTime,.08);if(windSource)setTimeout(()=>{try{windSource.stop()}catch(e){} windSource=null;windGain=null},250)}catch(e){windSource=null;windGain=null}
 }
-function bellStrike(){
-  if(!filmSound)return;
+function bellStrike(force=false){
+  if(!filmSound&&!force)return;
   try{
     const AC=window.AudioContext||window.webkitAudioContext;if(!audioCtx)audioCtx=new AC();
     if(audioCtx.state==='suspended')audioCtx.resume();
