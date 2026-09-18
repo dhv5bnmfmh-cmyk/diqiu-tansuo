@@ -1,0 +1,47 @@
+const CACHE="diqiu-shell-v1";
+const SHELL=[
+  "./",
+  "./manifest.webmanifest",
+  "./assets/app-icon.svg",
+  "./assets/scenes/s01-night.svg",
+  "./assets/scenes/s02-home.svg",
+  "./assets/scenes/s03-leave.svg",
+  "./assets/scenes/s04-bell.svg",
+  "./assets/scenes/s05-wake.svg",
+  "./assets/scenes/s06-porridge.svg",
+  "./assets/scenes/s07-city.svg",
+  "./assets/scenes/s08-end.svg"
+];
+
+self.addEventListener("install",event=>{
+  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)));
+  self.skipWaiting();
+});
+
+self.addEventListener("activate",event=>{
+  event.waitUntil(
+    caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))
+  );
+  self.clients.claim();
+});
+
+self.addEventListener("fetch",event=>{
+  const req=event.request;
+  const url=new URL(req.url);
+
+  // Do not intercept narration MP3 or byte-range media requests.
+  // Let Safari handle these directly for stable background/lock-screen playback.
+  if(req.headers.has("range") || url.pathname.endsWith(".mp3")){
+    return;
+  }
+
+  if(req.method!=="GET" || url.origin!==self.location.origin) return;
+
+  event.respondWith(
+    caches.match(req).then(hit=>hit || fetch(req).then(res=>{
+      const copy=res.clone();
+      caches.open(CACHE).then(cache=>cache.put(req,copy));
+      return res;
+    }))
+  );
+});
