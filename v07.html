@@ -405,6 +405,7 @@ function closeMore(){
   document.getElementById('moreSheet').classList.remove('open');
 }
 
+let audioCtx=null;
 let sceneSoundOn=false,sceneSoundTimers=[],sceneSoundNodes=[];
 function ensureAudio(){
   try{
@@ -435,6 +436,20 @@ function playFootsteps(){
   [0,.42,.86,1.28,1.72].forEach((d,i)=>{tone(88+i%2*9,.12,.035,'sine',d);tone(155,.07,.012,'triangle',d+.02)});
 }
 function playBowl(){tone(920,.18,.025,'sine',.1);tone(1320,.12,.012,'sine',.16)}
+function bellStrike(){
+  try{
+    const ac=ensureAudio(); if(!ac)return;
+    const now=ac.currentTime;
+    [92,138,184,276].forEach((f,i)=>{
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.type=i<2?'sine':'triangle';o.frequency.value=f;
+      g.gain.setValueAtTime(i===0?.16:.075,now);
+      g.gain.exponentialRampToValueAtTime(.0001,now+4.5+i*.55);
+      o.connect(g).connect(ac.destination);o.start(now);o.stop(now+5.5);
+      sceneSoundNodes.push(o);
+    });
+  }catch(e){}
+}
 function sceneAmbience(type){
   if(type==='wind'){noiseBurst(5.5,.018,480)}
   if(type==='prep'){noiseBurst(4.5,.014,620);tone(210,.12,.018,'triangle',.8);tone(240,.1,.014,'triangle',2.1)}
@@ -486,8 +501,7 @@ function beginSceneReading(asContinuous=false){
   setReadingButtons();
   const a=sceneAudio[idx];
   sceneAmbience(a.type);
-  sceneSoundTimers.push(setTimeout(()=>{
-    speakScript(sceneScripts[idx],0,()=>{
+  speakScript(sceneScripts[idx],0,()=>{
       if(!sceneSoundOn)return;
       if(continuousRead && idx<scenes.length-1){
         sceneSoundTimers.push(setTimeout(()=>{
@@ -505,7 +519,6 @@ function beginSceneReading(asContinuous=false){
         setReadingButtons();
       }
     });
-  },320));
 }
 function toggleSceneAudio(){
   if(sceneSoundOn){stopSceneAudio();return}
@@ -528,6 +541,20 @@ function stopSceneAudio(){
   setReadingButtons();
 }
 
+function startExperience(){
+  idx=0;
+  localStorage.setItem('earth-bj001-progress','0');
+  try{
+    if('speechSynthesis' in window){
+      speechSynthesis.cancel();
+      speechSynthesis.getVoices();
+    }
+  }catch(e){}
+  render();
+  show('story');
+  continuousRead=true;
+  beginSceneReading(true);
+}
 
 refreshResume();
 </script>
