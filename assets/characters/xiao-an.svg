@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760" role="img" aria-label="XIAO AN">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#10212c"/><stop offset="1" stop-color="#263944"/></linearGradient>
+<radialGradient id="light"><stop stop-color="#f0c98f" stop-opacity=".24"/><stop offset="1" stop-color="#f0c98f" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="600" height="760" rx="42" fill="url(#bg)"/>
+<circle cx="300" cy="220" r="210" fill="url(#light)"/>
+<ellipse cx="300" cy="690" rx="210" ry="38" fill="#000" opacity=".3"/>
+<path d="M175 655 Q190 480 300 465 Q410 480 425 655 Z" fill="#394a54"/>
+<path d="M250 464 Q300 512 350 464 L360 510 Q300 550 240 510 Z" fill="#1d2428" opacity=".55"/>
+<ellipse cx="300" cy="320" rx="115" ry="145" fill="#b88767"/>
+<path d="M190 318 Q205 168 300 168 Q405 170 414 322 Q368 250 300 250 Q235 250 190 318 Z" fill="#201914"/>
+<path d="M206 315 Q235 277 270 282" fill="none" stroke="#201812" stroke-width="11" stroke-linecap="round"/>
+<path d="M394 315 Q365 277 330 282" fill="none" stroke="#201812" stroke-width="11" stroke-linecap="round"/>
+<circle cx="258" cy="326" r="10" fill="#171413"/><circle cx="342" cy="326" r="10" fill="#171413"/>
+<path d="M278 382 Q300 394 322 382" fill="none" stroke="#734e3f" stroke-width="7" stroke-linecap="round"/>
+<path d="M300 338 L289 365 L308 367" fill="none" stroke="#8e6553" stroke-width="5" stroke-linecap="round"/>
+<rect x="42" y="42" rx="18" width="162" height="42" fill="#071018" opacity=".7"/>
+<text x="62" y="70" fill="#e2b96f" font-size="22" font-family="system-ui,-apple-system,sans-serif" font-weight="700">XIAO AN</text>
+<text x="50" y="706" fill="#f7f2e8" font-size="34" font-family="system-ui,-apple-system,sans-serif" font-weight="800">小安</text>
+<text x="50" y="738" fill="#b8c2c7" font-size="18" font-family="system-ui,-apple-system,sans-serif">15岁 · 虚构人物</text>
+</svg>

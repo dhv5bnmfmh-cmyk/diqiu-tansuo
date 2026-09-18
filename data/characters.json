@@ -1,0 +1,65 @@
+{
+  "version": "v0.5",
+  "characters": {
+    "xiao_an": {
+      "name": "小安",
+      "age": 15,
+      "fictional": true,
+      "visual": {
+        "body": "slim",
+        "clothing": "深蓝灰短褂",
+        "palette": [
+          "#394a54",
+          "#263944",
+          "#b88767"
+        ]
+      },
+      "voice": {
+        "lang": "zh-CN",
+        "rate": 0.95,
+        "pitch": 1.12,
+        "volume": 1
+      }
+    },
+    "uncle": {
+      "name": "舅舅",
+      "age_range": "中年",
+      "fictional": true,
+      "visual": {
+        "body": "average",
+        "clothing": "棕灰衣",
+        "palette": [
+          "#59483a",
+          "#4b3a2d",
+          "#a9785d"
+        ]
+      },
+      "voice": {
+        "lang": "zh-CN",
+        "rate": 0.88,
+        "pitch": 0.82,
+        "volume": 1
+      }
+    },
+    "porter": {
+      "name": "脚夫",
+      "age_range": "成年",
+      "fictional": true,
+      "visual": {
+        "body": "sturdy",
+        "clothing": "深褐灰衣",
+        "palette": [
+          "#4c463d",
+          "#3f3b36",
+          "#95684f"
+        ]
+      },
+      "voice": {
+        "lang": "zh-CN",
+        "rate": 0.86,
+        "pitch": 0.72,
+        "volume": 1
+      }
+    }
+  }
+}
