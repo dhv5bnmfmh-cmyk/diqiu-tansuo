@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05080b">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>地球探索</title>
+<style>
+:root{--bg:#05080b;--ink:#f7f3ea;--muted:#9da8af;--gold:#e7bd73}
+*{box-sizing:border-box}
+html,body{margin:0;background:#000;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif}
+button{font:inherit}
+.story,.story *{-webkit-user-select:none;user-select:none}
+.app{width:min(470px,100vw);min-height:100vh;margin:auto;background:var(--bg);position:relative;overflow:hidden}
+.screen{display:none;min-height:100vh;position:relative}.screen.active{display:block}
+.header{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid rgba(255,255,255,.06)}
+.brand{font-size:19px;font-weight:850}
+.back{border:0;background:transparent;color:#fff;font-size:28px;padding:8px 10px}
+.blank{width:48px}
+.list{padding:10px 22px 32px}
+.row{min-height:74px;display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,.08);font-size:22px;font-weight:720;cursor:pointer}
+.row:active{opacity:.65}
+.row.disabled{opacity:.34;cursor:default}
+.homeTitle{font-size:13px;color:var(--muted);letter-spacing:.12em;padding:34px 22px 8px}
+.homeCity{font-size:34px;font-weight:850;padding:18px 22px 24px;cursor:pointer}
+.homeCity:active{opacity:.65}
+
+/* Story */
+.story{overflow:hidden;background:#030608}
+.story.active{position:fixed;left:50%;top:0;transform:translateX(-50%);width:min(470px,100vw);height:100dvh;min-height:100dvh;max-height:100dvh;overflow:hidden;overscroll-behavior:none;touch-action:none}
+.bg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.01);transition:background-image .28s ease}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.18) 0%,rgba(0,0,0,.02) 35%,rgba(2,5,8,.24) 52%,rgba(2,5,8,.9) 78%,#020508 100%)}
+.storyTop{position:absolute;z-index:5;left:0;right:0;top:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.storyTitle{font-size:14px;font-weight:750;text-shadow:0 1px 10px rgba(0,0,0,.6)}
+.sceneCount{font-size:12px;color:#d3d8db}
+.storyText{position:absolute;z-index:4;left:24px;right:24px;bottom:126px;max-height:44vh;overflow:hidden}
+.sceneName{font-size:11px;color:var(--gold);letter-spacing:.1em;margin-bottom:10px}
+.body{font-size:21px;line-height:1.72;text-shadow:0 1px 12px rgba(0,0,0,.55)}
+.player{position:absolute;z-index:8;left:0;right:0;bottom:0;padding:10px 18px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(2,5,8,0),rgba(2,5,8,.88) 24%,rgba(2,5,8,.98) 100%)}
+.controls{height:68px;border-radius:34px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(18px);display:grid;grid-template-columns:1fr 84px 1fr;align-items:center}
+.ctrl{border:0;background:transparent;color:#fff;font-weight:750;font-size:14px;height:100%}
+.play{width:58px;height:58px;border-radius:50%;border:0;background:#ead7af;color:#1b1711;font-size:23px;font-weight:900;justify-self:center}
+.ctrl small{display:block;font-size:10px;color:#aeb8be;margin-top:2px;font-weight:600}
+.progress{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.10)}
+.bar{height:100%;background:var(--gold);transition:.25s}
+</style>
+</head>
+<body>
+<div class="app">
+
+<section class="screen active" id="home">
+  <div class="header"><div class="brand">🌍 地球探索</div><div class="blank"></div></div>
+  <div class="homeTitle">选择城市</div>
+  <div class="homeCity" onclick="show('beijing')">北京</div>
+</section>
+
+<section class="screen" id="beijing">
+  <div class="header"><button class="back" onclick="show('home')">‹</button><div class="brand">北京</div><div class="blank"></div></div>
+  <div class="list">
+    <div class="row" onclick="startStory(0)">天亮以前的钟楼</div>
+    <div class="row disabled">前门来了一个外乡人</div>
+  </div>
+</section>
+
+<section class="screen story" id="story">
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="bg" id="storyBg"></div>
+  <div class="shade"></div>
+  <div class="storyTop">
+    <button class="back" onclick="leaveStory()">‹</button>
+    <div class="storyTitle">天亮以前的钟楼</div>
+    <div class="sceneCount" id="sceneCount">1 / 8</div>
+  </div>
+  <div class="storyText">
+    <div class="sceneName" id="sceneName"></div>
+    <div class="body" id="sceneBody"></div>
+  </div>
+  <div class="player">
+    <div class="controls">
+      <button class="ctrl" onclick="cycleSpeed()"><span id="speedLabel">1.0×</span><small>速度</small></button>
+      <button class="play" id="playBtn" onclick="togglePlay()">⏸</button>
+      <button class="ctrl" onclick="cycleVoice()"><span id="voiceLabel">声音 1</span><small>朗读声音</small></button>
+    </div>
+  </div>
+</section>
+
+</div>
+<script>
+const images=[
+'assets/scenes/s01-night.svg','assets/scenes/s02-home.svg','assets/scenes/s03-leave.svg','assets/scenes/s04-bell.svg',
+'assets/scenes/s05-wake.svg','assets/scenes/s06-porridge.svg','assets/scenes/s07-city.svg','assets/scenes/s08-end.svg'
+];
+
+const scenes=[
+{n:"01 · 夜还没退",t:"天还没亮，北京城还安安静静的。风从胡同里慢慢吹过，带着一点秋天的凉意。远远望去，高高的钟楼立在灰蓝色的天边。"},
+{n:"02 · 小安起床",t:"小安已经醒了。他今年十五岁，住在钟楼附近的一条小胡同里。他跟着舅舅一起做早点生意，每天清晨都要早早出门。"},
+{n:"03 · 出门",t:"小安抱着一小捆柴，跟在舅舅后面走出院门。胡同很窄，脚步声在安静的清晨里听得格外清楚。小安问：“舅舅，快到时候了吗？”"},
+{n:"04 · 钟声",t:"“快了。等钟声一响，这城就活了。”他们刚走到钟楼附近，钟声就响了。咚，一声，又一声。声音沉稳、悠长，慢慢传进清冷的空气里。"},
+{n:"05 · 北京慢慢醒了",t:"钟声过后，街上开始慢慢有了人。一个卖烧饼的人挑着担子从胡同口经过。天色一点一点亮起来，空气里也慢慢有了热气和米粥的香味。"},
+{n:"06 · 第一位客人",t:"第一位客人是一个挑担的脚夫。“来一碗热的。”小安小心地盛了一碗粥，双手递过去。那人笑着说：“这天儿啊，还是热粥最暖人。”"},
+{n:"07 · 看着这座城",t:"太阳还没有真正升起来，可天已经比刚才亮了很多。钟楼、屋顶、胡同口，还有远处的街道，都慢慢有了颜色。小安轻轻地说：“北京，又开始新的一天了。”"},
+{n:"08 · 天亮以前的钟楼",t:"舅舅在后面叫他：“小安，别发呆了，快来帮忙！”“来了！”小安转身跑过去。每一天的钟声，都像在告诉他：只要天亮了，日子就会继续往前走。"}
+];
+
+const scripts=[
+[["n","天还没亮，北京城还安安静静的。风从胡同里慢慢吹过，带着一点秋天的凉意。远远望去，高高的钟楼立在灰蓝色的天边。"]],
+[["n","小安已经醒了。他今年十五岁，住在钟楼附近的一条小胡同里。他跟着舅舅一起做早点生意，每天清晨都要早早出门。"]],
+[["n","小安抱着一小捆柴，跟在舅舅后面走出院门。胡同很窄，脚步声在安静的清晨里听得格外清楚。小安问："],["x","舅舅，快到时候了吗？"]],
+[["u","快了。等钟声一响，这城就活了。"],["n","他们刚走到钟楼附近，钟声就响了。咚，一声，又一声。声音沉稳、悠长，慢慢传进清冷的空气里。"]],
+[["n","钟声过后，街上开始慢慢有了人。一个卖烧饼的人挑着担子从胡同口经过。天色一点一点亮起来，空气里也慢慢有了热气和米粥的香味。"]],
+[["n","第一位客人是一个挑担的脚夫。"],["p","来一碗热的。"],["n","小安小心地盛了一碗粥，双手递过去。那人笑着说："],["p","这天儿啊，还是热粥最暖人。"]],
+[["n","太阳还没有真正升起来，可天已经比刚才亮了很多。钟楼、屋顶、胡同口，还有远处的街道，都慢慢有了颜色。小安轻轻地说："],["x","北京，又开始新的一天了。"]],
+[["n","舅舅在后面叫他："],["u","小安，别发呆了，快来帮忙！"],["x","来了！"],["n","小安转身跑过去。每一天的钟声，都像在告诉他：只要天亮了，日子就会继续往前走。"]]
+];
+
+const role={n:{pitch:.94},x:{pitch:1.12},u:{pitch:.82},p:{pitch:.72}};
+const speeds=[.8,1,1.2,1.5];
+let speedIndex=1,voiceIndex=0,idx=0,part=0,playing=false,finished=false,token=0;
+let voiceChoices=[];
+
+function refreshVoices(){
+  if(!('speechSynthesis' in window))return;
+  const all=speechSynthesis.getVoices();
+  voiceChoices=all.filter(v=>/^zh/i.test(v.lang));
+  if(!voiceChoices.length)voiceChoices=all;
+  if(voiceIndex>=voiceChoices.length)voiceIndex=0;
+  updatePlayer();
+}
+if('speechSynthesis' in window){
+  refreshVoices();
+  speechSynthesis.onvoiceschanged=refreshVoices;
+}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.documentElement.style.overflow=id==='story'?'hidden':'';
+  document.body.style.overflow=id==='story'?'hidden':'';
+}
+function render(){
+  document.getElementById('storyBg').style.backgroundImage='url("'+images[idx]+'")';
+  document.getElementById('sceneName').textContent=scenes[idx].n;
+  document.getElementById('sceneBody').textContent=scenes[idx].t;
+  document.getElementById('sceneCount').textContent=(idx+1)+' / '+scenes.length;
+  document.getElementById('bar').style.width=((idx+1)/scenes.length*100)+'%';
+}
+function startStory(){
+  stopSpeech();
+  idx=0;part=0;finished=false;
+  render();show('story');
+  playing=true;updatePlayer();
+  speak(++token);
+}
+function leaveStory(){stopSpeech();show('beijing')}
+function getVoice(){
+  refreshVoices();
+  if(!voiceChoices.length)return null;
+  return voiceChoices[voiceIndex%voiceChoices.length]||null;
+}
+function speak(myToken){
+  if(!playing||myToken!==token)return;
+  if(finished)return;
+  if(part>=scripts[idx].length){
+    if(idx<scenes.length-1){
+      idx++;part=0;render();
+      setTimeout(()=>speak(myToken),220);
+    }else{
+      finished=true;playing=false;updatePlayer();
+    }
+    return;
+  }
+  if(!('speechSynthesis' in window)){playing=false;updatePlayer();return}
+  const [r,text]=scripts[idx][part],u=new SpeechSynthesisUtterance(text),cfg=role[r]||role.n;
+  u.lang='zh-CN';
+  u.rate=speeds[speedIndex];
+  const fallbackPitch=[.90,1.02,1.12];
+  u.pitch=voiceChoices.length>1?cfg.pitch:(fallbackPitch[voiceIndex%fallbackPitch.length]*cfg.pitch);
+  u.volume=1;
+  const v=getVoice();if(v)u.voice=v;
+  u.onend=()=>{if(playing&&myToken===token){part++;setTimeout(()=>speak(myToken),120)}};
+  u.onerror=()=>{if(playing&&myToken===token){part++;setTimeout(()=>speak(myToken),70)}};
+  speechSynthesis.speak(u);
+}
+function togglePlay(){
+  if(finished){
+    idx=0;part=0;finished=false;render();playing=true;updatePlayer();speak(++token);return;
+  }
+  if(playing){stopSpeech(false)}
+  else{playing=true;updatePlayer();speak(++token)}
+}
+function stopSpeech(reset=false){
+  playing=false;token++;
+  try{speechSynthesis.cancel()}catch(e){}
+  if(reset){idx=0;part=0;finished=false}
+  updatePlayer();
+}
+function updatePlayer(){
+  const b=document.getElementById('playBtn');
+  b.textContent=finished?'↻':(playing?'⏸':'▶');
+  document.getElementById('speedLabel').textContent=speeds[speedIndex].toFixed(1)+'×';
+  const count=Math.max(voiceChoices.length,3);
+  document.getElementById('voiceLabel').textContent='声音 '+((voiceIndex%count)+1);
+}
+function restartCurrent(){
+  if(!playing)return;
+  try{speechSynthesis.cancel()}catch(e){}
+  token++;part=0;speak(++token);
+}
+function cycleSpeed(){
+  speedIndex=(speedIndex+1)%speeds.length;
+  updatePlayer();restartCurrent();
+}
+function cycleVoice(){
+  refreshVoices();
+  const count=Math.max(voiceChoices.length,3);
+  voiceIndex=(voiceIndex+1)%count;
+  updatePlayer();
+  restartCurrent();
+}
+updatePlayer();
+</script>
+</body>
+</html>
