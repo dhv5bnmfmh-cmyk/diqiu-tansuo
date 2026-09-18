@@ -3,645 +3,308 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#071018">
-<title>地球探索 · 北京</title>
+<meta name="theme-color" content="#05080b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="地球探索">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/app-icon.svg">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>地球探索</title>
 <style>
-:root{--bg:#071018;--panel:#101820;--ink:#f7f2e8;--muted:#aeb8c0;--gold:#e2b96f;--line:rgba(255,255,255,.11)}
-*{box-sizing:border-box}html,body{margin:0;background:#03070b;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif}
-body{min-height:100vh}.app{max-width:470px;min-height:100vh;margin:auto;background:var(--bg);position:relative;overflow:hidden}
-.screen{display:none;min-height:100vh;position:relative}.screen.active{display:block}.pad{padding:22px 20px 32px}
-.hero{min-height:100vh;background:radial-gradient(circle at 52% 16%,rgba(51,83,112,.5),transparent 24%),linear-gradient(180deg,#0a1824 0,#0b1116 45%,#070a0c 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:28px 22px 36px}
-.kicker{font-size:12px;letter-spacing:.12em;color:#e8c98d;font-weight:700}.brand{position:absolute;top:18px;left:20px;font-size:14px;font-weight:800}.planet{position:absolute;right:-70px;top:60px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#557184,#263843 55%,#0e151a 70%);box-shadow:0 0 80px rgba(84,121,143,.24)}
-h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0 0 8px}p{line-height:1.7}
-.sub{color:#c7d0d6;font-size:15px}.btn{width:100%;border:0;border-radius:18px;padding:17px 18px;font-weight:800;font-size:16px;margin-top:12px;cursor:pointer}.primary{background:#ead7af;color:#211a11}.secondary{background:rgba(255,255,255,.07);color:#f5f3ed;border:1px solid var(--line)}
-.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:15px 18px;background:rgba(7,16,24,.82);backdrop-filter:blur(15px);border-bottom:1px solid rgba(255,255,255,.05)}
-.back{border:0;background:transparent;color:#fff;font-size:22px;padding:6px 10px;cursor:pointer}.small{font-size:12px;color:var(--muted)}
-.cityHero{height:280px;margin:-1px -20px 22px;background-image:linear-gradient(180deg,rgba(5,8,12,.04),rgba(5,8,12,.86)),url("assets/scenes/s07-city.svg");background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:22px}.cityHero h2{font-size:35px;text-shadow:0 2px 20px rgba(0,0,0,.7)}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:21px;padding:18px;margin:12px 0}.tag{font-size:11px;color:var(--gold);letter-spacing:.1em;margin-bottom:8px}.storyCard{padding:0;overflow:hidden}.storyArt{height:205px;background-image:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.72)),url("assets/scenes/s01-night.svg");background-size:cover;background-position:center}.storyBody{padding:18px}.storyTitle{font-size:23px;font-weight:850}.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.pill{font-size:11px;padding:7px 9px;border-radius:999px;background:rgba(255,255,255,.07);color:#cfd5d8}.twoBtns{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}.twoBtns .btn{margin:0;font-size:14px;padding:14px 10px}
-.referenceNote{font-size:11px;color:#9da8ae;margin-top:10px;line-height:1.55}
-.storyScreen{min-height:100vh;background:#091017}.sceneArt{position:absolute;inset:0 0 42%;background:var(--scene);background-size:cover;background-position:center;transform:scale(1.01);transition:background-image .35s ease}.sceneShade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.02) 28%,rgba(7,12,16,.70) 57%,#071018 77%)}
-.sceneRef{position:absolute;top:64px;right:15px;z-index:3;background:rgba(0,0,0,.46);backdrop-filter:blur(8px);padding:6px 8px;border-radius:999px;font-size:9px;color:#d4d9dc}
-.scenePanel{position:absolute;left:0;right:0;bottom:0;padding:0 20px 24px;z-index:2}.sceneName{font-size:12px;color:#e4bd77;letter-spacing:.08em}.sceneText{font-size:20px;line-height:1.72;margin:10px 0 0}.trans{display:none;margin-top:12px;color:#cbd2d6;font-size:14px;line-height:1.65;padding-top:12px;border-top:1px solid var(--line)}
-.langs{display:flex;gap:7px;margin-top:16px}.chip{border:0;border-radius:999px;padding:9px 11px;background:rgba(255,255,255,.08);color:#fff;font-size:12px;cursor:pointer}.chip.on{background:#ead7af;color:#1d1710}
-.sceneNav{display:flex;align-items:center;gap:10px;margin-top:15px}.navBtn{flex:1;border:1px solid var(--line);border-radius:15px;padding:14px;background:rgba(255,255,255,.06);color:#fff;font-weight:750;cursor:pointer}.navBtn.next{background:#ead7af;color:#211a11;border:0}.word{color:#f0cc8d;border-bottom:1px dotted #f0cc8d;cursor:pointer}
-.progress{height:3px;background:rgba(255,255,255,.08);position:absolute;top:0;left:0;right:0;z-index:10}.bar{height:100%;background:#dfb56b;transition:.25s}
-.sheetBack{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20}.sheetBack.open{display:block}.sheet{position:fixed;left:0;right:0;bottom:-430px;max-width:470px;margin:auto;background:#f4eddf;color:#181715;border-radius:28px 28px 0 0;padding:16px 22px 28px;z-index:21;transition:.25s}.sheet.open{bottom:0}.handle{width:52px;height:5px;border-radius:5px;background:#aaa08d;margin:0 auto 15px}.wordTitle{font-size:34px;font-weight:900}.pinyin{color:#826e48;margin:4px 0 15px}.def{font-size:17px;line-height:1.6}
-.cultureArt{height:205px;border-radius:18px;background-image:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.55)),url("https://commons.wikimedia.org/wiki/Special:Redirect/file/Beijing_Drum_Tower_and_Beijing_Bell_Tower_20160822.jpg?width=960");background-size:cover;background-position:center;position:relative;margin-top:10px}.cultureArt:after{content:"钟楼 · 鼓楼";position:absolute;left:14px;bottom:13px;background:rgba(0,0,0,.52);padding:7px 10px;border-radius:999px;font-size:11px}
-.credit{font-size:11px;color:#98a4ab;line-height:1.65}.credit a{color:#d6bd8b}.end{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:30px 22px 40px;background-image:linear-gradient(180deg,rgba(4,7,10,.06),rgba(4,7,10,.82)),url("assets/scenes/s08-end.svg");background-size:cover;background-position:center}.quote{font-size:24px;line-height:1.5;color:#f2d9aa}.resume{display:none;margin-top:12px}.resume.show{display:block}
+:root{
+  --bg:#05080b;--ink:#f7f3ea;--muted:#9da8af;--gold:#e7bd73;
+  --glass:rgba(16,22,27,.70);--line:rgba(255,255,255,.10)
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#000;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif}
+button{font:inherit;-webkit-tap-highlight-color:transparent}
+.app{width:min(470px,100vw);min-height:100vh;margin:auto;background:var(--bg);position:relative;overflow:hidden}
+.screen{display:none;min-height:100vh;position:relative}.screen.active{display:block}
+.header{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid rgba(255,255,255,.055)}
+.brand{font-size:19px;font-weight:850;letter-spacing:.01em}
+.back{border:0;background:transparent;color:#fff;font-size:29px;padding:8px 10px}.blank{width:48px}
+.homeTitle{font-size:12px;color:var(--muted);letter-spacing:.14em;padding:36px 22px 10px}
+.homeCity{font-size:36px;font-weight:860;padding:18px 22px 26px;cursor:pointer}
+.list{padding:6px 22px 34px}
+.row{min-height:78px;display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,.075);font-size:22px;font-weight:730;cursor:pointer}
+.row:active,.homeCity:active{opacity:.58}.row.disabled{opacity:.3;cursor:default}
 
-/* Film intro */
-.film{background:#020507;overflow:hidden}.filmBg{position:absolute;inset:-3%;background-size:cover;background-position:center;filter:saturate(.75) contrast(1.06);transform:scale(1.02)}.filmBg.playing{animation:kenburns 7.5s ease-out forwards}.filmShade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.18) 45%,rgba(0,0,0,.86) 88%,#020507)}
-@keyframes kenburns{from{transform:scale(1.02)}to{transform:scale(1.12)}}
-.filmTop{position:absolute;left:15px;right:15px;top:16px;z-index:4;display:flex;justify-content:space-between;align-items:center}.filmRound{border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.35);color:#fff;border-radius:999px;padding:10px 13px;font-size:12px;backdrop-filter:blur(8px)}.filmCopy{position:absolute;left:24px;right:24px;bottom:74px;z-index:4}.filmEyebrow{color:#efd29b;font-size:11px;letter-spacing:.12em;margin-bottom:9px}.filmTitle{font-size:31px;font-weight:850;line-height:1.35;text-shadow:0 2px 18px rgba(0,0,0,.8)}.filmSub{margin-top:8px;color:#d2d7d9;font-size:13px;line-height:1.6}.filmProgress{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.12);z-index:5}.filmBar{height:100%;width:0;background:#e1b76c}.filmBadge{position:absolute;top:67px;right:16px;z-index:4;font-size:9px;background:rgba(0,0,0,.5);padding:6px 8px;border-radius:999px;color:#cfd5d7}
-.layerTools{position:absolute;top:62px;left:14px;right:14px;z-index:4;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.layerGroup{display:flex;gap:6px;background:rgba(0,0,0,.42);backdrop-filter:blur(10px);padding:5px;border-radius:999px;border:1px solid rgba(255,255,255,.09)}
-.layerBtn{border:0;background:transparent;color:#d7dcdf;border-radius:999px;padding:7px 10px;font-size:10px;font-weight:700}
-.layerBtn.on{background:#ead7af;color:#201810}
-.factBtn{border:1px solid rgba(255,255,255,.13);background:rgba(0,0,0,.42);backdrop-filter:blur(10px);color:#fff;border-radius:999px;padding:9px 11px;font-size:10px;font-weight:700}
-.factSheet{position:fixed;left:0;right:0;bottom:-650px;max-width:470px;margin:auto;background:#0e151b;color:#f6f1e7;border-radius:28px 28px 0 0;padding:15px 20px 28px;z-index:31;transition:.28s;box-shadow:0 -20px 70px rgba(0,0,0,.45);max-height:78vh;overflow:auto}
-.factSheet.open{bottom:0}.factBack{display:none;position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:30}.factBack.open{display:block}
-.factRow{padding:13px 0;border-bottom:1px solid rgba(255,255,255,.08)}.factRow:last-child{border-bottom:0}.factLabel{font-size:10px;letter-spacing:.1em;color:#e3b96f;font-weight:800;margin-bottom:5px}.factValue{font-size:14px;line-height:1.65;color:#d9dee1}.archiveNote{font-size:11px;line-height:1.6;color:#aab4ba;margin-top:10px}.archiveNote a{color:#e0c18a}
-.archiveStamp{position:absolute;right:14px;bottom:44%;z-index:3;background:rgba(0,0,0,.55);padding:6px 8px;border-radius:999px;font-size:9px;color:#d9dddf;display:none}.archiveStamp.show{display:block}
-.storyActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}
-.actionBtn{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.075);color:#f5f2eb;border-radius:14px;padding:11px 10px;font-size:12px;font-weight:750}
-.actionBtn.playing{background:#ead7af;color:#211a11;border-color:transparent}
-.charBack{display:none;position:fixed;inset:0;background:rgba(0,0,0,.64);z-index:34}.charBack.open{display:block}
-.charSheet{position:fixed;left:0;right:0;bottom:-760px;max-width:470px;margin:auto;background:#0d141a;color:#f7f2e8;border-radius:28px 28px 0 0;padding:15px 20px 30px;z-index:35;transition:.28s;max-height:84vh;overflow:auto;box-shadow:0 -20px 70px rgba(0,0,0,.5)}
-.charSheet.open{bottom:0}.charGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}.charCard{border:1px solid rgba(255,255,255,.08);background:#131d24;border-radius:17px;overflow:hidden;opacity:.58;transition:.2s}.charCard.active{opacity:1;border-color:rgba(226,185,111,.55);box-shadow:0 0 0 1px rgba(226,185,111,.15) inset}.charCard img{width:100%;aspect-ratio:3/3.8;object-fit:cover;display:block}.charMeta{padding:9px}.charName{font-size:13px;font-weight:850}.charRole{font-size:10px;color:#aeb8c0;margin-top:3px;line-height:1.4}
-.charRule{margin-top:14px;padding:13px;border-radius:15px;background:#121b22;font-size:12px;line-height:1.65;color:#cbd2d6}
-.soundHint{font-size:10px;color:#9eaaaf;margin-top:8px;line-height:1.5}
-#continuousReadBtn{grid-column:1/-1}
-.simpleMoreBtn{border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.38);backdrop-filter:blur(10px);color:#fff;border-radius:999px;padding:9px 12px;font-size:11px;font-weight:750}
-.simpleControl{margin-top:15px}
-.simpleControl .actionBtn{width:100%;padding:14px 12px;font-size:14px}
-.moreBack{display:none;position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:38}.moreBack.open{display:block}
-.moreSheet{position:fixed;left:0;right:0;bottom:-760px;max-width:470px;margin:auto;background:#0d141a;color:#f7f2e8;border-radius:28px 28px 0 0;padding:15px 20px 28px;z-index:39;transition:.28s;max-height:82vh;overflow:auto;box-shadow:0 -20px 70px rgba(0,0,0,.5)}
-.moreSheet.open{bottom:0}.moreSection{padding:13px 0;border-top:1px solid rgba(255,255,255,.08)}.moreSection:first-of-type{border-top:0}.moreTitle{font-size:10px;letter-spacing:.1em;color:#e3b96f;font-weight:800;margin-bottom:9px}.moreRow{display:flex;gap:8px;flex-wrap:wrap}.moreRow .chip,.moreRow .actionBtn{flex:1;min-width:86px}
-.storyCard{cursor:pointer}
-.storyCard:active{transform:scale(.995)}
+/* story */
+.story.active{position:fixed;left:50%;top:0;transform:translateX(-50%);width:min(470px,100vw);height:100dvh;min-height:100dvh;overflow:hidden;overscroll-behavior:none}
+.storyBg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.02);transition:background-image .6s ease,transform 8s ease}
+.story.active .storyBg{transform:scale(1.07)}
+.storyShade{position:absolute;inset:0;background:
+ linear-gradient(180deg,rgba(0,0,0,.20),rgba(0,0,0,.01) 34%,rgba(2,5,8,.18) 50%,rgba(2,5,8,.70) 72%,#020508 100%)}
+.storyTop{position:absolute;z-index:5;left:0;right:0;top:0;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 17px}
+.title{font-size:14px;font-weight:760;text-shadow:0 1px 12px rgba(0,0,0,.65)}
+.count{font-size:12px;color:#d2d7da}
+.storyText{position:absolute;z-index:4;left:25px;right:25px;bottom:158px}
+.scene{font-size:11px;color:var(--gold);letter-spacing:.11em;margin-bottom:10px;font-weight:760}
+.body{font-size:21px;line-height:1.68;text-shadow:0 2px 16px rgba(0,0,0,.68)}
+.player{position:absolute;z-index:8;left:0;right:0;bottom:0;padding:6px 14px calc(13px + env(safe-area-inset-bottom))}
+.playerGlass{
+  background:linear-gradient(180deg,rgba(26,32,37,.78),rgba(12,17,21,.91));
+  border:1px solid rgba(255,255,255,.11);box-shadow:0 18px 55px rgba(0,0,0,.35);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-radius:26px;padding:12px 14px 10px
+}
+.timeline{height:3px;background:rgba(255,255,255,.12);border-radius:999px;overflow:hidden;margin:0 5px 11px}
+.timelineBar{height:100%;width:0;background:linear-gradient(90deg,#e6b767,#f2d49a);border-radius:999px}
+.timeRow{display:flex;justify-content:space-between;color:#89959c;font-size:10px;margin:0 4px 2px}
+.controls{height:64px;display:grid;grid-template-columns:1fr 78px 1fr;align-items:center}
+.ctrl{border:0;background:transparent;color:#f5f3ed;font-size:14px;font-weight:760;height:58px;border-radius:18px}
+.ctrl:active{background:rgba(255,255,255,.06)}
+.ctrl small{display:block;color:#87949b;font-size:9px;font-weight:650;margin-top:3px}
+.play{width:58px;height:58px;border-radius:50%;border:0;justify-self:center;background:linear-gradient(145deg,#f0ddb3,#dcb974);color:#1c1711;font-size:22px;font-weight:900;box-shadow:0 7px 24px rgba(226,185,111,.25)}
+.status{position:absolute;left:50%;top:80px;transform:translateX(-50%);z-index:6;font-size:10px;color:#d9dfe2;background:rgba(0,0,0,.32);padding:6px 10px;border-radius:999px;backdrop-filter:blur(12px);opacity:0;transition:.25s;pointer-events:none}
+.status.show{opacity:1}
 </style>
 </head>
 <body>
 <div class="app">
+
 <section class="screen active" id="home">
-  <div class="hero">
-    <div class="brand">🌍 地球探索</div><div class="planet"></div>
-    <div class="kicker">EXPLORE THE EARTH THROUGH STORIES</div>
-    <h1>从一个故事，<br>走进一个地方。</h1>
-    <div class="sub">不是考试，也不是背课文。跟着人物走进城市、文化和语言。</div>
-    <button class="btn primary" onclick="show('beijing')">开始探索北京</button>
-    <button id="resumeBtn" class="btn secondary resume" onclick="resumeStory()">继续上次的故事</button>
-  </div>
+  <div class="header"><div class="brand">🌍 地球探索</div><div class="blank"></div></div>
+  <div class="homeTitle">选择城市</div>
+  <div class="homeCity" onclick="show('beijing')">北京</div>
 </section>
 
 <section class="screen" id="beijing">
-  <div class="top"><button class="back" onclick="show('home')">‹</button><b>北京 · BEIJING</b><span class="small">01 城市</span></div>
-  <div class="pad">
-    <div class="cityHero"><div><div class="kicker">CHINA · 北京</div><h2>一座城，很多种时间。</h2></div></div>
-    <p class="sub">从中轴线、胡同、早点和普通人的一天开始。第一篇不是讲帝王，而是讲天亮之前，一个十五岁少年的清晨。</p>
-    <div class="card storyCard" onclick="startExperience()">
-      <div class="storyArt"></div>
-      <div class="storyBody">
-        <div class="tag">BJ-001 · 北京故事</div>
-        <div class="storyTitle">《天亮以前的钟楼》</div>
-        <p class="sub">北京醒来之前，一个普通少年的清晨。</p>
-        <div class="meta"><span class="pill">清末背景</span><span class="pill">人物虚构</span><span class="pill">地点真实</span></div>
-        <button class="btn primary" onclick="event.stopPropagation();startExperience()">开始故事</button>
-        <div class="referenceNote">点一下就开始：电影开场后自动进入故事并连续朗读。</div>
+  <div class="header"><button class="back" onclick="show('home')">‹</button><div class="brand">北京</div><div class="blank"></div></div>
+  <div class="list">
+    <div class="row" onclick="startStory()">天亮以前的钟楼</div>
+    <div class="row disabled">前门来了一个外乡人</div>
+  </div>
+</section>
+
+<section class="screen story" id="story">
+  <div class="storyBg" id="storyBg"></div><div class="storyShade"></div>
+  <div class="storyTop">
+    <button class="back" onclick="leaveStory()">‹</button>
+    <div class="title">天亮以前的钟楼</div>
+    <div class="count" id="count">1 / 8</div>
+  </div>
+  <div class="status" id="status">声音 1 · 沉稳男声</div>
+  <div class="storyText">
+    <div class="scene" id="scene"></div>
+    <div class="body" id="body"></div>
+  </div>
+  <div class="player">
+    <div class="playerGlass">
+      <div class="timeRow"><span id="elapsed">0:00</span><span id="remaining">-0:00</span></div>
+      <div class="timeline"><div class="timelineBar" id="timelineBar"></div></div>
+      <div class="controls">
+        <button class="ctrl" onclick="cycleSpeed()"><span id="speed">1.0×</span><small>速度</small></button>
+        <button class="play" id="play" onclick="togglePlay()">⏸</button>
+        <button class="ctrl" onclick="cycleVoice()"><span id="voice">声音 1</span><small>朗读声音</small></button>
       </div>
     </div>
-    <div class="card" style="opacity:.58"><div class="tag">COMING NEXT</div><div class="storyTitle">《前门来了一个外乡人》</div><p class="sub">BJ-002 · 下一篇正在准备。</p></div>
   </div>
 </section>
 
-<section class="screen film" id="film">
-  <div class="filmBg" id="filmBg"></div><div class="filmShade"></div>
-  <div class="filmTop">
-    <button class="filmRound" onclick="leaveFilm()">‹ 返回</button>
-    <span></span>
-    <button class="filmRound" onclick="finishFilm()">跳过</button>
-  </div>
-  <div class="filmBadge">场景复原插画 · 非史料影像</div>
-  <div class="filmCopy">
-    <div class="filmEyebrow" id="filmEyebrow">BJ-001 · 电影开场</div>
-    <div class="filmTitle" id="filmTitle"></div>
-    <div class="filmSub" id="filmSub"></div>
-  </div>
-  <div class="filmProgress"><div class="filmBar" id="filmBar"></div></div>
-</section>
-
-<section class="screen storyScreen" id="story">
-  <div class="progress"><div class="bar" id="bar"></div></div>
-  <div class="sceneArt" id="sceneArt"></div><div class="sceneShade"></div>
-  <div class="sceneRef" id="sceneRef">场景复原插画 · 非史料影像</div>
-  <div class="archiveStamp" id="archiveStamp">历史影像 · 约1900–1906</div>
-  <div class="top" style="background:transparent;border:0;position:absolute;left:0;right:0"><button class="back" onclick="show('beijing')">‹</button><span class="small" id="count"></span><button class="simpleMoreBtn" onclick="openMore()">更多</button></div>
-  <div class="scenePanel">
-    <div class="sceneName" id="sceneName"></div>
-    <div class="sceneText" id="sceneText"></div>
-    <div class="trans" id="trans"></div>
-    <div class="simpleControl">
-      <button class="actionBtn" id="continuousReadBtn" onclick="toggleContinuousRead()">▶ 继续朗读</button>
-    </div>
-  </div>
-</section>
-
-<section class="screen" id="culture">
-  <div class="top"><button class="back" onclick="goScene(7)">‹</button><b>故事里的北京</b><span class="small">文化卡</span></div>
-  <div class="pad">
-    <h2>故事结束了，<br>北京还在继续。</h2>
-    <p class="sub">没有测试题。你想打开哪扇门，就继续看哪一扇。</p>
-    <div class="card"><div class="tag">PLACE</div><h3>北京钟鼓楼</h3><p>钟鼓楼位于北京传统中轴线北端，是老北京重要的城市地标，也曾与城市报时和日常节律密切相关。</p><div class="cultureArt"></div></div>
-    <div class="card"><div class="tag">TIME</div><h3>晨钟暮鼓</h3><p>钟与鼓曾经参与城市时间秩序。本故事使用少量钟声作为电影化表达，不声称完整复原历史报时程序。</p></div>
-    <div class="card"><div class="tag">LIFE</div><h3>胡同与早点</h3><p>真正的城市生活常常藏在小事里：院门、脚步、早点、热气、邻居和清晨的第一位客人。</p></div>
-    <div class="card"><div class="tag">FACT LOCK</div><h3>哪些是真的？</h3><p><b>真实背景：</b>北京钟鼓楼、胡同、时代与城市报时文化。<br><b>虚构创作：</b>小安、舅舅、脚夫、对白与这个清晨的具体事件。</p></div>
-    <div class="card"><div class="tag">CHARACTERS · 角色锁定</div><h3>小安、舅舅、脚夫</h3>
-      <div class="charGrid" style="margin-top:12px">
-        <div class="charCard active"><img src="assets/characters/xiao-an.svg" alt="小安"><div class="charMeta"><div class="charName">小安</div><div class="charRole">15岁 · 虚构</div></div></div>
-        <div class="charCard active"><img src="assets/characters/uncle.svg" alt="舅舅"><div class="charMeta"><div class="charName">舅舅</div><div class="charRole">中年 · 虚构</div></div></div>
-        <div class="charCard active"><img src="assets/characters/porter.svg" alt="脚夫"><div class="charMeta"><div class="charName">脚夫</div><div class="charRole">成年 · 虚构</div></div></div>
-      </div>
-      <p class="credit">本篇角色已锁定外形色系和声线参数，后续 Story Cinema 镜头继续沿用。</p>
-    </div>
-    <div class="card"><div class="tag">ARCHIVE · 历史影像</div><h3>从故事切回史料</h3>
-      <p>故事页右上可以切换“故事画面 / 历史影像”。历史影像包括约1900–1906年的北京钟楼、鼓楼及中轴线北段街景，用来帮助理解时代环境，而不是证明故事中的具体情节。</p>
-      <p class="credit">
-        1906年前北京钟楼照片：Sanshichiro Yamamoto，Public Domain。<br>
-        <a href="https://commons.wikimedia.org/wiki/File:Bell_Tower,_from_Peking_(1906).jpg" target="_blank" rel="noopener">查看钟楼历史照片</a><br><br>
-        1900–1901年鼓楼方向街景：capitaine Tissier，Public Domain。<br>
-        <a href="https://commons.wikimedia.org/wiki/File:Rue_centrale_au_nord_du_Palais_Imp%C3%A9rial_%C3%A0_P%C3%A9kin_%3B_au_fond_on_aper%C3%A7oit_la_Tour_du_Tambour_qui_date_du_milieu_du_xiiie_si%C3%A8cle.jpg" target="_blank" rel="noopener">查看历史街景</a>
-      </p>
-    </div>
-    <div class="card"><div class="tag">STORY CINEMA · 场景复原</div><h3>故事画面是什么？</h3>
-      <p>8 幕默认画面是为本故事制作的场景复原插画，用来建立光线、空间和人物关系。它们不是历史照片，也不单独作为建筑、服饰或街景细节的史料证据。</p>
-      <p class="credit">需要核对真实时代环境时，请切换到“历史影像”或打开“这一幕依据”。</p>
-    </div>
-    <button class="btn primary" onclick="show('end')">完成这一篇</button>
-  </div>
-</section>
-
-<section class="screen end" id="end">
-  <div class="kicker">BJ-001 · COMPLETE</div><h2>北京已经醒了。</h2>
-  <div class="quote">只要天亮了，<br>日子就会继续往前走。</div>
-  <div class="card"><div class="tag">NEXT STORY</div><div class="storyTitle">《前门来了一个外乡人》</div><p class="sub">下一篇，我们从城门外走进北京。</p></div>
-  <button class="btn primary" onclick="finishStory()">回到北京</button>
-  <button class="btn secondary" onclick="show('home')">回到地球</button>
-</section>
-
-<div class="sheetBack" id="sheetBack" onclick="closeWord()"></div>
-<div class="sheet" id="sheet"><div class="handle"></div><div class="wordTitle" id="wordTitle"></div><div class="pinyin" id="wordPinyin"></div><div class="def" id="wordDef"></div></div>
-<div class="factBack" id="factBack" onclick="closeFacts()"></div>
-<div class="factSheet" id="factSheet">
-  <div class="handle"></div>
-  <div class="tag">FACT LAYERS · 场景依据</div>
-  <h2 id="factTitle" style="font-size:25px;margin:7px 0 5px"></h2>
-  <div class="factRow"><div class="factLabel">HISTORICAL FACT · 历史事实</div><div class="factValue" id="factHistory"></div></div>
-  <div class="factRow"><div class="factLabel">REAL PLACE · 真实地点</div><div class="factValue" id="factPlace"></div></div>
-  <div class="factRow"><div class="factLabel">STORY RECONSTRUCTION · 故事化复原</div><div class="factValue" id="factReconstruction"></div></div>
-  <div class="factRow"><div class="factLabel">FICTION · 虚构内容</div><div class="factValue" id="factFiction"></div></div>
-  <div class="archiveNote">“历史影像”用于帮助理解时代与地点，不代表照片中发生了本故事情节。故事人物与具体对白仍为虚构。</div>
-</div>
-<div class="charBack" id="charBack" onclick="closeCharacters()"></div>
-<div class="charSheet" id="charSheet">
-  <div class="handle"></div>
-  <div class="tag">CHARACTER LOCK · 角色锁定</div>
-  <h2 style="font-size:25px;margin:7px 0 4px">这一篇的人</h2>
-  <div class="sub" style="font-size:12px">角色外形、衣色和声线参数固定，后续镜头继续沿用。</div>
-  <div class="charGrid">
-    <div class="charCard" id="char-xiao"><img src="assets/characters/xiao-an.svg" alt="小安角色基准"><div class="charMeta"><div class="charName">小安</div><div class="charRole">15岁 · 深蓝灰短褂 · 年轻声线</div></div></div>
-    <div class="charCard" id="char-uncle"><img src="assets/characters/uncle.svg" alt="舅舅角色基准"><div class="charMeta"><div class="charName">舅舅</div><div class="charRole">中年 · 棕灰衣 · 沉稳声线</div></div></div>
-    <div class="charCard" id="char-porter"><img src="assets/characters/porter.svg" alt="脚夫角色基准"><div class="charMeta"><div class="charName">脚夫</div><div class="charRole">成年 · 深褐灰衣 · 较低声线</div></div></div>
-  </div>
-  <div class="charRule">三人均为虚构人物。角色卡用于保证故事镜头的一致性，不代表任何真实历史人物。</div>
-</div>
-<div class="moreBack" id="moreBack" onclick="closeMore()"></div>
-<div class="moreSheet" id="moreSheet">
-  <div class="handle"></div>
-  <div class="tag">MORE · 更多</div>
-  <h2 style="font-size:24px;margin:7px 0 10px">阅读设置</h2>
-  <div class="moreSection">
-    <div class="moreTitle">语言</div>
-    <div class="moreRow">
-      <button class="chip on" data-lang="zh" onclick="setLang('zh',this)">中文</button>
-      <button class="chip" data-lang="py" onclick="setLang('py',this)">拼音</button>
-      <button class="chip" data-lang="en" onclick="setLang('en',this)">EN</button>
-      <button class="chip" data-lang="vi" onclick="setLang('vi',this)">VI</button>
-    </div>
-  </div>
-  <div class="moreSection">
-    <div class="moreTitle">画面与资料</div>
-    <div class="moreRow">
-      <button class="actionBtn" id="storyModeBtn" onclick="setVisualMode('story')">故事画面</button>
-      <button class="actionBtn" id="archiveModeBtn" onclick="setVisualMode('archive')">历史影像</button>
-    </div>
-    <div class="moreRow" style="margin-top:8px">
-      <button class="actionBtn" onclick="closeMore();openFacts()">这一幕依据</button>
-      <button class="actionBtn" onclick="closeMore();openCharacters()">角色</button>
-    </div>
-  </div>
-  <div class="moreSection">
-    <div class="moreTitle">手动翻页</div>
-    <div class="moreRow">
-      <button class="actionBtn" onclick="closeMore();prevScene()">上一幕</button>
-      <button class="actionBtn" onclick="closeMore();nextScene()">下一幕</button>
-    </div>
-  </div>
-</div>
+<audio id="audio" preload="auto" playsinline webkit-playsinline x-webkit-airplay="allow"></audio>
 </div>
 
 <script>
-const STORY_IMAGES=[
-'assets/scenes/s01-night.svg',
-'assets/scenes/s02-home.svg',
-'assets/scenes/s03-leave.svg',
-'assets/scenes/s04-bell.svg',
-'assets/scenes/s05-wake.svg',
-'assets/scenes/s06-porridge.svg',
-'assets/scenes/s07-city.svg',
-'assets/scenes/s08-end.svg'
+const VOICES=[
+"assets/audio/bj001-voice1.mp3",
+"assets/audio/bj001-voice2.mp3",
+"assets/audio/bj001-voice3.mp3"
 ];
-const ARCHIVE_BELL='https://commons.wikimedia.org/wiki/Special:Redirect/file/Bell_Tower,_from_Peking_(1906).jpg?width=1280';
-const ARCHIVE_STREET='https://commons.wikimedia.org/wiki/Special:Redirect/file/Rue_centrale_au_nord_du_Palais_Imp%C3%A9rial_%C3%A0_P%C3%A9kin_%3B_au_fond_on_aper%C3%A7oit_la_Tour_du_Tambour_qui_date_du_milieu_du_xiiie_si%C3%A8cle.jpg?width=1280';
-
+const VOICE_NAMES=["声音 1 · 沉稳男声","声音 2 · 温和女声","声音 3 · 年轻平静男声"];
+const images=[
+'assets/scenes/s01-night.svg','assets/scenes/s02-home.svg','assets/scenes/s03-leave.svg','assets/scenes/s04-bell.svg',
+'assets/scenes/s05-wake.svg','assets/scenes/s06-porridge.svg','assets/scenes/s07-city.svg','assets/scenes/s08-end.svg'
+];
 const scenes=[
-{n:"01 · 夜还没退",img:STORY_IMAGES[0],c:"#14212a",zh:"天还没亮，北京城还安安静静的。风从胡同里慢慢吹过，带着一点秋天的凉意。远远望去，高高的钟楼立在灰蓝色的天边。",py:"Tiān hái méi liàng, Běijīng chéng hái ān ān jìng jìng de. Fēng cóng hútòng lǐ màn man chuī guò.",en:"Before dawn, Beijing was still quiet. A cool autumn wind moved through the hutongs, and the Bell Tower stood against the gray-blue sky.",vi:"Trời vẫn chưa sáng, Bắc Kinh còn rất yên tĩnh. Gió thu len qua những con hutong, còn Chung Lâu đứng dưới bầu trời xanh xám."},
-{n:"02 · 小安起床",img:STORY_IMAGES[1],c:"#38291f",zh:"小安已经醒了。他今年十五岁，住在钟楼附近的一条小胡同里。他跟着舅舅一起做早点生意，每天清晨都要早早出门。",py:"Xiǎo Ān yǐjīng xǐng le. Tā jīnnián shíwǔ suì, zhù zài Zhōnglóu fùjìn de yì tiáo xiǎo hútòng lǐ.",en:"Xiao An was already awake. He was fifteen and lived in a small hutong near the Bell Tower. Every morning he went out early with his uncle to prepare breakfast.",vi:"Tiểu An đã thức dậy. Cậu mười lăm tuổi, sống trong một con hutong nhỏ gần Chung Lâu và mỗi sáng đều cùng cậu mình làm đồ ăn sáng."},
-{n:"03 · 出门",img:STORY_IMAGES[2],c:"#1b2a33",zh:"小安抱着一小捆柴，跟在舅舅后面走出院门。胡同很窄，脚步声在安静的清晨里听得格外清楚。小安问：“舅舅，快到时候了吗？”",py:"Xiǎo Ān bàozhe yì xiǎo kǔn chái, gēn zài jiùjiu hòumiàn zǒu chū yuànmén.",en:"Xiao An carried a small bundle of firewood and followed his uncle out. The hutong was narrow, and their footsteps sounded especially clear.",vi:"Tiểu An ôm một bó củi nhỏ, đi theo sau cậu ra khỏi sân. Con ngõ rất hẹp, tiếng bước chân nghe đặc biệt rõ trong buổi sớm."},
-{n:"04 · 钟声",img:STORY_IMAGES[3],c:"#35434f",zh:"“快了。等钟声一响，这城就活了。”他们刚走到钟楼附近，钟声就响了。咚，一声，又一声。声音沉稳、悠长，慢慢传进清冷的空气里。",py:"Kuài le. Děng zhōngshēng yì xiǎng, zhè chéng jiù huó le. Dōng, yì shēng, yòu yì shēng.",en:"“Almost. Once the bell rings, the whole city comes alive.” Then the bell sounded, deep and lingering in the cold air.",vi:"“Sắp rồi. Khi tiếng chuông vang lên, cả thành phố sẽ sống dậy.” Rồi tiếng chuông cất lên, trầm và dài trong không khí lạnh."},
-{n:"05 · 北京慢慢醒了",img:STORY_IMAGES[4],c:"#6f543d",zh:"钟声过后，街上开始慢慢有了人。一个卖烧饼的人挑着担子从胡同口经过。天色一点一点亮起来，空气里也慢慢有了热气和米粥的香味。",py:"Zhōngshēng guòhòu, jiē shàng kāishǐ màn man yǒu le rén. Yí ge mài shāobǐng de rén tiāozhe dànzi cóng hútòng kǒu jīngguò.",en:"After the bell, people slowly began to appear. A flatbread vendor passed the hutong entrance, and the air filled with warmth and the smell of rice porridge.",vi:"Sau tiếng chuông, trên phố dần có người. Một người bán bánh đi qua đầu ngõ, còn mùi cháo nóng bắt đầu lan trong không khí."},
-{n:"06 · 第一位客人",img:STORY_IMAGES[5],c:"#765238",zh:"第一位客人是一个挑担的脚夫。“来一碗热的。”小安小心地盛了一碗粥，双手递过去。那人笑着说：“这天儿啊，还是热粥最暖人。”",py:"Dì yí wèi kèrén shì yí ge tiāodàn de jiǎofū. Lái yì wǎn rè de.",en:"The first customer was a porter. “One hot bowl.” Xiao An carefully handed him a bowl of porridge. The man smiled: “On a day like this, hot porridge warms you best.”",vi:"Vị khách đầu tiên là một người khuân vác. “Cho tôi một bát nóng.” Tiểu An cẩn thận đưa cháo cho anh. Người ấy mỉm cười: “Trời thế này, cháo nóng vẫn ấm lòng người nhất.”"},
-{n:"07 · 看着这座城",img:STORY_IMAGES[6],c:"#8f6844",zh:"太阳还没有真正升起来，可天已经比刚才亮了很多。钟楼、屋顶、胡同口，还有远处的街道，都慢慢有了颜色。小安轻轻地说：“北京，又开始新的一天了。”",py:"Tàiyáng hái méiyǒu zhēnzhèng shēng qǐlai, kě tiān yǐjīng bǐ gāngcái liàng le hěn duō.",en:"The sun had not fully risen, but the sky was much brighter. The Bell Tower, rooftops and streets slowly gained color. “Beijing has begun a new day again,” Xiao An said.",vi:"Mặt trời chưa mọc hẳn, nhưng trời đã sáng hơn nhiều. Chung Lâu, mái nhà và đường phố dần có màu sắc. “Bắc Kinh lại bắt đầu một ngày mới rồi,” Tiểu An nói."},
-{n:"08 · 天亮以前的钟楼",img:STORY_IMAGES[7],c:"#a87949",zh:"舅舅在后面叫他：“小安，别发呆了，快来帮忙！”“来了！”小安转身跑过去。每一天的钟声，都像在告诉他：只要天亮了，日子就会继续往前走。",py:"Jiùjiu zài hòumiàn jiào tā: Xiǎo Ān, bié fādāi le, kuài lái bāngmáng!",en:"His uncle called from behind. “Xiao An, stop daydreaming and come help!” Every morning bell seemed to tell him: as long as dawn comes, life will keep moving forward.",vi:"Cậu mình gọi từ phía sau: “Tiểu An, đừng ngẩn người nữa, mau lại giúp đi!” Mỗi tiếng chuông dường như đều nói: chỉ cần trời sáng, cuộc sống sẽ tiếp tục bước về phía trước."}
+{n:"01 · 夜还没退",t:"天还没亮，北京城还安安静静的。风从胡同里慢慢吹过，带着一点秋天的凉意。远远望去，高高的钟楼立在灰蓝色的天边。"},
+{n:"02 · 小安起床",t:"小安已经醒了。他今年十五岁，住在钟楼附近的一条小胡同里。他跟着舅舅一起做早点生意，每天清晨都要早早出门。"},
+{n:"03 · 出门",t:"小安抱着一小捆柴，跟在舅舅后面走出院门。胡同很窄，脚步声在安静的清晨里听得格外清楚。小安问：“舅舅，快到时候了吗？”"},
+{n:"04 · 钟声",t:"“快了。等钟声一响，这城就活了。”他们刚走到钟楼附近，钟声就响了。咚，一声，又一声。声音沉稳、悠长，慢慢传进清冷的空气里。"},
+{n:"05 · 北京慢慢醒了",t:"钟声过后，街上开始慢慢有了人。一个卖烧饼的人挑着担子从胡同口经过。天色一点一点亮起来，空气里也慢慢有了热气和米粥的香味。"},
+{n:"06 · 第一位客人",t:"第一位客人是一个挑担的脚夫。“来一碗热的。”小安小心地盛了一碗粥，双手递过去。那人笑着说：“这天儿啊，还是热粥最暖人。”"},
+{n:"07 · 看着这座城",t:"太阳还没有真正升起来，可天已经比刚才亮了很多。钟楼、屋顶、胡同口，还有远处的街道，都慢慢有了颜色。小安轻轻地说：“北京，又开始新的一天了。”"},
+{n:"08 · 天亮以前的钟楼",t:"舅舅在后面叫他：“小安，别发呆了，快来帮忙！”“来了！”小安转身跑过去。每一天的钟声，都像在告诉他：只要天亮了，日子就会继续往前走。"}
 ];
+const weights=scenes.map(s=>s.t.replace(/[\s“”。，！？：；、]/g,"").length+10);
+const totalWeight=weights.reduce((a,b)=>a+b,0);
+const audio=document.getElementById("audio");
+let voiceIndex=0,speedIndex=1,sceneIndex=-1;
+const speeds=[.8,1,1.2,1.5];
 
-const sceneFacts=[
-{history:"清末北京已有成熟的城市报时传统；本幕只建立“天亮前的北京”氛围，不声称照片中的具体街景就是小安所在胡同。",place:"故事设定在北京钟楼、鼓楼附近胡同。钟鼓楼为真实地点。",reconstruction:"清晨风、秋凉、远望钟楼的画面顺序属于叙事组织。",fiction:"小安及其观察、感受为虚构。"},
-{history:"清末北京普通居民清晨劳作、早点经营属于合理生活背景。",place:"钟鼓楼周边胡同为真实城市空间。",reconstruction:"舅舅熬粥、小安搬柴、生火与摆碗是故事化生活复原，不对应某个可考家庭。",fiction:"小安、舅舅及其家庭关系为虚构。"},
-{history:"胡同作为北京传统街巷空间真实存在。",place:"故事发生在钟楼附近胡同，但没有指定某一条可考门牌。",reconstruction:"抱柴出门、狗叫、灯光、脚步声属于场景复原。",fiction:"“舅舅，快到时候了吗？”这段对话为虚构。"},
-{history:"钟鼓楼曾承担北京城市报时功能；现存钟楼建成于清乾隆十二年（1747），因此清末设定可成立。",place:"北京钟楼为真实地点。",reconstruction:"故事只表现两三次电影化钟声，不等同于完整历史报时程序。",fiction:"小安与舅舅此刻恰好经过、停步聆听属于虚构。"},
-{history:"清代北京存在早点、粥食与街头小贩等日常生活形态。",place:"胡同与钟鼓楼周边为真实城市环境。",reconstruction:"卖烧饼者挑担经过、街上逐渐有人等是合成式生活场景。",fiction:"具体路人和发生顺序为虚构。"},
-{history:"脚夫是旧时以搬运、挑担等体力劳动谋生的人群。",place:"早点摊位没有对应现实可考地址。",reconstruction:"热粥、陶碗、蒸汽与清晨摊位用于呈现生活质感。",fiction:"第一位客人及“还是热粥最暖人”的对白为虚构。"},
-{history:"钟楼、鼓楼与周边街巷共同构成北京中轴线北端的重要城市景观。",place:"钟鼓楼是真实地点。",reconstruction:"晨光逐渐照亮屋顶与街道是叙事性的时间推进。",fiction:"小安说“北京，又开始新的一天了”为虚构对白。"},
-{history:"本幕没有新增历史事实，重点是故事主题收束。",place:"钟楼、胡同仍为真实背景。",reconstruction:"钟声被赋予“日子继续往前走”的象征意义，属于文学表达。",fiction:"舅舅喊小安、人物动作与最后心理感受均为虚构。"}
-];
+function ensurePlaybackSession(){
+  try{
+    if("audioSession" in navigator){
+      navigator.audioSession.type="playback";
+    }
+  }catch(e){}
+}
+ensurePlaybackSession();
 
-const sceneAudio=[
-{type:"wind",chars:[]},
-{type:"prep",chars:["xiao","uncle"]},
-{type:"footsteps",chars:["xiao","uncle"]},
-{type:"bell",chars:["xiao","uncle"]},
-{type:"street",chars:["xiao","uncle"]},
-{type:"stall",chars:["xiao","porter"]},
-{type:"morning",chars:["xiao"]},
-{type:"morning",chars:["xiao","uncle"]}
-];
-
-const sceneScripts=[
-[
- ["narrator","天还没亮，北京城还安安静静的。风从胡同里慢慢吹过，带着一点秋天的凉意。远远望去，高高的钟楼立在灰蓝色的天边。"]
-],
-[
- ["narrator","小安已经醒了。他今年十五岁，住在钟楼附近的一条小胡同里。他跟着舅舅一起做早点生意，每天清晨都要早早出门。"]
-],
-[
- ["narrator","小安抱着一小捆柴，跟在舅舅后面走出院门。胡同很窄，脚步声在安静的清晨里听得格外清楚。小安问："],
- ["xiao","舅舅，快到时候了吗？"]
-],
-[
- ["uncle","快了。等钟声一响，这城就活了。"],
- ["narrator","他们刚走到钟楼附近，钟声就响了。咚，一声，又一声。声音沉稳、悠长，慢慢传进清冷的空气里。"]
-],
-[
- ["narrator","钟声过后，街上开始慢慢有了人。一个卖烧饼的人挑着担子从胡同口经过。天色一点一点亮起来，空气里也慢慢有了热气和米粥的香味。"]
-],
-[
- ["narrator","第一位客人是一个挑担的脚夫。"],
- ["porter","来一碗热的。"],
- ["narrator","小安小心地盛了一碗粥，双手递过去。那人笑着说："],
- ["porter","这天儿啊，还是热粥最暖人。"]
-],
-[
- ["narrator","太阳还没有真正升起来，可天已经比刚才亮了很多。钟楼、屋顶、胡同口，还有远处的街道，都慢慢有了颜色。小安轻轻地说："],
- ["xiao","北京，又开始新的一天了。"]
-],
-[
- ["narrator","舅舅在后面叫他："],
- ["uncle","小安，别发呆了，快来帮忙！"],
- ["xiao","来了！"],
- ["narrator","小安转身跑过去。每一天的钟声，都像在告诉他：只要天亮了，日子就会继续往前走。"]
-]
-];
-
-const roleVoice={
- narrator:{rate:.88,pitch:.94,volume:1},
- xiao:{rate:.95,pitch:1.12,volume:1},
- uncle:{rate:.88,pitch:.82,volume:1},
- porter:{rate:.86,pitch:.72,volume:1}
-};
-
-const words={
-"胡同":["hú tòng","北京传统的小街小巷，也是许多日常生活发生的空间。"],
-"钟楼":["zhōng lóu","古代城市中与敲钟、报时有关的高大建筑。"],
-"烧饼":["shāo bing","一种烤制面食，在北京饮食文化中很常见。"],
-"脚夫":["jiǎo fū","旧时靠搬运、挑担等体力劳动谋生的人。"],
-"发呆":["fā dāi","出神，一时没有动作。"]
-};
-
-let idx=0;
-let visualMode='story';
 function show(id){
-  if(id!=='story') stopSceneAudio();
-  if(document.getElementById('film').classList.contains('active') && id!=='film') stopFilm();
-  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.documentElement.style.overflow=id==="story"?"hidden":"";
+ document.body.style.overflow=id==="story"?"hidden":"";
 }
-function openStory(){
-  idx=Number(localStorage.getItem('earth-bj001-progress')||0);
-  if(idx<0||idx>7)idx=0;
-  render();show('story');
+function startStory(){
+ ensurePlaybackSession();
+ voiceIndex=0;speedIndex=1;sceneIndex=-1;
+ audio.pause();
+ audio.src=VOICES[voiceIndex];
+ audio.preload="auto";
+ audio.load();
+ audio.playbackRate=speeds[speedIndex];
+ show("story");updateVoiceUI();setupMedia();
+ audio.play().catch(()=>{document.getElementById("play").textContent="▶"});
 }
-function resumeStory(){
-  openStory();
-  setTimeout(()=>{continuousRead=true;beginSceneReading(true)},250);
+function leaveStory(){audio.pause();show("beijing")}
+function resumePlayback(){
+ ensurePlaybackSession();
+ if(audio.ended)audio.currentTime=0;
+ const p=audio.play();
+ if(p&&typeof p.catch==="function"){
+   p.catch(()=>{document.getElementById("play").textContent="▶"});
+ }
+ return p;
 }
-function render(keepReading=false){
- if(!keepReading) stopSceneAudio();
- const s=scenes[idx];
- const art=document.getElementById('sceneArt');
- art.style.backgroundColor=s.c;
- const archiveImg=(idx===3||idx===6||idx===7)?ARCHIVE_BELL:ARCHIVE_STREET;
- const useImg=visualMode==='archive'?archiveImg:s.img;
- art.style.backgroundImage='linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.28)),url("'+useImg+'")';
- document.getElementById('sceneRef').textContent=visualMode==='archive'?'历史影像 · 约1900–1906':'场景复原插画 · 非史料影像';
- document.getElementById('archiveStamp').classList.toggle('show',visualMode==='archive');
- document.getElementById('sceneName').textContent=s.n;
- document.getElementById('sceneText').innerHTML=mark(s.zh);
- document.getElementById('count').textContent=(idx+1)+' / 8';
- document.getElementById('bar').style.width=((idx+1)/8*100)+'%';
- document.getElementById('trans').style.display='none';
- document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x.dataset.lang==='zh'));
- localStorage.setItem('earth-bj001-progress',String(idx));refreshResume();
+function togglePlay(){
+ if(audio.ended||(!audio.currentTime&&audio.duration&&audio.currentTime===audio.duration))audio.currentTime=0;
+ if(audio.paused){
+   resumePlayback();
+ }else{
+   audio.pause();
+ }
 }
-function mark(t){return t.replace(/胡同|钟楼|烧饼|脚夫|发呆/g,m=>'<span class="word" onclick="openWord(\''+m+'\')">'+m+'</span>')}
-function setLang(l,b){
-  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-  const tr=document.getElementById('trans');
-  if(l==='zh'){tr.style.display='none'}else{tr.textContent=scenes[idx][l];tr.style.display='block'}
+function cycleSpeed(){speedIndex=(speedIndex+1)%speeds.length;audio.playbackRate=speeds[speedIndex];document.getElementById("speed").textContent=speeds[speedIndex].toFixed(1)+"×"}
+function cycleVoice(){
+ const ratio=(audio.duration&&isFinite(audio.duration))?audio.currentTime/audio.duration:0;
+ const wasPlaying=!audio.paused;
+ voiceIndex=(voiceIndex+1)%VOICES.length;
+ audio.src=VOICES[voiceIndex];
+ audio.preload="auto";
+ audio.load();
+ audio.playbackRate=speeds[speedIndex];
+ updateVoiceUI();setupMedia();
+ audio.addEventListener("loadedmetadata",function once(){
+   audio.removeEventListener("loadedmetadata",once);
+   if(audio.duration&&isFinite(audio.duration))audio.currentTime=ratio*audio.duration;
+   if(wasPlaying)audio.play();
+ },{once:true});
 }
-function nextScene(){if(idx<7){idx++;render()}else{localStorage.setItem('earth-bj001-progress','8');show('culture');refreshResume()}}
-function prevScene(){if(idx>0){idx--;render()}else show('beijing')}
-function goScene(i){idx=i;render();show('story')}
-function openWord(w){
-  const d=words[w];document.getElementById('wordTitle').textContent=w;document.getElementById('wordPinyin').textContent=d[0];document.getElementById('wordDef').textContent=d[1];
-  document.getElementById('sheetBack').classList.add('open');document.getElementById('sheet').classList.add('open');
+function updateVoiceUI(){
+ document.getElementById("voice").textContent="声音 "+(voiceIndex+1);
+ const s=document.getElementById("status");s.textContent=VOICE_NAMES[voiceIndex];s.classList.add("show");setTimeout(()=>s.classList.remove("show"),1300);
 }
-function closeWord(){document.getElementById('sheetBack').classList.remove('open');document.getElementById('sheet').classList.remove('open')}
-function finishStory(){localStorage.setItem('earth-bj001-progress','0');refreshResume();show('beijing')}
-function refreshResume(){const n=Number(localStorage.getItem('earth-bj001-progress')||0);document.getElementById('resumeBtn').classList.toggle('show',n>0&&n<8)}
-function setVisualMode(mode){
-  visualMode=mode;
-  const s=document.getElementById('storyModeBtn'),a=document.getElementById('archiveModeBtn');
-  if(s)s.classList.toggle('playing',mode==='story');
-  if(a)a.classList.toggle('playing',mode==='archive');
-  render();
+function sceneStarts(){
+ if(!audio.duration||!isFinite(audio.duration))return [0];
+ let acc=0;const out=[0];
+ for(let i=0;i<weights.length-1;i++){acc+=weights[i];out.push(audio.duration*(acc/totalWeight))}
+ return out;
 }
-function openFacts(){
-  const f=sceneFacts[idx];
-  document.getElementById('factTitle').textContent=scenes[idx].n;
-  document.getElementById('factHistory').textContent=f.history;
-  document.getElementById('factPlace').textContent=f.place;
-  document.getElementById('factReconstruction').textContent=f.reconstruction;
-  document.getElementById('factFiction').textContent=f.fiction;
-  document.getElementById('factBack').classList.add('open');
-  document.getElementById('factSheet').classList.add('open');
+function sceneForTime(t){
+ const starts=sceneStarts();let i=0;
+ for(let n=0;n<starts.length;n++){if(t>=starts[n])i=n;else break}
+ return i;
 }
-function closeFacts(){
-  document.getElementById('factBack').classList.remove('open');
-  document.getElementById('factSheet').classList.remove('open');
+function renderScene(i){
+ if(i===sceneIndex)return;sceneIndex=i;
+ document.getElementById("storyBg").style.backgroundImage='url("'+images[i]+'")';
+ document.getElementById("scene").textContent=scenes[i].n;
+ document.getElementById("body").textContent=scenes[i].t;
+ document.getElementById("count").textContent=(i+1)+" / "+scenes.length;
+ if("mediaSession" in navigator){
+   navigator.mediaSession.metadata=new MediaMetadata({
+     title:"天亮以前的钟楼",
+     artist:"地球探索 · 北京",
+     album:scenes[i].n,
+     artwork:[{src:new URL(images[i],location.href).href,sizes:"512x512",type:"image/svg+xml"}]
+   });
+ }
 }
-function openCharacters(){
-  const active=sceneAudio[idx].chars||[];
-  ["xiao","uncle","porter"].forEach(k=>document.getElementById("char-"+k).classList.toggle("active",active.includes(k)));
-  document.getElementById('charBack').classList.add('open');
-  document.getElementById('charSheet').classList.add('open');
+function seekScene(delta){
+ const target=Math.max(0,Math.min(scenes.length-1,sceneForTime(audio.currentTime)+delta));
+ const starts=sceneStarts();if(starts[target]!=null)audio.currentTime=starts[target]+.05;
 }
-function closeCharacters(){
-  document.getElementById('charBack').classList.remove('open');
-  document.getElementById('charSheet').classList.remove('open');
+function setupMedia(){
+ if(!("mediaSession" in navigator))return;
+ ensurePlaybackSession();
+ navigator.mediaSession.metadata=new MediaMetadata({
+   title:"天亮以前的钟楼",
+   artist:"地球探索 · 北京",
+   album:VOICE_NAMES[voiceIndex]
+ });
+ const handlers={
+  play:()=>{
+    ensurePlaybackSession();
+    resumePlayback();
+  },
+  pause:()=>audio.pause(),
+  previoustrack:()=>seekScene(-1),
+  nexttrack:()=>seekScene(1),
+  seekbackward:(d)=>audio.currentTime=Math.max(0,audio.currentTime-(d.seekOffset||10)),
+  seekforward:(d)=>audio.currentTime=Math.min(audio.duration||Infinity,audio.currentTime+(d.seekOffset||10))
+ };
+ Object.entries(handlers).forEach(([k,v])=>{
+   try{navigator.mediaSession.setActionHandler(k,v)}catch(e){}
+ });
 }
-function openMore(){
-  const s=document.getElementById('storyModeBtn'),a=document.getElementById('archiveModeBtn');
-  if(s)s.classList.toggle('playing',visualMode==='story');
-  if(a)a.classList.toggle('playing',visualMode==='archive');
-  document.getElementById('moreBack').classList.add('open');
-  document.getElementById('moreSheet').classList.add('open');
-}
-function closeMore(){
-  document.getElementById('moreBack').classList.remove('open');
-  document.getElementById('moreSheet').classList.remove('open');
-}
-
-let sceneSoundOn=false,sceneSoundTimers=[],sceneSoundNodes=[];
-function ensureAudio(){
-  try{
-    const AC=window.AudioContext||window.webkitAudioContext;
-    if(!AC)return null;
-    if(!audioCtx)audioCtx=new AC();
-    if(audioCtx.state==='suspended')audioCtx.resume();
-    return audioCtx;
-  }catch(e){return null}
-}
-function noiseBurst(duration=.8,gain=.02,cutoff=700){
-  const ac=ensureAudio(); if(!ac)return;
-  const len=Math.max(1,Math.floor(ac.sampleRate*duration));
-  const b=ac.createBuffer(1,len,ac.sampleRate),d=b.getChannelData(0);
-  for(let i=0;i<len;i++)d[i]=(Math.random()*2-1);
-  const s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();
-  s.buffer=b;f.type='lowpass';f.frequency.value=cutoff;g.gain.value=gain;
-  s.connect(f).connect(g).connect(ac.destination);s.start();
-  sceneSoundNodes.push(s);
-}
-function tone(freq,duration=.14,gain=.035,type='sine',delay=0){
-  const ac=ensureAudio();if(!ac)return;
-  const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+delay;
-  o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(.0001,t+duration);
-  o.connect(g).connect(ac.destination);o.start(t);o.stop(t+duration+.05);sceneSoundNodes.push(o);
-}
-function playFootsteps(){
-  [0,.42,.86,1.28,1.72].forEach((d,i)=>{tone(88+i%2*9,.12,.035,'sine',d);tone(155,.07,.012,'triangle',d+.02)});
-}
-function playBowl(){tone(920,.18,.025,'sine',.1);tone(1320,.12,.012,'sine',.16)}
-function sceneAmbience(type){
-  if(type==='wind'){noiseBurst(5.5,.018,480)}
-  if(type==='prep'){noiseBurst(4.5,.014,620);tone(210,.12,.018,'triangle',.8);tone(240,.1,.014,'triangle',2.1)}
-  if(type==='footsteps'){noiseBurst(4.8,.012,500);playFootsteps()}
-  if(type==='bell'){noiseBurst(5.5,.012,450);sceneSoundTimers.push(setTimeout(()=>bellStrike(true),420));sceneSoundTimers.push(setTimeout(()=>bellStrike(true),2300))}
-  if(type==='street'){noiseBurst(5.6,.025,1050);[.7,2.1,3.5].forEach(d=>tone(270,.1,.009,'triangle',d))}
-  if(type==='stall'){noiseBurst(5.4,.02,1500);playBowl();sceneSoundTimers.push(setTimeout(playBowl,2300))}
-  if(type==='morning'){noiseBurst(4.8,.011,750);tone(520,.16,.008,'sine',1.2)}
-}
-function chineseVoice(){
-  if(!('speechSynthesis' in window))return null;
-  const vs=speechSynthesis.getVoices();
-  return vs.find(v=>/^zh-CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||null;
-}
-function voiceFor(role){
-  const cfg=roleVoice[role]||roleVoice.narrator;
-  const ucfg={...cfg};
-  return ucfg;
-}
-function speakScript(parts,i=0,onDone=null){
-  if(!sceneSoundOn||i>=parts.length){
-    if(onDone)onDone();
-    return;
+function fmt(s){if(!isFinite(s)||s<0)s=0;const m=Math.floor(s/60),r=Math.floor(s%60);return m+":"+String(r).padStart(2,"0")}
+audio.addEventListener("loadedmetadata",()=>{
+  audio.playbackRate=speeds[speedIndex];
+  renderScene(sceneForTime(audio.currentTime||0));
+  setupMedia();
+});
+audio.addEventListener("canplay",()=>{
+  document.getElementById("status").classList.remove("show");
+});
+audio.addEventListener("waiting",()=>{
+  const s=document.getElementById("status");
+  s.textContent="正在缓冲…";
+  s.classList.add("show");
+});
+audio.addEventListener("stalled",()=>{
+  const s=document.getElementById("status");
+  s.textContent="网络较慢，正在恢复…";
+  s.classList.add("show");
+});
+audio.addEventListener("timeupdate",()=>{
+ const d=audio.duration||0,t=audio.currentTime||0;
+ document.getElementById("timelineBar").style.width=(d?t/d*100:0)+"%";
+ document.getElementById("elapsed").textContent=fmt(t);
+ document.getElementById("remaining").textContent="-"+fmt(Math.max(0,d-t));
+ renderScene(sceneForTime(t));
+ if("mediaSession" in navigator && navigator.mediaSession.setPositionState && d&&isFinite(d)){
+  try{navigator.mediaSession.setPositionState({duration:d,playbackRate:audio.playbackRate,position:Math.min(t,d)})}catch(e){}
+ }
+});
+audio.addEventListener("play",()=>{document.getElementById("play").textContent="⏸";if("mediaSession" in navigator)navigator.mediaSession.playbackState="playing"});
+audio.addEventListener("pause",()=>{document.getElementById("play").textContent="▶";if("mediaSession" in navigator)navigator.mediaSession.playbackState="paused"});
+audio.addEventListener("ended",()=>{document.getElementById("play").textContent="↻";audio.currentTime=0;renderScene(0)});
+document.addEventListener("visibilitychange",()=>{
+  ensurePlaybackSession();
+  if(!document.hidden){
+    document.getElementById("play").textContent=audio.paused?"▶":"⏸";
+    audio.playbackRate=speeds[speedIndex];
   }
-  if(!('speechSynthesis' in window)){
-    if(onDone)onDone();
-    return;
+});
+window.addEventListener("pageshow",()=>{
+  ensurePlaybackSession();
+  document.getElementById("play").textContent=audio.paused?"▶":"⏸";
+  audio.playbackRate=speeds[speedIndex];
+});
+try{
+  if("audioSession" in navigator && navigator.audioSession.addEventListener){
+    navigator.audioSession.addEventListener("statechange",()=>ensurePlaybackSession());
   }
-  const [role,txt]=parts[i],cfg=voiceFor(role),u=new SpeechSynthesisUtterance(txt);
-  u.lang='zh-CN';u.rate=cfg.rate;u.pitch=cfg.pitch;u.volume=cfg.volume;
-  const v=chineseVoice();if(v)u.voice=v;
-  u.onend=()=>{if(sceneSoundOn)sceneSoundTimers.push(setTimeout(()=>speakScript(parts,i+1,onDone),170))};
-  u.onerror=()=>{if(sceneSoundOn)sceneSoundTimers.push(setTimeout(()=>speakScript(parts,i+1,onDone),80))};
-  speechSynthesis.speak(u);
+}catch(e){}
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  });
 }
-function setReadingButtons(){
-  const continuousBtn=document.getElementById('continuousReadBtn');
-  if(continuousBtn){
-    continuousBtn.classList.toggle('playing',continuousRead&&sceneSoundOn);
-    continuousBtn.textContent=(continuousRead&&sceneSoundOn)?'⏸ 暂停故事':'▶ 继续朗读';
-  }
-}
-
-let continuousRead=false;
-function beginSceneReading(asContinuous=false){
-  clearScenePlayback(true);
-  sceneSoundOn=true;
-  if(asContinuous)continuousRead=true;
-  setReadingButtons();
-  const a=sceneAudio[idx];
-  sceneAmbience(a.type);
-  sceneSoundTimers.push(setTimeout(()=>{
-    speakScript(sceneScripts[idx],0,()=>{
-      if(!sceneSoundOn)return;
-      if(continuousRead && idx<scenes.length-1){
-        sceneSoundTimers.push(setTimeout(()=>{
-          clearScenePlayback(true);
-          idx++;
-          render(true);
-          beginSceneReading(true);
-        },520));
-      }else{
-        const keepContinuous=continuousRead;
-        clearScenePlayback(true);
-        sceneSoundOn=false;
-        if(idx>=scenes.length-1)continuousRead=false;
-        else continuousRead=keepContinuous;
-        setReadingButtons();
-      }
-    });
-  },320));
-}
-function toggleSceneAudio(){
-  if(sceneSoundOn){stopSceneAudio();return}
-  continuousRead=false;
-  beginSceneReading(false);
-}
-function toggleContinuousRead(){
-  if(continuousRead||sceneSoundOn){stopSceneAudio();return}
-  continuousRead=true;
-  beginSceneReading(true);
-}
-function clearScenePlayback(keepMode=false){
-  sceneSoundTimers.forEach(clearTimeout);sceneSoundTimers=[];
-  sceneSoundNodes.forEach(n=>{try{n.stop()}catch(e){}});sceneSoundNodes=[];
-  if('speechSynthesis' in window)try{speechSynthesis.cancel()}catch(e){}
-  if(!keepMode){sceneSoundOn=false;continuousRead=false}
-}
-function stopSceneAudio(){
-  clearScenePlayback(false);
-  setReadingButtons();
-}
-
-
-/* lightweight cinematic intro */
-const filmSlides=[
- {img:STORY_IMAGES[0],title:'天还没亮，北京还没醒。',sub:'风从胡同里慢慢吹过，秋天的凉意还留在空气里。',ms:4000},
- {img:STORY_IMAGES[3],title:'“等钟声一响，这城就活了。”',sub:'高高的钟楼，曾经参与这座城市的时间秩序。',ms:4000,bell:true},
- {img:STORY_IMAGES[4],title:'钟声过后，街上慢慢有了人。',sub:'脚步、院门、早点和热气，把清晨一点一点填满。',ms:4000},
- {img:STORY_IMAGES[7],title:'北京，又开始新的一天了。',sub:'只要天亮了，日子就会继续往前走。',ms:4000}
-];
-let filmTimers=[],filmProgressTimer=null,filmStartAt=0,filmTotal=filmSlides.reduce((a,s)=>a+s.ms,0),filmSound=true;
-let audioCtx=null,windSource=null,windGain=null;
-
-function startExperience(){
-  idx=0;
-  localStorage.setItem('earth-bj001-progress','0');
-  try{ if('speechSynthesis' in window) speechSynthesis.getVoices(); }catch(e){}
-  startFilm();
-}
-function startFilm(){
-  show('film');
-  filmSound=true;
-  startAmbient();
-  filmStartAt=Date.now();
-  playFilmSlide(0);
-  filmProgressTimer=setInterval(()=>{
-    const p=Math.min(100,(Date.now()-filmStartAt)/filmTotal*100);
-    document.getElementById('filmBar').style.width=p+'%';
-  },100);
-}
-function playFilmSlide(i){
-  if(i>=filmSlides.length){finishFilm();return}
-  const s=filmSlides[i],bg=document.getElementById('filmBg');
-  bg.classList.remove('playing');void bg.offsetWidth;
-  bg.style.backgroundImage='url("'+s.img+'")';
-  bg.classList.add('playing');
-  document.getElementById('filmTitle').textContent=s.title;
-  document.getElementById('filmSub').textContent=s.sub;
-  if(s.bell && filmSound){
-    filmTimers.push(setTimeout(()=>bellStrike(),800));
-    filmTimers.push(setTimeout(()=>bellStrike(),2600));
-  }
-  filmTimers.push(setTimeout(()=>playFilmSlide(i+1),s.ms));
-}
-function finishFilm(){
-  stopFilm();
-  idx=0;
-  render();
-  show('story');
-  setTimeout(()=>{
-    continuousRead=true;
-    beginSceneReading(true);
-  },280);
-}
-function leaveFilm(){stopFilm();show('beijing')}
-function stopFilm(){
-  filmTimers.forEach(clearTimeout);filmTimers=[];
-  if(filmProgressTimer){clearInterval(filmProgressTimer);filmProgressTimer=null}
-  document.getElementById('filmBar').style.width='0';
-  stopAmbient();
-}
-function toggleFilmSound(){
-  filmSound=!filmSound;
-  if(filmSound) startAmbient(); else stopAmbient();
-}
-function startAmbient(){
-  if(!filmSound||windSource)return;
-  try{
-    const AC=window.AudioContext||window.webkitAudioContext;
-    if(!AC)return;
-    if(!audioCtx)audioCtx=new AC();
-    if(audioCtx.state==='suspended')audioCtx.resume();
-    const len=audioCtx.sampleRate*2,buf=audioCtx.createBuffer(1,len,audioCtx.sampleRate),data=buf.getChannelData(0);
-    for(let i=0;i<len;i++)data[i]=(Math.random()*2-1)*0.22;
-    windSource=audioCtx.createBufferSource();windSource.buffer=buf;windSource.loop=true;
-    const filter=audioCtx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=520;
-    windGain=audioCtx.createGain();windGain.gain.value=.028;
-    windSource.connect(filter).connect(windGain).connect(audioCtx.destination);windSource.start();
-  }catch(e){}
-}
-function stopAmbient(){
-  try{if(windGain&&audioCtx)windGain.gain.setTargetAtTime(0,audioCtx.currentTime,.08);if(windSource)setTimeout(()=>{try{windSource.stop()}catch(e){} windSource=null;windGain=null},250)}catch(e){windSource=null;windGain=null}
-}
-function bellStrike(force=false){
-  if(!filmSound&&!force)return;
-  try{
-    const AC=window.AudioContext||window.webkitAudioContext;if(!audioCtx)audioCtx=new AC();
-    if(audioCtx.state==='suspended')audioCtx.resume();
-    const now=audioCtx.currentTime;
-    [92,138,184,276].forEach((f,i)=>{
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-      o.type=i<2?'sine':'triangle';o.frequency.value=f;
-      g.gain.setValueAtTime(i===0?.16:.075,now);
-      g.gain.exponentialRampToValueAtTime(.0001,now+4.8+i*.7);
-      o.connect(g).connect(audioCtx.destination);o.start(now);o.stop(now+6);
-    });
-  }catch(e){}
-}
-refreshResume();
 </script>
 </body>
 </html>
