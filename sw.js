@@ -1,8 +1,8 @@
-const CACHE="diqiu-shell-v1";
+const CACHE="diqiu-shell-v2";
 const SHELL=[
-  "./",
   "./manifest.webmanifest",
   "./assets/app-icon.svg",
+  "./assets/apple-touch-icon.png",
   "./assets/scenes/s01-night.svg",
   "./assets/scenes/s02-home.svg",
   "./assets/scenes/s03-leave.svg",
@@ -29,14 +29,24 @@ self.addEventListener("fetch",event=>{
   const req=event.request;
   const url=new URL(req.url);
 
-  // Do not intercept narration MP3 or byte-range media requests.
-  // Let Safari handle these directly for stable background/lock-screen playback.
-  if(req.headers.has("range") || url.pathname.endsWith(".mp3")){
+  // Never intercept narration media. Safari handles byte-range audio directly,
+  // which is required for stable background and lock-screen playback.
+  if(req.headers.has("range") || url.pathname.endsWith(".mp3")) return;
+  if(req.method!=="GET" || url.origin!==self.location.origin) return;
+
+  // Navigations are network-first so users immediately receive the newest app.
+  if(req.mode==="navigate"){
+    event.respondWith(
+      fetch(req).then(res=>{
+        const copy=res.clone();
+        caches.open(CACHE).then(cache=>cache.put("./",copy));
+        return res;
+      }).catch(()=>caches.match("./"))
+    );
     return;
   }
 
-  if(req.method!=="GET" || url.origin!==self.location.origin) return;
-
+  // Static visual shell is cache-first.
   event.respondWith(
     caches.match(req).then(hit=>hit || fetch(req).then(res=>{
       const copy=res.clone();
