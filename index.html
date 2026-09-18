@@ -13,20 +13,26 @@ body{min-height:100vh}.app{max-width:470px;min-height:100vh;margin:auto;backgrou
 .hero{min-height:100vh;background:radial-gradient(circle at 52% 16%,rgba(51,83,112,.5),transparent 24%),linear-gradient(180deg,#0a1824 0,#0b1116 45%,#070a0c 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:28px 22px 36px}
 .kicker{font-size:12px;letter-spacing:.12em;color:#e8c98d;font-weight:700}.brand{position:absolute;top:18px;left:20px;font-size:14px;font-weight:800}.planet{position:absolute;right:-70px;top:60px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#557184,#263843 55%,#0e151a 70%);box-shadow:0 0 80px rgba(84,121,143,.24)}
 h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0 0 8px}p{line-height:1.7}
-.sub{color:#c7d0d6;font-size:15px}.btn{width:100%;border:0;border-radius:18px;padding:17px 18px;font-weight:800;font-size:16px;margin-top:12px}.primary{background:#ead7af;color:#211a11}.secondary{background:rgba(255,255,255,.07);color:#f5f3ed;border:1px solid var(--line)}
+.sub{color:#c7d0d6;font-size:15px}.btn{width:100%;border:0;border-radius:18px;padding:17px 18px;font-weight:800;font-size:16px;margin-top:12px;cursor:pointer}.primary{background:#ead7af;color:#211a11}.secondary{background:rgba(255,255,255,.07);color:#f5f3ed;border:1px solid var(--line)}
 .top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:15px 18px;background:rgba(7,16,24,.82);backdrop-filter:blur(15px);border-bottom:1px solid rgba(255,255,255,.05)}
-.back{border:0;background:transparent;color:#fff;font-size:22px;padding:6px 10px}.small{font-size:12px;color:var(--muted)}
-.cityHero{height:280px;margin:-1px -20px 22px;background:linear-gradient(180deg,rgba(5,8,12,.04),rgba(5,8,12,.88)),radial-gradient(circle at 55% 33%,#9b7651,#354454 45%,#131a22 72%);display:flex;align-items:flex-end;padding:22px}.cityHero h2{font-size:35px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:21px;padding:18px;margin:12px 0}.tag{font-size:11px;color:var(--gold);letter-spacing:.1em;margin-bottom:8px}.storyCard{padding:0;overflow:hidden}.storyArt{height:190px;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.7)),radial-gradient(circle at 50% 25%,#53687a,#273843 55%,#12181d)}.storyBody{padding:18px}.storyTitle{font-size:23px;font-weight:850}.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.pill{font-size:11px;padding:7px 9px;border-radius:999px;background:rgba(255,255,255,.07);color:#cfd5d8}
-.storyScreen{min-height:100vh;background:#091017}.sceneArt{position:absolute;inset:0 0 42%;background:var(--scene);background-size:cover}.sceneShade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.02) 28%,rgba(7,12,16,.72) 57%,#071018 77%)}
+.back{border:0;background:transparent;color:#fff;font-size:22px;padding:6px 10px;cursor:pointer}.small{font-size:12px;color:var(--muted)}
+.cityHero{height:280px;margin:-1px -20px 22px;background-image:linear-gradient(180deg,rgba(5,8,12,.06),rgba(5,8,12,.9)),url("https://commons.wikimedia.org/wiki/Special:Redirect/file/Beijing_Drum_Tower_and_Beijing_Bell_Tower_20160822.jpg?width=1280");background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:22px}.cityHero h2{font-size:35px;text-shadow:0 2px 20px rgba(0,0,0,.7)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:21px;padding:18px;margin:12px 0}.tag{font-size:11px;color:var(--gold);letter-spacing:.1em;margin-bottom:8px}.storyCard{padding:0;overflow:hidden}.storyArt{height:205px;background-image:linear-gradient(180deg,rgba(0,0,0,.06),rgba(0,0,0,.76)),url("https://commons.wikimedia.org/wiki/Special:Redirect/file/Hutong_beijing.JPG?width=1280");background-size:cover;background-position:center}.storyBody{padding:18px}.storyTitle{font-size:23px;font-weight:850}.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.pill{font-size:11px;padding:7px 9px;border-radius:999px;background:rgba(255,255,255,.07);color:#cfd5d8}.twoBtns{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}.twoBtns .btn{margin:0;font-size:14px;padding:14px 10px}
+.referenceNote{font-size:11px;color:#9da8ae;margin-top:10px;line-height:1.55}
+.storyScreen{min-height:100vh;background:#091017}.sceneArt{position:absolute;inset:0 0 42%;background:var(--scene);background-size:cover;background-position:center;transform:scale(1.01);transition:background-image .35s ease}.sceneShade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.02) 28%,rgba(7,12,16,.70) 57%,#071018 77%)}
+.sceneRef{position:absolute;top:64px;right:15px;z-index:3;background:rgba(0,0,0,.46);backdrop-filter:blur(8px);padding:6px 8px;border-radius:999px;font-size:9px;color:#d4d9dc}
 .scenePanel{position:absolute;left:0;right:0;bottom:0;padding:0 20px 24px;z-index:2}.sceneName{font-size:12px;color:#e4bd77;letter-spacing:.08em}.sceneText{font-size:20px;line-height:1.72;margin:10px 0 0}.trans{display:none;margin-top:12px;color:#cbd2d6;font-size:14px;line-height:1.65;padding-top:12px;border-top:1px solid var(--line)}
-.langs{display:flex;gap:7px;margin-top:16px}.chip{border:0;border-radius:999px;padding:9px 11px;background:rgba(255,255,255,.08);color:#fff;font-size:12px}.chip.on{background:#ead7af;color:#1d1710}
-.sceneNav{display:flex;align-items:center;gap:10px;margin-top:15px}.navBtn{flex:1;border:1px solid var(--line);border-radius:15px;padding:14px;background:rgba(255,255,255,.06);color:#fff;font-weight:750}.navBtn.next{background:#ead7af;color:#211a11;border:0}.word{color:#f0cc8d;border-bottom:1px dotted #f0cc8d;cursor:pointer}
+.langs{display:flex;gap:7px;margin-top:16px}.chip{border:0;border-radius:999px;padding:9px 11px;background:rgba(255,255,255,.08);color:#fff;font-size:12px;cursor:pointer}.chip.on{background:#ead7af;color:#1d1710}
+.sceneNav{display:flex;align-items:center;gap:10px;margin-top:15px}.navBtn{flex:1;border:1px solid var(--line);border-radius:15px;padding:14px;background:rgba(255,255,255,.06);color:#fff;font-weight:750;cursor:pointer}.navBtn.next{background:#ead7af;color:#211a11;border:0}.word{color:#f0cc8d;border-bottom:1px dotted #f0cc8d;cursor:pointer}
 .progress{height:3px;background:rgba(255,255,255,.08);position:absolute;top:0;left:0;right:0;z-index:10}.bar{height:100%;background:#dfb56b;transition:.25s}
 .sheetBack{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20}.sheetBack.open{display:block}.sheet{position:fixed;left:0;right:0;bottom:-430px;max-width:470px;margin:auto;background:#f4eddf;color:#181715;border-radius:28px 28px 0 0;padding:16px 22px 28px;z-index:21;transition:.25s}.sheet.open{bottom:0}.handle{width:52px;height:5px;border-radius:5px;background:#aaa08d;margin:0 auto 15px}.wordTitle{font-size:34px;font-weight:900}.pinyin{color:#826e48;margin:4px 0 15px}.def{font-size:17px;line-height:1.6}
-.cultureArt{height:170px;border-radius:18px;background:linear-gradient(180deg,#22323f,#111b22);margin-top:10px;position:relative}.axis{position:absolute;left:50%;top:18px;bottom:18px;width:2px;background:#d9ad63}.dot{position:absolute;left:50%;top:25px;transform:translateX(-50%);background:#ead7af;color:#1b1610;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:800}
-.end{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:30px 22px 40px;background:radial-gradient(circle at 50% 25%,#a87645,#394b59 32%,#0a1116 70%)}.quote{font-size:24px;line-height:1.5;color:#f2d9aa}
-.resume{display:none;margin-top:12px}.resume.show{display:block}
+.cultureArt{height:205px;border-radius:18px;background-image:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.55)),url("https://commons.wikimedia.org/wiki/Special:Redirect/file/Beijing_Drum_Tower_and_Beijing_Bell_Tower_20160822.jpg?width=960");background-size:cover;background-position:center;position:relative;margin-top:10px}.cultureArt:after{content:"钟楼 · 鼓楼";position:absolute;left:14px;bottom:13px;background:rgba(0,0,0,.52);padding:7px 10px;border-radius:999px;font-size:11px}
+.credit{font-size:11px;color:#98a4ab;line-height:1.65}.credit a{color:#d6bd8b}.end{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:30px 22px 40px;background-image:linear-gradient(180deg,rgba(4,7,10,.15),rgba(4,7,10,.83)),url("https://commons.wikimedia.org/wiki/Special:Redirect/file/Beijing_Drum_Tower_and_Beijing_Bell_Tower_20160822.jpg?width=1280");background-size:cover;background-position:center}.quote{font-size:24px;line-height:1.5;color:#f2d9aa}.resume{display:none;margin-top:12px}.resume.show{display:block}
+
+/* Film intro */
+.film{background:#020507;overflow:hidden}.filmBg{position:absolute;inset:-3%;background-size:cover;background-position:center;filter:saturate(.75) contrast(1.06);transform:scale(1.02)}.filmBg.playing{animation:kenburns 7.5s ease-out forwards}.filmShade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.18) 45%,rgba(0,0,0,.86) 88%,#020507)}
+@keyframes kenburns{from{transform:scale(1.02)}to{transform:scale(1.12)}}
+.filmTop{position:absolute;left:15px;right:15px;top:16px;z-index:4;display:flex;justify-content:space-between;align-items:center}.filmRound{border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.35);color:#fff;border-radius:999px;padding:10px 13px;font-size:12px;backdrop-filter:blur(8px)}.filmCopy{position:absolute;left:24px;right:24px;bottom:74px;z-index:4}.filmEyebrow{color:#efd29b;font-size:11px;letter-spacing:.12em;margin-bottom:9px}.filmTitle{font-size:31px;font-weight:850;line-height:1.35;text-shadow:0 2px 18px rgba(0,0,0,.8)}.filmSub{margin-top:8px;color:#d2d7d9;font-size:13px;line-height:1.6}.filmProgress{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.12);z-index:5}.filmBar{height:100%;width:0;background:#e1b76c}.filmBadge{position:absolute;top:67px;right:16px;z-index:4;font-size:9px;background:rgba(0,0,0,.5);padding:6px 8px;border-radius:999px;color:#cfd5d7}
 </style>
 </head>
 <body>
@@ -47,23 +53,44 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
   <div class="pad">
     <div class="cityHero"><div><div class="kicker">CHINA · 北京</div><h2>一座城，很多种时间。</h2></div></div>
     <p class="sub">从中轴线、胡同、早点和普通人的一天开始。第一篇不是讲帝王，而是讲天亮之前，一个十五岁少年的清晨。</p>
-    <div class="card storyCard" onclick="openStory()">
+    <div class="card storyCard">
       <div class="storyArt"></div>
       <div class="storyBody">
         <div class="tag">BJ-001 · 北京故事</div>
         <div class="storyTitle">《天亮以前的钟楼》</div>
         <p class="sub">北京醒来之前，一个普通少年的清晨。</p>
         <div class="meta"><span class="pill">清末背景</span><span class="pill">人物虚构</span><span class="pill">地点真实</span></div>
-        <button class="btn primary">进入故事</button>
+        <div class="twoBtns">
+          <button class="btn primary" onclick="startFilm()">🎬 电影开场</button>
+          <button class="btn secondary" onclick="openStory()">直接读故事</button>
+        </div>
+        <div class="referenceNote">当前影像为真实地点参考照片，并经过电影化裁切与调色。不是清末历史照片，也不作为服饰、街景细节的历史复原证据。</div>
       </div>
     </div>
     <div class="card" style="opacity:.58"><div class="tag">COMING NEXT</div><div class="storyTitle">《前门来了一个外乡人》</div><p class="sub">BJ-002 · 下一篇正在准备。</p></div>
   </div>
 </section>
 
+<section class="screen film" id="film">
+  <div class="filmBg" id="filmBg"></div><div class="filmShade"></div>
+  <div class="filmTop">
+    <button class="filmRound" onclick="leaveFilm()">‹ 返回</button>
+    <button class="filmRound" id="soundBtn" onclick="toggleFilmSound()">🔊 声音开</button>
+    <button class="filmRound" onclick="finishFilm()">跳过 →</button>
+  </div>
+  <div class="filmBadge">地点参考影像 · 非清末复原</div>
+  <div class="filmCopy">
+    <div class="filmEyebrow" id="filmEyebrow">BJ-001 · 电影开场</div>
+    <div class="filmTitle" id="filmTitle"></div>
+    <div class="filmSub" id="filmSub"></div>
+  </div>
+  <div class="filmProgress"><div class="filmBar" id="filmBar"></div></div>
+</section>
+
 <section class="screen storyScreen" id="story">
   <div class="progress"><div class="bar" id="bar"></div></div>
   <div class="sceneArt" id="sceneArt"></div><div class="sceneShade"></div>
+  <div class="sceneRef">地点参考影像 · 非历史复原</div>
   <div class="top" style="background:transparent;border:0;position:absolute;left:0;right:0"><button class="back" onclick="show('beijing')">‹</button><span class="small" id="count"></span><span></span></div>
   <div class="scenePanel">
     <div class="sceneName" id="sceneName"></div>
@@ -84,10 +111,18 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
   <div class="pad">
     <h2>故事结束了，<br>北京还在继续。</h2>
     <p class="sub">没有测试题。你想打开哪扇门，就继续看哪一扇。</p>
-    <div class="card"><div class="tag">PLACE</div><h3>北京钟鼓楼</h3><p>钟鼓楼位于北京传统中轴线北端，是老北京重要的城市地标，也曾与城市报时和日常节律密切相关。</p><div class="cultureArt"><div class="axis"></div><div class="dot">钟鼓楼 · 中轴线北端</div></div></div>
+    <div class="card"><div class="tag">PLACE</div><h3>北京钟鼓楼</h3><p>钟鼓楼位于北京传统中轴线北端，是老北京重要的城市地标，也曾与城市报时和日常节律密切相关。</p><div class="cultureArt"></div></div>
     <div class="card"><div class="tag">TIME</div><h3>晨钟暮鼓</h3><p>钟与鼓曾经参与城市时间秩序。本故事使用少量钟声作为电影化表达，不声称完整复原历史报时程序。</p></div>
     <div class="card"><div class="tag">LIFE</div><h3>胡同与早点</h3><p>真正的城市生活常常藏在小事里：院门、脚步、早点、热气、邻居和清晨的第一位客人。</p></div>
     <div class="card"><div class="tag">FACT LOCK</div><h3>哪些是真的？</h3><p><b>真实背景：</b>北京钟鼓楼、胡同、时代与城市报时文化。<br><b>虚构创作：</b>小安、舅舅、脚夫、对白与这个清晨的具体事件。</p></div>
+    <div class="card"><div class="tag">IMAGE CREDITS</div><h3>地点参考影像</h3>
+      <p class="credit">
+        钟鼓楼：そらみみ，Wikimedia Commons，CC BY-SA 4.0。<br>
+        <a href="https://commons.wikimedia.org/wiki/File:Beijing_Drum_Tower_and_Beijing_Bell_Tower_20160822.jpg" target="_blank" rel="noopener">查看源文件与许可</a><br><br>
+        胡同：Denis Yuen，Wikimedia Commons，CC BY-SA 2.5。<br>
+        <a href="https://commons.wikimedia.org/wiki/File:Hutong_beijing.JPG" target="_blank" rel="noopener">查看源文件与许可</a>
+      </p>
+    </div>
     <button class="btn primary" onclick="show('end')">完成这一篇</button>
   </div>
 </section>
@@ -105,16 +140,20 @@ h1{font-size:45px;line-height:1.05;margin:10px 0 14px}h2{font-size:29px;margin:0
 </div>
 
 <script>
+const IMG_HUTONG='https://commons.wikimedia.org/wiki/Special:Redirect/file/Hutong_beijing.JPG?width=1280';
+const IMG_TOWERS='https://commons.wikimedia.org/wiki/Special:Redirect/file/Beijing_Drum_Tower_and_Beijing_Bell_Tower_20160822.jpg?width=1280';
+
 const scenes=[
-{n:"01 · 夜还没退",c:"radial-gradient(circle at 52% 20%,#435868,#1a2933 45%,#0a1117 75%)",zh:"天还没亮，北京城还安安静静的。风从胡同里慢慢吹过，带着一点秋天的凉意。远远望去，高高的钟楼立在灰蓝色的天边。",py:"Tiān hái méi liàng, Běijīng chéng hái ān ān jìng jìng de. Fēng cóng hútòng lǐ màn man chuī guò.",en:"Before dawn, Beijing was still quiet. A cool autumn wind moved through the hutongs, and the Bell Tower stood against the gray-blue sky.",vi:"Trời vẫn chưa sáng, Bắc Kinh còn rất yên tĩnh. Gió thu len qua những con hutong, còn Chung Lâu đứng dưới bầu trời xanh xám."},
-{n:"02 · 小安起床",c:"radial-gradient(circle at 42% 34%,#8d613a,#33271e 38%,#101416 75%)",zh:"小安已经醒了。他今年十五岁，住在钟楼附近的一条小胡同里。他跟着舅舅一起做早点生意，每天清晨都要早早出门。",py:"Xiǎo Ān yǐjīng xǐng le. Tā jīnnián shíwǔ suì, zhù zài Zhōnglóu fùjìn de yì tiáo xiǎo hútòng lǐ.",en:"Xiao An was already awake. He was fifteen and lived in a small hutong near the Bell Tower. Every morning he went out early with his uncle to prepare breakfast.",vi:"Tiểu An đã thức dậy. Cậu mười lăm tuổi, sống trong một con hutong nhỏ gần Chung Lâu và mỗi sáng đều cùng cậu mình làm đồ ăn sáng."},
-{n:"03 · 出门",c:"linear-gradient(135deg,#18252d,#3d4750 48%,#12181c)",zh:"小安抱着一小捆柴，跟在舅舅后面走出院门。胡同很窄，脚步声在安静的清晨里听得格外清楚。小安问：“舅舅，快到时候了吗？”",py:"Xiǎo Ān bàozhe yì xiǎo kǔn chái, gēn zài jiùjiu hòumiàn zǒu chū yuànmén.",en:"Xiao An carried a small bundle of firewood and followed his uncle out. The hutong was narrow, and their footsteps sounded especially clear.",vi:"Tiểu An ôm một bó củi nhỏ, đi theo sau cậu ra khỏi sân. Con ngõ rất hẹp, tiếng bước chân nghe đặc biệt rõ trong buổi sớm."},
-{n:"04 · 钟声",c:"radial-gradient(circle at 50% 18%,#76808a,#3b4650 36%,#11181d 74%)",zh:"“快了。等钟声一响，这城就活了。”他们刚走到钟楼附近，钟声就响了。咚——一声，又一声。声音沉稳、悠长，慢慢传进清冷的空气里。",py:"Kuài le. Děng zhōngshēng yì xiǎng, zhè chéng jiù huó le. Dōng—— yì shēng, yòu yì shēng.",en:"“Almost. Once the bell rings, the whole city comes alive.” Then the bell sounded, deep and lingering in the cold air.",vi:"“Sắp rồi. Khi tiếng chuông vang lên, cả thành phố sẽ sống dậy.” Rồi tiếng chuông cất lên, trầm và dài trong không khí lạnh."},
-{n:"05 · 北京慢慢醒了",c:"radial-gradient(circle at 65% 20%,#a87845,#5e4f40 38%,#1b2328 75%)",zh:"钟声过后，街上开始慢慢有了人。一个卖烧饼的人挑着担子从胡同口经过。天色一点一点亮起来，空气里也慢慢有了热气和米粥的香味。",py:"Zhōngshēng guòhòu, jiē shàng kāishǐ màn man yǒu le rén. Yí ge mài shāobǐng de rén tiāozhe dànzi cóng hútòng kǒu jīngguò.",en:"After the bell, people slowly began to appear. A flatbread vendor passed the hutong entrance, and the air filled with warmth and the smell of rice porridge.",vi:"Sau tiếng chuông, trên phố dần có người. Một người bán bánh đi qua đầu ngõ, còn mùi cháo nóng bắt đầu lan trong không khí."},
-{n:"06 · 第一位客人",c:"radial-gradient(circle at 48% 32%,#b08150,#5b4030 38%,#16191a 72%)",zh:"第一位客人是一个挑担的脚夫。“来一碗热的。”小安小心地盛了一碗粥，双手递过去。那人笑着说：“这天儿啊，还是热粥最暖人。”",py:"Dì yí wèi kèrén shì yí ge tiāodàn de jiǎofū. Lái yì wǎn rè de.",en:"The first customer was a porter. “One hot bowl.” Xiao An carefully handed him a bowl of porridge. The man smiled: “On a day like this, hot porridge warms you best.”",vi:"Vị khách đầu tiên là một người khuân vác. “Cho tôi một bát nóng.” Tiểu An cẩn thận đưa cháo cho anh. Người ấy mỉm cười: “Trời thế này, cháo nóng vẫn ấm lòng người nhất.”"},
-{n:"07 · 看着这座城",c:"radial-gradient(circle at 55% 18%,#d29551,#6e5a44 36%,#24303a 70%)",zh:"太阳还没有真正升起来，可天已经比刚才亮了很多。钟楼、屋顶、胡同口，还有远处的街道，都慢慢有了颜色。小安轻轻地说：“北京，又开始新的一天了。”",py:"Tàiyáng hái méiyǒu zhēnzhèng shēng qǐlai, kě tiān yǐjīng bǐ gāngcái liàng le hěn duō.",en:"The sun had not fully risen, but the sky was much brighter. The Bell Tower, rooftops and streets slowly gained color. “Beijing has begun a new day again,” Xiao An said.",vi:"Mặt trời chưa mọc hẳn, nhưng trời đã sáng hơn nhiều. Chung Lâu, mái nhà và đường phố dần có màu sắc. “Bắc Kinh lại bắt đầu một ngày mới rồi,” Tiểu An nói."},
-{n:"08 · 天亮以前的钟楼",c:"radial-gradient(circle at 50% 18%,#e0a65e,#786047 36%,#273540 72%)",zh:"舅舅在后面叫他：“小安，别发呆了，快来帮忙！”“来了！”小安转身跑过去。每一天的钟声，都像在告诉他：只要天亮了，日子就会继续往前走。",py:"Jiùjiu zài hòumiàn jiào tā: Xiǎo Ān, bié fādāi le, kuài lái bāngmáng!",en:"His uncle called from behind. “Xiao An, stop daydreaming and come help!” Every morning bell seemed to tell him: as long as dawn comes, life will keep moving forward.",vi:"Cậu mình gọi từ phía sau: “Tiểu An, đừng ngẩn người nữa, mau lại giúp đi!” Mỗi tiếng chuông dường như đều nói: chỉ cần trời sáng, cuộc sống sẽ tiếp tục bước về phía trước."}
+{n:"01 · 夜还没退",img:IMG_HUTONG,c:"#14212a",zh:"天还没亮，北京城还安安静静的。风从胡同里慢慢吹过，带着一点秋天的凉意。远远望去，高高的钟楼立在灰蓝色的天边。",py:"Tiān hái méi liàng, Běijīng chéng hái ān ān jìng jìng de. Fēng cóng hútòng lǐ màn man chuī guò.",en:"Before dawn, Beijing was still quiet. A cool autumn wind moved through the hutongs, and the Bell Tower stood against the gray-blue sky.",vi:"Trời vẫn chưa sáng, Bắc Kinh còn rất yên tĩnh. Gió thu len qua những con hutong, còn Chung Lâu đứng dưới bầu trời xanh xám."},
+{n:"02 · 小安起床",img:IMG_HUTONG,c:"#38291f",zh:"小安已经醒了。他今年十五岁，住在钟楼附近的一条小胡同里。他跟着舅舅一起做早点生意，每天清晨都要早早出门。",py:"Xiǎo Ān yǐjīng xǐng le. Tā jīnnián shíwǔ suì, zhù zài Zhōnglóu fùjìn de yì tiáo xiǎo hútòng lǐ.",en:"Xiao An was already awake. He was fifteen and lived in a small hutong near the Bell Tower. Every morning he went out early with his uncle to prepare breakfast.",vi:"Tiểu An đã thức dậy. Cậu mười lăm tuổi, sống trong một con hutong nhỏ gần Chung Lâu và mỗi sáng đều cùng cậu mình làm đồ ăn sáng."},
+{n:"03 · 出门",img:IMG_HUTONG,c:"#1b2a33",zh:"小安抱着一小捆柴，跟在舅舅后面走出院门。胡同很窄，脚步声在安静的清晨里听得格外清楚。小安问：“舅舅，快到时候了吗？”",py:"Xiǎo Ān bàozhe yì xiǎo kǔn chái, gēn zài jiùjiu hòumiàn zǒu chū yuànmén.",en:"Xiao An carried a small bundle of firewood and followed his uncle out. The hutong was narrow, and their footsteps sounded especially clear.",vi:"Tiểu An ôm một bó củi nhỏ, đi theo sau cậu ra khỏi sân. Con ngõ rất hẹp, tiếng bước chân nghe đặc biệt rõ trong buổi sớm."},
+{n:"04 · 钟声",img:IMG_TOWERS,c:"#35434f",zh:"“快了。等钟声一响，这城就活了。”他们刚走到钟楼附近，钟声就响了。咚，一声，又一声。声音沉稳、悠长，慢慢传进清冷的空气里。",py:"Kuài le. Děng zhōngshēng yì xiǎng, zhè chéng jiù huó le. Dōng, yì shēng, yòu yì shēng.",en:"“Almost. Once the bell rings, the whole city comes alive.” Then the bell sounded, deep and lingering in the cold air.",vi:"“Sắp rồi. Khi tiếng chuông vang lên, cả thành phố sẽ sống dậy.” Rồi tiếng chuông cất lên, trầm và dài trong không khí lạnh."},
+{n:"05 · 北京慢慢醒了",img:IMG_HUTONG,c:"#6f543d",zh:"钟声过后，街上开始慢慢有了人。一个卖烧饼的人挑着担子从胡同口经过。天色一点一点亮起来，空气里也慢慢有了热气和米粥的香味。",py:"Zhōngshēng guòhòu, jiē shàng kāishǐ màn man yǒu le rén. Yí ge mài shāobǐng de rén tiāozhe dànzi cóng hútòng kǒu jīngguò.",en:"After the bell, people slowly began to appear. A flatbread vendor passed the hutong entrance, and the air filled with warmth and the smell of rice porridge.",vi:"Sau tiếng chuông, trên phố dần có người. Một người bán bánh đi qua đầu ngõ, còn mùi cháo nóng bắt đầu lan trong không khí."},
+{n:"06 · 第一位客人",img:IMG_HUTONG,c:"#765238",zh:"第一位客人是一个挑担的脚夫。“来一碗热的。”小安小心地盛了一碗粥，双手递过去。那人笑着说：“这天儿啊，还是热粥最暖人。”",py:"Dì yí wèi kèrén shì yí ge tiāodàn de jiǎofū. Lái yì wǎn rè de.",en:"The first customer was a porter. “One hot bowl.” Xiao An carefully handed him a bowl of porridge. The man smiled: “On a day like this, hot porridge warms you best.”",vi:"Vị khách đầu tiên là một người khuân vác. “Cho tôi một bát nóng.” Tiểu An cẩn thận đưa cháo cho anh. Người ấy mỉm cười: “Trời thế này, cháo nóng vẫn ấm lòng người nhất.”"},
+{n:"07 · 看着这座城",img:IMG_TOWERS,c:"#8f6844",zh:"太阳还没有真正升起来，可天已经比刚才亮了很多。钟楼、屋顶、胡同口，还有远处的街道，都慢慢有了颜色。小安轻轻地说：“北京，又开始新的一天了。”",py:"Tàiyáng hái méiyǒu zhēnzhèng shēng qǐlai, kě tiān yǐjīng bǐ gāngcái liàng le hěn duō.",en:"The sun had not fully risen, but the sky was much brighter. The Bell Tower, rooftops and streets slowly gained color. “Beijing has begun a new day again,” Xiao An said.",vi:"Mặt trời chưa mọc hẳn, nhưng trời đã sáng hơn nhiều. Chung Lâu, mái nhà và đường phố dần có màu sắc. “Bắc Kinh lại bắt đầu một ngày mới rồi,” Tiểu An nói."},
+{n:"08 · 天亮以前的钟楼",img:IMG_TOWERS,c:"#a87949",zh:"舅舅在后面叫他：“小安，别发呆了，快来帮忙！”“来了！”小安转身跑过去。每一天的钟声，都像在告诉他：只要天亮了，日子就会继续往前走。",py:"Jiùjiu zài hòumiàn jiào tā: Xiǎo Ān, bié fādāi le, kuài lái bāngmáng!",en:"His uncle called from behind. “Xiao An, stop daydreaming and come help!” Every morning bell seemed to tell him: as long as dawn comes, life will keep moving forward.",vi:"Cậu mình gọi từ phía sau: “Tiểu An, đừng ngẩn người nữa, mau lại giúp đi!” Mỗi tiếng chuông dường như đều nói: chỉ cần trời sáng, cuộc sống sẽ tiếp tục bước về phía trước."}
 ];
+
 const words={
 "胡同":["hú tòng","北京传统的小街小巷，也是许多日常生活发生的空间。"],
 "钟楼":["zhōng lóu","古代城市中与敲钟、报时有关的高大建筑。"],
@@ -122,25 +161,134 @@ const words={
 "脚夫":["jiǎo fū","旧时靠搬运、挑担等体力劳动谋生的人。"],
 "发呆":["fā dāi","出神，一时没有动作。"]
 };
+
 let idx=0;
-function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
-function openStory(){idx=Number(localStorage.getItem('earth-bj001-progress')||0);if(idx<0||idx>7)idx=0;render();show('story')}
+function show(id){
+  if(document.getElementById('film').classList.contains('active') && id!=='film') stopFilm();
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function openStory(){
+  idx=Number(localStorage.getItem('earth-bj001-progress')||0);
+  if(idx<0||idx>7)idx=0;
+  render();show('story');
+}
 function resumeStory(){openStory()}
 function render(){
- const s=scenes[idx];document.getElementById('sceneArt').style.setProperty('--scene',s.c);document.getElementById('sceneName').textContent=s.n;
- document.getElementById('sceneText').innerHTML=mark(s.zh);document.getElementById('count').textContent=(idx+1)+' / 8';document.getElementById('bar').style.width=((idx+1)/8*100)+'%';
- document.getElementById('trans').style.display='none';document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x.dataset.lang==='zh'));
+ const s=scenes[idx];
+ const art=document.getElementById('sceneArt');
+ art.style.backgroundColor=s.c;
+ art.style.backgroundImage='linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.28)),url("'+s.img+'")';
+ document.getElementById('sceneName').textContent=s.n;
+ document.getElementById('sceneText').innerHTML=mark(s.zh);
+ document.getElementById('count').textContent=(idx+1)+' / 8';
+ document.getElementById('bar').style.width=((idx+1)/8*100)+'%';
+ document.getElementById('trans').style.display='none';
+ document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x.dataset.lang==='zh'));
  localStorage.setItem('earth-bj001-progress',String(idx));refreshResume();
 }
 function mark(t){return t.replace(/胡同|钟楼|烧饼|脚夫|发呆/g,m=>'<span class="word" onclick="openWord(\''+m+'\')">'+m+'</span>')}
-function setLang(l,b){document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');const tr=document.getElementById('trans');if(l==='zh'){tr.style.display='none'}else{tr.textContent=scenes[idx][l];tr.style.display='block'}}
+function setLang(l,b){
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  const tr=document.getElementById('trans');
+  if(l==='zh'){tr.style.display='none'}else{tr.textContent=scenes[idx][l];tr.style.display='block'}
+}
 function nextScene(){if(idx<7){idx++;render()}else{localStorage.setItem('earth-bj001-progress','8');show('culture');refreshResume()}}
 function prevScene(){if(idx>0){idx--;render()}else show('beijing')}
 function goScene(i){idx=i;render();show('story')}
-function openWord(w){const d=words[w];document.getElementById('wordTitle').textContent=w;document.getElementById('wordPinyin').textContent=d[0];document.getElementById('wordDef').textContent=d[1];document.getElementById('sheetBack').classList.add('open');document.getElementById('sheet').classList.add('open')}
+function openWord(w){
+  const d=words[w];document.getElementById('wordTitle').textContent=w;document.getElementById('wordPinyin').textContent=d[0];document.getElementById('wordDef').textContent=d[1];
+  document.getElementById('sheetBack').classList.add('open');document.getElementById('sheet').classList.add('open');
+}
 function closeWord(){document.getElementById('sheetBack').classList.remove('open');document.getElementById('sheet').classList.remove('open')}
 function finishStory(){localStorage.setItem('earth-bj001-progress','0');refreshResume();show('beijing')}
 function refreshResume(){const n=Number(localStorage.getItem('earth-bj001-progress')||0);document.getElementById('resumeBtn').classList.toggle('show',n>0&&n<8)}
+
+/* lightweight cinematic intro */
+const filmSlides=[
+ {img:IMG_HUTONG,title:'天还没亮，北京还没醒。',sub:'风从胡同里慢慢吹过，秋天的凉意还留在空气里。',ms:6500},
+ {img:IMG_TOWERS,title:'“等钟声一响，这城就活了。”',sub:'高高的钟楼，曾经参与这座城市的时间秩序。',ms:7000,bell:true},
+ {img:IMG_HUTONG,title:'钟声过后，街上慢慢有了人。',sub:'脚步、院门、早点和热气，把清晨一点一点填满。',ms:7000},
+ {img:IMG_TOWERS,title:'北京，又开始新的一天了。',sub:'只要天亮了，日子就会继续往前走。',ms:7500}
+];
+let filmTimers=[],filmProgressTimer=null,filmStartAt=0,filmTotal=filmSlides.reduce((a,s)=>a+s.ms,0),filmSound=true;
+let audioCtx=null,windSource=null,windGain=null;
+
+function startFilm(){
+  show('film');
+  filmSound=true;document.getElementById('soundBtn').textContent='🔊 声音开';
+  startAmbient();
+  filmStartAt=Date.now();
+  playFilmSlide(0);
+  filmProgressTimer=setInterval(()=>{
+    const p=Math.min(100,(Date.now()-filmStartAt)/filmTotal*100);
+    document.getElementById('filmBar').style.width=p+'%';
+  },100);
+}
+function playFilmSlide(i){
+  if(i>=filmSlides.length){finishFilm();return}
+  const s=filmSlides[i],bg=document.getElementById('filmBg');
+  bg.classList.remove('playing');void bg.offsetWidth;
+  bg.style.backgroundImage='url("'+s.img+'")';
+  bg.classList.add('playing');
+  document.getElementById('filmTitle').textContent=s.title;
+  document.getElementById('filmSub').textContent=s.sub;
+  if(s.bell && filmSound){
+    filmTimers.push(setTimeout(()=>bellStrike(),800));
+    filmTimers.push(setTimeout(()=>bellStrike(),2600));
+  }
+  filmTimers.push(setTimeout(()=>playFilmSlide(i+1),s.ms));
+}
+function finishFilm(){
+  stopFilm();
+  idx=0;render();show('story');
+}
+function leaveFilm(){stopFilm();show('beijing')}
+function stopFilm(){
+  filmTimers.forEach(clearTimeout);filmTimers=[];
+  if(filmProgressTimer){clearInterval(filmProgressTimer);filmProgressTimer=null}
+  document.getElementById('filmBar').style.width='0';
+  stopAmbient();
+}
+function toggleFilmSound(){
+  filmSound=!filmSound;
+  document.getElementById('soundBtn').textContent=filmSound?'🔊 声音开':'🔇 声音关';
+  if(filmSound) startAmbient(); else stopAmbient();
+}
+function startAmbient(){
+  if(!filmSound||windSource)return;
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC)return;
+    if(!audioCtx)audioCtx=new AC();
+    if(audioCtx.state==='suspended')audioCtx.resume();
+    const len=audioCtx.sampleRate*2,buf=audioCtx.createBuffer(1,len,audioCtx.sampleRate),data=buf.getChannelData(0);
+    for(let i=0;i<len;i++)data[i]=(Math.random()*2-1)*0.22;
+    windSource=audioCtx.createBufferSource();windSource.buffer=buf;windSource.loop=true;
+    const filter=audioCtx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=520;
+    windGain=audioCtx.createGain();windGain.gain.value=.028;
+    windSource.connect(filter).connect(windGain).connect(audioCtx.destination);windSource.start();
+  }catch(e){}
+}
+function stopAmbient(){
+  try{if(windGain&&audioCtx)windGain.gain.setTargetAtTime(0,audioCtx.currentTime,.08);if(windSource)setTimeout(()=>{try{windSource.stop()}catch(e){} windSource=null;windGain=null},250)}catch(e){windSource=null;windGain=null}
+}
+function bellStrike(){
+  if(!filmSound)return;
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;if(!audioCtx)audioCtx=new AC();
+    if(audioCtx.state==='suspended')audioCtx.resume();
+    const now=audioCtx.currentTime;
+    [92,138,184,276].forEach((f,i)=>{
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+      o.type=i<2?'sine':'triangle';o.frequency.value=f;
+      g.gain.setValueAtTime(i===0?.16:.075,now);
+      g.gain.exponentialRampToValueAtTime(.0001,now+4.8+i*.7);
+      o.connect(g).connect(audioCtx.destination);o.start(now);o.stop(now+6);
+    });
+  }catch(e){}
+}
 refreshResume();
 </script>
 </body>
