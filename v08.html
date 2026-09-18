@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071018">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>地球探索 · v0.8</title>
+<style>
+:root{--bg:#071018;--ink:#f7f2e8;--muted:#aab4ba;--gold:#e6bd73}
+*{box-sizing:border-box}
+html,body{margin:0;background:#03070b;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif}
+button{font:inherit}
+.app{max-width:470px;min-height:100vh;margin:auto;background:var(--bg);position:relative;overflow:hidden}
+.screen{display:none;min-height:100vh;position:relative}.screen.active{display:block}
+.top{height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:relative;z-index:5}
+.icon{border:0;background:transparent;color:#fff;font-size:24px;padding:8px 10px}.dots{font-size:22px;letter-spacing:2px}
+.home{padding:24px 20px 28px}
+.brand{font-size:15px;font-weight:800;color:#f4e7ca;margin-top:4px}
+.hero{padding:68px 2px 34px}
+.hero h1{font-size:46px;line-height:1.05;margin:0 0 14px}.hero p{margin:0;color:#bcc7cd;line-height:1.7;font-size:16px}
+.cityCard,.storyCard{position:relative;overflow:hidden;border-radius:26px;min-height:370px;background:#101820;cursor:pointer}
+.cityCard .bg,.storyCard .bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.cityCard .shade,.storyCard .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.12) 45%,rgba(2,5,8,.9) 100%)}
+.cardCopy{position:absolute;left:24px;right:24px;bottom:24px}.eyebrow{font-size:11px;letter-spacing:.13em;color:#eccb8d;font-weight:800}.cardTitle{font-size:34px;font-weight:850;margin-top:8px}.cardSub{font-size:15px;color:#d0d7da;margin-top:7px}
+.cityPage{padding:0 20px 30px}.cityPage .top{margin:0 -20px}.cityName{font-size:17px;font-weight:800}.storyCard{min-height:66vh;border-radius:0;margin:0 -20px}.storyCard .cardTitle{font-size:31px;line-height:1.25}.nextLine{padding:18px 2px;color:#818e95;font-size:13px}
+.story{overflow:hidden;background:#060b0f}.storyBg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.01);transition:background-image .3s ease}.storyShade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.17),rgba(0,0,0,.03) 36%,rgba(4,8,11,.38) 57%,rgba(4,8,11,.94) 82%,#04080b 100%)}
+.progress{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.12);z-index:8}.bar{height:100%;background:var(--gold);transition:.25s}
+.story .top{position:absolute;left:0;right:0;top:0}.count{font-size:13px;color:#d3d9dc}
+.storyCopy{position:absolute;left:24px;right:24px;bottom:calc(24px + env(safe-area-inset-bottom));z-index:4}
+.sceneName{font-size:12px;color:#e8c784;letter-spacing:.08em}.sceneText{font-size:21px;line-height:1.72;margin-top:10px;text-shadow:0 1px 12px rgba(0,0,0,.5)}
+.alt{display:none;color:#c9d0d4;font-size:15px;line-height:1.65;margin-top:12px}
+.play{width:100%;margin-top:18px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.10);color:#fff;border-radius:999px;padding:13px 16px;font-weight:800}.play.on{background:#ead7af;color:#211a11}
+.word{color:#f0cd8f}
+.moreBack{display:none;position:fixed;inset:0;background:rgba(0,0,0,.58);z-index:20}.moreBack.open{display:block}
+.more{position:fixed;left:0;right:0;bottom:-620px;max-width:470px;margin:auto;background:#0e151b;color:white;border-radius:28px 28px 0 0;padding:16px 20px 28px;z-index:21;transition:.25s;max-height:78vh;overflow:auto}.more.open{bottom:0}
+.handle{width:52px;height:5px;border-radius:5px;background:#59636a;margin:0 auto 18px}.more h2{font-size:23px;margin:0 0 16px}
+.section{padding:14px 0;border-top:1px solid rgba(255,255,255,.08)}.section:first-of-type{border-top:0}.sectionTitle{font-size:10px;letter-spacing:.11em;color:#e1b96f;font-weight:800;margin-bottom:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap}.chip{flex:1;min-width:70px;border:0;border-radius:999px;padding:10px;background:rgba(255,255,255,.08);color:#fff}.chip.on{background:#ead7af;color:#211a11}
+.fact{font-size:13px;line-height:1.65;color:#cbd2d6}
+.end{display:flex;flex-direction:column;justify-content:flex-end;padding:30px 24px calc(34px + env(safe-area-inset-bottom));background-size:cover;background-position:center}.end:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(3,6,8,.86) 78%,#030608)}.end>*{position:relative;z-index:2}.end h2{font-size:34px;margin:0 0 12px}.quote{font-size:22px;line-height:1.55;color:#f1d8aa}.endBtn{margin-top:20px;border:0;border-radius:999px;padding:15px;background:#ead7af;color:#211a11;font-weight:850}.endLink{margin-top:10px;border:0;background:transparent;color:#b8c2c7;padding:12px}
+</style>
+</head>
+<body>
+<div class="app">
+
+<section class="screen active" id="home">
+  <div class="home">
+    <div class="brand">🌍 地球探索</div>
+    <div class="hero">
+      <h1>从一个故事，<br>走进一个地方。</h1>
+      <p>先从北京开始。</p>
+    </div>
+    <div class="cityCard" onclick="show('beijing')">
+      <div class="bg" style="background-image:url('assets/scenes/s07-city.svg')"></div>
+      <div class="shade"></div>
+      <div class="cardCopy">
+        <div class="eyebrow">CHINA · 01</div>
+        <div class="cardTitle">北京</div>
+        <div class="cardSub">1 个故事</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="screen cityPage" id="beijing">
+  <div class="top"><button class="icon" onclick="show('home')">‹</button><div class="cityName">北京</div><span style="width:44px"></span></div>
+  <div class="storyCard" onclick="startStory()">
+    <div class="bg" style="background-image:url('assets/scenes/s01-night.svg')"></div>
+    <div class="shade"></div>
+    <div class="cardCopy">
+      <div class="eyebrow">BJ-001</div>
+      <div class="cardTitle">天亮以前的钟楼</div>
+      <div class="cardSub">点一下，故事就开始。</div>
+    </div>
+  </div>
+  <div class="nextLine">下一篇 · 前门来了一个外乡人</div>
+</section>
+
+<section class="screen story" id="story">
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="storyBg" id="storyBg"></div>
+  <div class="storyShade"></div>
+  <div class="top"><button class="icon" onclick="leaveStory()">‹</button><div class="count" id="count"></div><button class="icon dots" onclick="openMore()">···</button></div>
+  <div class="storyCopy">
+    <div class="sceneName" id="sceneName"></div>
+    <div class="sceneText" id="sceneText"></div>
+    <div class="alt" id="alt"></div>
+    <button class="play" id="playBtn" onclick="toggleRead()">⏸ 暂停</button>
+  </div>
+</section>
+
+<section class="screen end" id="end" style="background-image:url('assets/scenes/s08-end.svg')">
+  <div class="eyebrow">BJ-001 · 完成</div>
+  <h2>北京已经醒了。</h2>
+  <div class="quote">只要天亮了，<br>日子就会继续往前走。</div>
+  <button class="endBtn" onclick="startStory()">再听一次</button>
+  <button class="endLink" onclick="show('beijing')">回到北京</button>
+</section>
+
+<div class="moreBack" id="moreBack" onclick="closeMore()"></div>
+<div class="more" id="more">
+  <div class="handle"></div>
+  <h2>更多</h2>
+  <div class="section">
+    <div class="sectionTitle">语言</div>
+    <div class="row">
+      <button class="chip on" data-lang="zh" onclick="setLang('zh',this)">中文</button>
+      <button class="chip" data-lang="py" onclick="setLang('py',this)">拼音</button>
+      <button class="chip" data-lang="en" onclick="setLang('en',this)">EN</button>
+      <button class="chip" data-lang="vi" onclick="setLang('vi',this)">VI</button>
+    </div>
+  </div>
+  <div class="section">
+    <div class="sectionTitle">画面</div>
+    <div class="row">
+      <button class="chip on" id="storyImgBtn" onclick="setImageMode('story')">故事画面</button>
+      <button class="chip" id="archiveImgBtn" onclick="setImageMode('archive')">历史影像</button>
+    </div>
+  </div>
+  <div class="section">
+    <div class="sectionTitle">这一幕依据</div>
+    <div class="fact" id="factText"></div>
+  </div>
+</div>
+</div>
+
+<script>
+const STORY_IMAGES=[
+'assets/scenes/s01-night.svg','assets/scenes/s02-home.svg','assets/scenes/s03-leave.svg','assets/scenes/s04-bell.svg',
+'assets/scenes/s05-wake.svg','assets/scenes/s06-porridge.svg','assets/scenes/s07-city.svg','assets/scenes/s08-end.svg'
+];
+const ARCHIVE_BELL='https://commons.wikimedia.org/wiki/Special:Redirect/file/Bell_Tower,_from_Peking_(1906).jpg?width=1280';
+const ARCHIVE_STREET='https://commons.wikimedia.org/wiki/Special:Redirect/file/Rue_centrale_au_nord_du_Palais_Imp%C3%A9rial_%C3%A0_P%C3%A9kin_%3B_au_fond_on_aper%C3%A7oit_la_Tour_du_Tambour_qui_date_du_milieu_du_xiiie_si%C3%A8cle.jpg?width=1280';
+
+const scenes=[
+{n:"01 · 夜还没退",zh:"天还没亮，北京城还安安静静的。风从胡同里慢慢吹过，带着一点秋天的凉意。远远望去，高高的钟楼立在灰蓝色的天边。",py:"Tiān hái méi liàng, Běijīng chéng hái ān ān jìng jìng de. Fēng cóng hútòng lǐ màn man chuī guò.",en:"Before dawn, Beijing was still quiet. A cool autumn wind moved through the hutongs, and the Bell Tower stood against the gray-blue sky.",vi:"Trời vẫn chưa sáng, Bắc Kinh còn rất yên tĩnh. Gió thu len qua những con hutong, còn Chung Lâu đứng dưới bầu trời xanh xám."},
+{n:"02 · 小安起床",zh:"小安已经醒了。他今年十五岁，住在钟楼附近的一条小胡同里。他跟着舅舅一起做早点生意，每天清晨都要早早出门。",py:"Xiǎo Ān yǐjīng xǐng le. Tā jīnnián shíwǔ suì, zhù zài Zhōnglóu fùjìn de yì tiáo xiǎo hútòng lǐ.",en:"Xiao An was already awake. He was fifteen and lived in a small hutong near the Bell Tower. Every morning he went out early with his uncle.",vi:"Tiểu An đã thức dậy. Cậu mười lăm tuổi, sống trong một con hutong nhỏ gần Chung Lâu."},
+{n:"03 · 出门",zh:"小安抱着一小捆柴，跟在舅舅后面走出院门。胡同很窄，脚步声在安静的清晨里听得格外清楚。小安问：“舅舅，快到时候了吗？”",py:"Xiǎo Ān bàozhe yì xiǎo kǔn chái, gēn zài jiùjiu hòumiàn zǒu chū yuànmén.",en:"Xiao An carried a small bundle of firewood and followed his uncle out. The hutong was narrow, and their footsteps sounded especially clear.",vi:"Tiểu An ôm một bó củi nhỏ, đi theo sau cậu ra khỏi sân. Con ngõ rất hẹp, tiếng bước chân nghe đặc biệt rõ."},
+{n:"04 · 钟声",zh:"“快了。等钟声一响，这城就活了。”他们刚走到钟楼附近，钟声就响了。咚，一声，又一声。声音沉稳、悠长，慢慢传进清冷的空气里。",py:"Kuài le. Děng zhōngshēng yì xiǎng, zhè chéng jiù huó le.",en:"“Almost. Once the bell rings, the whole city comes alive.” Then the bell sounded, deep and lingering in the cold air.",vi:"“Sắp rồi. Khi tiếng chuông vang lên, cả thành phố sẽ sống dậy.” Rồi tiếng chuông cất lên."},
+{n:"05 · 北京慢慢醒了",zh:"钟声过后，街上开始慢慢有了人。一个卖烧饼的人挑着担子从胡同口经过。天色一点一点亮起来，空气里也慢慢有了热气和米粥的香味。",py:"Zhōngshēng guòhòu, jiē shàng kāishǐ màn man yǒu le rén.",en:"After the bell, people slowly began to appear. A flatbread vendor passed the hutong entrance, and the air filled with the smell of rice porridge.",vi:"Sau tiếng chuông, trên phố dần có người. Mùi cháo nóng bắt đầu lan trong không khí."},
+{n:"06 · 第一位客人",zh:"第一位客人是一个挑担的脚夫。“来一碗热的。”小安小心地盛了一碗粥，双手递过去。那人笑着说：“这天儿啊，还是热粥最暖人。”",py:"Dì yí wèi kèrén shì yí ge tiāodàn de jiǎofū.",en:"The first customer was a porter. Xiao An handed him a bowl of hot porridge.",vi:"Vị khách đầu tiên là một người khuân vác. Tiểu An đưa cho anh một bát cháo nóng."},
+{n:"07 · 看着这座城",zh:"太阳还没有真正升起来，可天已经比刚才亮了很多。钟楼、屋顶、胡同口，还有远处的街道，都慢慢有了颜色。小安轻轻地说：“北京，又开始新的一天了。”",py:"Tàiyáng hái méiyǒu zhēnzhèng shēng qǐlai, kě tiān yǐjīng bǐ gāngcái liàng le hěn duō.",en:"The sun had not fully risen, but the sky was much brighter. “Beijing has begun a new day again,” Xiao An said.",vi:"Mặt trời chưa mọc hẳn, nhưng trời đã sáng hơn nhiều. “Bắc Kinh lại bắt đầu một ngày mới rồi,” Tiểu An nói."},
+{n:"08 · 天亮以前的钟楼",zh:"舅舅在后面叫他：“小安，别发呆了，快来帮忙！”“来了！”小安转身跑过去。每一天的钟声，都像在告诉他：只要天亮了，日子就会继续往前走。",py:"Jiùjiu zài hòumiàn jiào tā: Xiǎo Ān, bié fādāi le, kuài lái bāngmáng!",en:"His uncle called from behind. Every morning bell seemed to say: as long as dawn comes, life will keep moving forward.",vi:"Cậu mình gọi từ phía sau. Mỗi tiếng chuông dường như đều nói: chỉ cần trời sáng, cuộc sống sẽ tiếp tục bước về phía trước."}
+];
+
+const scripts=[
+[["n","天还没亮，北京城还安安静静的。风从胡同里慢慢吹过，带着一点秋天的凉意。远远望去，高高的钟楼立在灰蓝色的天边。"]],
+[["n","小安已经醒了。他今年十五岁，住在钟楼附近的一条小胡同里。他跟着舅舅一起做早点生意，每天清晨都要早早出门。"]],
+[["n","小安抱着一小捆柴，跟在舅舅后面走出院门。胡同很窄，脚步声在安静的清晨里听得格外清楚。小安问："],["x","舅舅，快到时候了吗？"]],
+[["u","快了。等钟声一响，这城就活了。"],["n","他们刚走到钟楼附近，钟声就响了。咚，一声，又一声。声音沉稳、悠长，慢慢传进清冷的空气里。"]],
+[["n","钟声过后，街上开始慢慢有了人。一个卖烧饼的人挑着担子从胡同口经过。天色一点一点亮起来，空气里也慢慢有了热气和米粥的香味。"]],
+[["n","第一位客人是一个挑担的脚夫。"],["p","来一碗热的。"],["n","小安小心地盛了一碗粥，双手递过去。那人笑着说："],["p","这天儿啊，还是热粥最暖人。"]],
+[["n","太阳还没有真正升起来，可天已经比刚才亮了很多。钟楼、屋顶、胡同口，还有远处的街道，都慢慢有了颜色。小安轻轻地说："],["x","北京，又开始新的一天了。"]],
+[["n","舅舅在后面叫他："],["u","小安，别发呆了，快来帮忙！"],["x","来了！"],["n","小安转身跑过去。每一天的钟声，都像在告诉他：只要天亮了，日子就会继续往前走。"]]
+];
+
+const facts=[
+"真实地点：北京钟楼、鼓楼及周边胡同。小安为虚构人物。",
+"清末北京普通居民清晨劳作、早点经营属于合理生活背景。",
+"胡同是真实城市空间；抱柴出门和这段对白为故事创作。",
+"钟鼓楼曾承担城市报时功能；故事中的钟声为电影化表达。",
+"清代北京存在早点、粥食与街头小贩等日常生活形态。",
+"脚夫是旧时靠搬运、挑担等体力劳动谋生的人。",
+"钟鼓楼位于北京中轴线北端；小安的对白为虚构。",
+"最后一句是文学表达，用来收束故事主题。"
+];
+
+const voice={n:{rate:.88,pitch:.94},x:{rate:.95,pitch:1.12},u:{rate:.88,pitch:.82},p:{rate:.86,pitch:.72}};
+let idx=0,reading=false,imageMode="story",lang="zh",token=0;
+
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active")}
+function startStory(){
+  stopRead(); idx=0; imageMode="story"; lang="zh"; render(); show("story");
+  reading=true; updatePlay(); speakPart(0,++token);
+}
+function leaveStory(){stopRead();show("beijing")}
+function render(){
+  const img=imageMode==="story"?STORY_IMAGES[idx]:((idx===3||idx===6||idx===7)?ARCHIVE_BELL:ARCHIVE_STREET);
+  document.getElementById("storyBg").style.backgroundImage='url("'+img+'")';
+  document.getElementById("sceneName").textContent=scenes[idx].n;
+  document.getElementById("sceneText").innerHTML=mark(scenes[idx].zh);
+  const alt=document.getElementById("alt");
+  if(lang==="zh"){alt.style.display="none"}else{alt.style.display="block";alt.textContent=scenes[idx][lang]}
+  document.getElementById("count").textContent=(idx+1)+" / 8";
+  document.getElementById("bar").style.width=((idx+1)/8*100)+"%";
+  document.getElementById("factText").textContent=facts[idx];
+}
+function mark(t){return t.replace(/胡同|钟楼|烧饼|脚夫|发呆/g,m=>'<span class="word">'+m+'</span>')}
+function updatePlay(){const b=document.getElementById("playBtn");b.textContent=reading?"⏸ 暂停":"▶ 继续";b.classList.toggle("on",reading)}
+function chineseVoice(){const vs=speechSynthesis.getVoices();return vs.find(v=>/^zh-CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||null}
+function speakPart(i,myToken){
+  if(!reading||myToken!==token)return;
+  if(i>=scripts[idx].length){
+    if(idx<7){idx++;render();setTimeout(()=>speakPart(0,myToken),350)}
+    else{stopRead();show("end")}
+    return;
+  }
+  const [role,text]=scripts[idx][i],cfg=voice[role]||voice.n,u=new SpeechSynthesisUtterance(text);
+  u.lang="zh-CN";u.rate=cfg.rate;u.pitch=cfg.pitch;const v=chineseVoice();if(v)u.voice=v;
+  u.onend=()=>{if(reading&&myToken===token)setTimeout(()=>speakPart(i+1,myToken),130)};
+  u.onerror=()=>{if(reading&&myToken===token)setTimeout(()=>speakPart(i+1,myToken),80)};
+  speechSynthesis.speak(u);
+}
+function toggleRead(){
+  if(reading){stopRead()}
+  else{reading=true;updatePlay();speakPart(0,++token)}
+}
+function stopRead(){reading=false;token++;try{speechSynthesis.cancel()}catch(e){}updatePlay()}
+function openMore(){document.getElementById("moreBack").classList.add("open");document.getElementById("more").classList.add("open")}
+function closeMore(){document.getElementById("moreBack").classList.remove("open");document.getElementById("more").classList.remove("open")}
+function setLang(l,b){lang=l;document.querySelectorAll("[data-lang]").forEach(x=>x.classList.remove("on"));b.classList.add("on");render()}
+function setImageMode(m){imageMode=m;document.getElementById("storyImgBtn").classList.toggle("on",m==="story");document.getElementById("archiveImgBtn").classList.toggle("on",m==="archive");render()}
+</script>
+</body>
+</html>
