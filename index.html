@@ -76,6 +76,14 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
 .play{width:58px;height:58px;border-radius:50%;border:0;justify-self:center;background:linear-gradient(145deg,#f0ddb3,#dcb974);color:#1c1711;font-size:22px;font-weight:900;box-shadow:0 7px 24px rgba(226,185,111,.25)}
 .status{position:absolute;left:50%;top:80px;transform:translateX(-50%);z-index:6;font-size:10px;color:#d9dfe2;background:rgba(0,0,0,.32);padding:6px 10px;border-radius:999px;backdrop-filter:blur(12px);opacity:0;transition:.25s;pointer-events:none}
 .status.show{opacity:1}
+
+.cinemaMeta{position:absolute;z-index:5;left:22px;top:76px;font-size:9px;letter-spacing:.16em;color:rgba(247,243,234,.72);text-transform:uppercase;text-shadow:0 2px 12px #000}
+.sceneNav{position:absolute;z-index:7;left:24px;right:24px;bottom:151px;display:flex;gap:5px;align-items:center}
+.sceneDot{height:3px;flex:1;border:0;border-radius:99px;background:rgba(255,255,255,.24);padding:0;cursor:pointer;transition:.2s}
+.sceneDot.active{background:#e7bd73;box-shadow:0 0 8px rgba(231,189,115,.35)}
+.sceneDot:active{opacity:.55}
+.swipeHint{position:absolute;z-index:5;right:22px;top:78px;font-size:9px;color:rgba(247,243,234,.55);opacity:0;transition:opacity .35s;text-shadow:0 2px 10px #000}
+.swipeHint.show{opacity:1}
 </style>
 </head>
 <body>
@@ -108,14 +116,14 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
 </section>
 
 <section class="screen story" id="story">
-  <div class="storyBg" id="storyBg"></div><div class="storyShade"></div>
+  <div class="storyBg" id="storyBg"></div><div class="storyShade"></div><div class="cinemaMeta">STORY CINEMA · 北京</div><div class="swipeHint" id="swipeHint">左右滑动切换场景</div>
   <div class="storyTop">
     <button class="back" onclick="leaveStory()">‹</button>
     <div class="title" id="storyTitle">天亮以前的钟楼</div>
     <div class="count" id="count">1 / 8</div>
   </div>
   <div class="status" id="status">声音 1 · 沉稳男声</div>
-  <div class="storyText">
+  <div class="sceneNav" id="sceneNav" aria-label="场景进度"></div><div class="storyText">
     <div class="scene" id="scene"></div>
     <div class="body" id="body"></div>
   </div>
@@ -258,6 +266,7 @@ function startStory(key){
   show("story");
   updateVoiceUI();
   setupMedia();
+  showSwipeHint();
   if(speechMode){
     prepareSpeechVoices();
     document.getElementById("play").textContent="⏸";
@@ -400,6 +409,8 @@ function renderScene(i){
   document.getElementById("scene").textContent=s.scenes[i].n;
   document.getElementById("body").textContent=s.scenes[i].t;
   document.getElementById("count").textContent=(i+1)+" / "+s.scenes.length;
+  renderSceneNav();
+  preloadScene(i+1);
   if("mediaSession" in navigator){
     navigator.mediaSession.metadata=new MediaMetadata({
       title:s.title,
@@ -409,6 +420,31 @@ function renderScene(i){
     });
   }
 }
+function renderSceneNav(){
+  const nav=document.getElementById("sceneNav");
+  if(!nav)return;
+  nav.innerHTML="";
+  story().scenes.forEach((_,i)=>{
+    const b=document.createElement("button");
+    b.className="sceneDot"+(i===sceneIndex?" active":"");
+    b.setAttribute("aria-label","第 "+(i+1)+" 幕");
+    b.onclick=()=>jumpToScene(i);
+    nav.appendChild(b);
+  });
+}
+function preloadScene(i){
+  const s=story();
+  if(i>=0&&i<s.images.length){const img=new Image();img.src=s.images[i]}
+}
+function jumpToScene(i){
+  const s=story();
+  if(i<0||i>=s.scenes.length)return;
+  if(speechMode){speakScene(i);return}
+  const starts=sceneStarts();
+  if(starts[i]!=null)audio.currentTime=Math.min(audio.duration||starts[i],starts[i]+.05);
+  renderScene(i);
+}
+
 
 function seekScene(delta){
   const s=story();
@@ -497,6 +533,24 @@ document.addEventListener("visibilitychange",()=>{
   }
 });
 
+let touchX=0,touchY=0;
+const storyEl=document.getElementById("story");
+storyEl.addEventListener("touchstart",e=>{
+  if(e.touches.length!==1)return;
+  touchX=e.touches[0].clientX; touchY=e.touches[0].clientY;
+},{passive:true});
+storyEl.addEventListener("touchend",e=>{
+  if(!touchX)return;
+  const dx=e.changedTouches[0].clientX-touchX, dy=e.changedTouches[0].clientY-touchY;
+  touchX=touchY=0;
+  if(Math.abs(dx)<55||Math.abs(dx)<Math.abs(dy)*1.25)return;
+  const target=Math.max(0,Math.min(story().scenes.length-1,sceneIndex+(dx<0?1:-1)));
+  if(target!==sceneIndex)jumpToScene(target);
+});
+function showSwipeHint(){
+  const el=document.getElementById("swipeHint"); if(!el)return;
+  el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),1800);
+}
 window.addEventListener("pageshow",()=>{
   ensurePlaybackSession();
   document.getElementById("play").textContent=audio.paused?"▶":"⏸";
