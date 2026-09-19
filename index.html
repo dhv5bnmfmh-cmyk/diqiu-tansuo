@@ -50,6 +50,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
 .story.active{position:fixed;left:50%;top:0;transform:translateX(-50%);width:min(470px,100vw);height:100dvh;min-height:100dvh;overflow:hidden;overscroll-behavior:none}
 .storyBg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.02);transition:background-image .6s ease,transform 8s ease}
 .story.active .storyBg{transform:scale(1.07)}
+.story.speechMode .timeline,.story.speechMode .timeRow{display:none}
 .storyShade{position:absolute;inset:0;background:
  linear-gradient(180deg,rgba(0,0,0,.20),rgba(0,0,0,.01) 34%,rgba(2,5,8,.18) 50%,rgba(2,5,8,.70) 72%,#020508 100%)}
 .storyTop{position:absolute;z-index:5;left:0;right:0;top:0;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 17px}
@@ -215,6 +216,7 @@ const STORIES={
 const audio=document.getElementById("audio");
 const speeds=[.8,1,1.2,1.5];
 let storyKey="bj001",voiceIndex=0,speedIndex=1,sceneIndex=-1;
+let speechMode=false,speechVoices=[],speechVoiceIndex=0;
 
 function story(){return STORIES[storyKey]}
 function weights(){return story().scenes.map(s=>s.t.replace(/[\s“”。，！？：；、]/g,"").length+10)}
@@ -235,12 +237,15 @@ function show(id){
 
 function startStory(key){
   ensurePlaybackSession();
+  if("speechSynthesis" in window) window.speechSynthesis.cancel();
   storyKey=key;
   voiceIndex=0;
   speedIndex=1;
   sceneIndex=-1;
   const s=story();
 
+  speechMode=(key==="bj003");
+  document.getElementById("story").classList.toggle("speechMode",speechMode);
   audio.pause();
   audio.src=s.voices[voiceIndex];
   audio.preload="auto";
@@ -253,10 +258,21 @@ function startStory(key){
   show("story");
   updateVoiceUI();
   setupMedia();
-  audio.play().catch(()=>{document.getElementById("play").textContent="▶"});
+  if(speechMode){
+    prepareSpeechVoices();
+    document.getElementById("play").textContent="⏸";
+    speakScene(0);
+  }else{
+    audio.play().catch(()=>{document.getElementById("play").textContent="▶"});
+  }
 }
 
-function leaveStory(){audio.pause();show("beijing")}
+function leaveStory(){
+  audio.pause();
+  if("speechSynthesis" in window)window.speechSynthesis.cancel();
+  document.getElementById("story").classList.remove("speechMode");
+  show("beijing")
+}
 
 function resumePlayback(){
   ensurePlaybackSession();
@@ -267,18 +283,45 @@ function resumePlayback(){
 }
 
 function togglePlay(){
+  if(speechMode){
+    if(!("speechSynthesis" in window))return;
+    if(window.speechSynthesis.paused){window.speechSynthesis.resume();document.getElementById("play").textContent="⏸";return}
+    if(window.speechSynthesis.speaking){window.speechSynthesis.pause();document.getElementById("play").textContent="▶";return}
+    speakScene(sceneIndex<0?0:sceneIndex);
+    return;
+  }
   if(audio.ended)audio.currentTime=0;
   if(audio.paused)resumePlayback();else audio.pause();
 }
 
 function cycleSpeed(){
   speedIndex=(speedIndex+1)%speeds.length;
-  audio.playbackRate=speeds[speedIndex];
   document.getElementById("speed").textContent=speeds[speedIndex].toFixed(1)+"×";
+  if(speechMode && ("speechSynthesis" in window)){
+    const wasSpeaking=window.speechSynthesis.speaking;
+    const wasPaused=window.speechSynthesis.paused;
+    window.speechSynthesis.cancel();
+    if(wasSpeaking||wasPaused)speakScene(sceneIndex<0?0:sceneIndex);
+  }else{
+    audio.playbackRate=speeds[speedIndex];
+  }
 }
 
 function cycleVoice(){
   const s=story();
+  if(speechMode){
+    prepareSpeechVoices();
+    if(speechVoices.length){
+      speechVoiceIndex=(speechVoiceIndex+1)%speechVoices.length;
+      voiceIndex=(speechVoiceIndex%3);
+      updateVoiceUI();
+      if(window.speechSynthesis.speaking||window.speechSynthesis.paused){
+        window.speechSynthesis.cancel();
+        speakScene(sceneIndex<0?0:sceneIndex);
+      }
+    }
+    return;
+  }
   const ratio=(audio.duration&&isFinite(audio.duration))?audio.currentTime/audio.duration:0;
   const wasPlaying=!audio.paused;
   voiceIndex=(voiceIndex+1)%s.voices.length;
@@ -294,6 +337,31 @@ function cycleVoice(){
     if(wasPlaying)resumePlayback();
   },{once:true});
 }
+
+function prepareSpeechVoices(){
+  if(!("speechSynthesis" in window))return;
+  const all=window.speechSynthesis.getVoices();
+  speechVoices=all.filter(v=>/^zh/i.test(v.lang));
+  if(!speechVoices.length)speechVoices=all;
+  if(speechVoiceIndex>=speechVoices.length)speechVoiceIndex=0;
+}
+function speakScene(i){
+  if(!("speechSynthesis" in window))return;
+  const s=story();
+  if(i<0||i>=s.scenes.length)return;
+  window.speechSynthesis.cancel();
+  renderScene(i);
+  const u=new SpeechSynthesisUtterance(s.scenes[i].t);
+  prepareSpeechVoices();
+  if(speechVoices.length)u.voice=speechVoices[speechVoiceIndex];
+  u.rate=speeds[speedIndex];
+  u.pitch=1;
+  u.lang=(u.voice&&u.voice.lang)||"zh-CN";
+  u.onstart=()=>{document.getElementById("play").textContent="⏸"};
+  u.onend=()=>{if(sceneIndex<i)return;if(i<s.scenes.length-1){speakScene(i+1)}else{document.getElementById("play").textContent="↻"}};
+  window.speechSynthesis.speak(u);
+}
+if("speechSynthesis" in window)window.speechSynthesis.onvoiceschanged=prepareSpeechVoices;
 
 function updateVoiceUI(){
   document.getElementById("voice").textContent="声音 "+(voiceIndex+1);
