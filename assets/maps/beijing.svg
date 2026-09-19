@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200">
+<defs>
+  <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#151b1f"/><stop offset="1" stop-color="#0b1013"/></linearGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="8"/></filter>
+</defs>
+<rect width="900" height="1200" fill="url(#paper)"/>
+<g fill="none" stroke="#9b8156" stroke-opacity=".22" stroke-width="2">
+  <path d="M120 140 C250 90 350 150 430 105 S650 80 790 145"/>
+  <path d="M90 300 C220 250 300 330 410 285 S650 250 820 330"/>
+  <path d="M80 470 C230 420 300 500 440 450 S670 430 830 500"/>
+  <path d="M75 650 C220 600 330 680 455 625 S690 590 830 675"/>
+  <path d="M80 850 C230 790 330 880 470 820 S680 790 825 875"/>
+  <path d="M115 1030 C240 980 350 1060 485 1000 S680 970 790 1045"/>
+  <path d="M180 80 C130 260 240 350 190 520 S160 850 230 1120"/>
+  <path d="M360 65 C310 220 400 330 345 500 S330 830 390 1130"/>
+  <path d="M540 60 C500 230 590 350 525 510 S530 830 570 1140"/>
+  <path d="M710 90 C650 240 750 360 680 530 S700 850 745 1110"/>
+</g>
+<g fill="none" stroke="#d1b47b" stroke-opacity=".36">
+  <path d="M450 90 L450 1110" stroke-width="8"/>
+  <path d="M185 585 L715 585" stroke-width="4"/>
+  <path d="M300 260 L600 260" stroke-width="3"/>
+  <path d="M280 900 L630 900" stroke-width="3"/>
+</g>
+<g fill="#e7bd73" fill-opacity=".14" stroke="#e7bd73" stroke-opacity=".28">
+  <circle cx="450" cy="205" r="62"/><circle cx="450" cy="585" r="58"/><circle cx="450" cy="690" r="48"/><circle cx="450" cy="900" r="55"/><circle cx="610" cy="650" r="45"/>
+</g>
+<g fill="#e7bd73" font-family="sans-serif" text-anchor="middle">
+  <text x="450" y="185" font-size="30" opacity=".78">钟楼</text>
+  <text x="450" y="565" font-size="30" opacity=".78">前门</text>
+  <text x="450" y="680" font-size="25" opacity=".65">大栅栏</text>
+  <text x="450" y="890" font-size="26" opacity=".55">城南</text>
+  <text x="610" y="640" font-size="25" opacity=".55">什刹海</text>
+  <text x="300" y="965" font-size="22" opacity=".48">琉璃厂</text>
+</g>
+<g fill="#f2dfb6" font-family="sans-serif">
+  <text x="450" y="1145" text-anchor="middle" font-size="16" letter-spacing="5" opacity=".42">BEIJING · STORY MAP</text>
+  <text x="450" y="1172" text-anchor="middle" font-size="12" opacity=".30">示意地图 · 用于故事探索</text>
+</g>
+</svg>
