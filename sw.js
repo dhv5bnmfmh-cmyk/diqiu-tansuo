@@ -1,8 +1,9 @@
-const CACHE="diqiu-shell-v3";
+const CACHE="diqiu-shell-v4";
 const SHELL=[
   "./manifest.webmanifest",
   "./assets/app-icon.svg",
   "./assets/apple-touch-icon.png",
+  "./assets/maps/beijing.svg",
   "./assets/scenes/s01-night.svg",
   "./assets/scenes/s02-home.svg",
   "./assets/scenes/s03-leave.svg",
