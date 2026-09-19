@@ -106,7 +106,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
     <div class="mapLabel">北京 · 故事地图</div>
     <button class="mapMark" style="left:50%;top:17%" onclick="startStory('bj001')" aria-label="钟楼：天亮以前的钟楼"><span class="dot"></span><span class="markName">钟楼</span></button>
     <button class="mapMark" style="left:50%;top:49%" onclick="startStory('bj002')" aria-label="前门：前门来了一个外乡人"><span class="dot"></span><span class="markName">前门</span></button>
-    <button class="mapMark" style="left:50%;top:75%" onclick="startStory('bj003')" aria-label="城南：城南的第一场雪"><span class="dot"></span><span class="markName">城南</span></button>
+    <button class="mapMark" style="left:50%;top:75%" onclick="startStory('bj003')" aria-label="天桥：桥下的人声"><span class="dot"></span><span class="markName">天桥</span></button>
     <button class="mapMark disabled" style="left:68%;top:54%" aria-label="什刹海：即将开放"><span class="dot"></span><span class="markName">什刹海</span></button>
     <button class="mapMark disabled" style="left:33%;top:81%" aria-label="琉璃厂：即将开放"><span class="dot"></span><span class="markName">琉璃厂</span></button>
     <div class="mapVignette"></div>
@@ -114,7 +114,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
   <div class="storyChoices">
     <div class="choice" onclick="startStory('bj001')"><span>天亮以前的钟楼</span><small>钟楼</small></div>
     <div class="choice" onclick="startStory('bj002')"><span>前门来了一个外乡人</span><small>前门 · 大栅栏</small></div>
-    <div class="choice" onclick="startStory('bj003')"><span>城南的第一场雪</span><small>城南</small></div>
+    <div class="choice" onclick="startStory('bj003')"><span>桥下的人声</span><small>天桥</small></div>
     <div class="choice disabled"><span>什刹海边的夏夜</span><small>即将开放</small></div>
     <div class="choice disabled"><span>一封从琉璃厂寄出的信</span><small>即将开放</small></div>
   </div>
@@ -178,7 +178,7 @@ const STORIES={
   },
   bj003:{
     id:"BJ-003",
-    title:"城南的第一场雪",
+    title:"桥下的人声",
     city:"北京",
     voices:[
       "assets/audio/bj003-voice1.mp3",
@@ -186,18 +186,18 @@ const STORIES={
       "assets/audio/bj003-voice3.mp3"
     ],
     images:[
-      "assets/scenes/bj003/s01-snow.svg","assets/scenes/bj003/s02-charcoal.svg","assets/scenes/bj003/s03-footprints.svg","assets/scenes/bj003/s04-breakfast.svg",
-      "assets/scenes/bj003/s05-street.svg","assets/scenes/bj003/s06-child.svg","assets/scenes/bj003/s07-rooftops.svg","assets/scenes/bj003/s08-window.svg"
+      "assets/scenes/bj003/s01-sign.svg","assets/scenes/bj003/s02-tea.svg","assets/scenes/bj003/s03-street.svg","assets/scenes/bj003/s04-bridge.svg",
+      "assets/scenes/bj003/s05-directions.svg","assets/scenes/bj003/s06-found.svg","assets/scenes/bj003/s07-shop.svg","assets/scenes/bj003/s08-south.svg"
     ],
     scenes:[
-      {n:"01 · 夜雪落城南",t:"天刚蒙蒙亮，城南已经落了一夜的雪。屋檐、门槛和胡同里的石路，都压着一层白。十四岁的阿宁推开院门，先没有出去。他站在门口，看着雪把昨天走过的脚印一点一点盖住。"},
-      {n:"02 · 一篮炭",t:"母亲在屋里喊他：“别站着了，把这篮炭送到隔壁院子去。”阿宁应了一声，提起篮子。昨晚炉火烧得旺，屋里暖和，可一开门，冷风就钻进袖口。他缩了缩肩，把篮子抱得更紧。"},
-      {n:"03 · 胡同里的脚印",t:"胡同比平日安静。雪把脚步声都压低了。墙根下留着几行新的脚印，有人已经出门，有人家的窗纸后面还透着灯光。阿宁走了几步，忽然回头看。刚才自己的脚印已经清清楚楚地留在雪上。"},
-      {n:"04 · 雪中的早点摊",t:"走到胡同口，他看见一个卖早点的老人正在扫门前的雪。老人没有急着把雪全扫走，只在门口清出一条窄窄的路。阿宁问：“这么大的雪，还开门吗？”老人笑了笑：“雪再大，人也得吃早饭。”"},
-      {n:"05 · 城南慢下来",t:"街上的人慢慢多起来。有人裹着棉衣赶路，有人推着小车，有人提着篮子去买东西。屋檐上的雪偶尔落下一小团，砸在地上，发出轻轻的声音。阿宁第一次发现，原来下雪并不会让北京停下来，只是让每个人走得慢一点。"},
-      {n:"06 · 门槛边的雪花",t:"到了隔壁院子，阿宁把炭篮放下。邻居家的孩子正在门槛边看雪，伸手想接一片落下来的雪花。阿宁笑着说：“别接了，手会冻红。”孩子不听，还是仰着脸。那一刻，阿宁也忘了冷。"},
-      {n:"07 · 回去的路",t:"回去的路上，雪又开始下。城南的屋顶一片接一片，灰墙和黑瓦被雪重新描了一遍。远处有人吆喝，近处有人关门，炉火的烟从屋顶慢慢升起来。阿宁忽然觉得，这座城和昨天一样，又好像完全不一样。"},
-      {n:"08 · 窗外还在下雪",t:"他推开家门，母亲已经把热水放在桌上。“送到了？”“送到了。”阿宁把冻红的手伸到炉边。窗外还在下雪。今天的北京没有发生什么大事，可阿宁知道，自己会记住这一场雪。因为它让他第一次看见，城市是许多人一起走过、一起生活的每一天。"}
+      {n:"01 · 木牌掉了",t:"木牌掉下来的时候，阿顺没有听见声音。他只是走了几步，忽然觉得腰间轻了一下。那块木牌不见了。正面写着：德兴布庄。背面还有一行小字：过桥，往南。阿顺站在人群中间，第一次不知道该往哪里走。"},
+      {n:"02 · 先找掉东西的地方",t:"他蹲下来找。地上有碎纸、草叶，还有被踩过的布头。没有木牌。走到一个茶摊旁边，他问：“您有没有看见一块木牌？”卖茶的人摇头，又问：“你找德兴布庄？”阿顺点头。“那你往北边找。”"},
+      {n:"03 · 天桥下面没有一条路",t:"阿顺按照他说的方向走了一段，又问了一个卖小吃的人。那人说：“德兴布庄我知道。过桥以后往南。”阿顺愣住：“可是刚才有人让我往北。”摊主笑了：“那你刚才问的是谁？他卖茶，又不是卖布。”"},
+      {n:"04 · 木牌背后的字",t:"阿顺走到一个卖旧东西的小摊。老人认得德兴布庄，却没有马上告诉他在哪里。“你先记住自己站在哪儿。”阿顺抬头看天桥，又低头想起木牌背后的几个字。他第一次明白，那不是完整的地址，只是一个方向。"},
+      {n:"05 · 原来每个人都有自己的天桥",t:"阿顺重新走回桥边。这一次，他没有马上问人。他开始自己看：桥的这一边是什么，另一边是什么，人从哪里来，又往哪里去。他发现，卖茶的人说的北边和卖小吃的人说的南边，都没有错。错的是他没有先知道自己站在哪里。"},
+      {n:"06 · 木牌在桌子下面",t:"过桥以后，他一路往南。忽然有人喊：“你的东西是不是这个？”一个孩子站在茶摊旁边，手里拿着那块褐色的小木牌。孩子说，木牌被人踩到，滑到了桌子下面。阿顺接过木牌，重新把它系在腰间。"},
+      {n:"07 · 德兴布庄",t:"德兴布庄并不难找。真正难的是，在不知道自己在哪里的时候找到它。阿顺走到门口，把木牌解下来。掌柜看了一眼：“怎么这么晚？”阿顺说：“木牌丢了。”“找到了？”“找到了。”掌柜笑了：“那你今天认识的人，比认识的路还多。”"},
+      {n:"08 · 往南",t:"天快黑了。阿顺又走回天桥附近。白天的人声还没有完全散去。有人收摊，有人赶路，有人还在招呼客人。他摸了摸腰间的木牌。以前他只知道这是一个地址。现在，他知道从哪里过桥，往哪里走。然后，他往南走。这一次，他没有问路。"}
     ]
   },
   bj002:{
