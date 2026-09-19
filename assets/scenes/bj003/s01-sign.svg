@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#17232b"/><stop offset=".62" stop-color="#0a1116"/><stop offset="1" stop-color="#030609"/></linearGradient>
+<linearGradient id="warm" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4b968" stop-opacity=".9"/><stop offset="1" stop-color="#8b5b2f" stop-opacity=".18"/></linearGradient>
+</defs>
+<rect width="900" height="1200" fill="url(#bg)"/>
+<circle cx="680" cy="300" r="170" fill="#d9b36d" opacity=".08"/>
+<path d="M0 690 Q180 610 330 680 T620 650 T900 700 V1200 H0Z" fill="#18242a"/>
+<g fill="#27343a" opacity=".95">
+<path d="M0 700 L145 570 L285 700 V980 H0Z"/><path d="M255 700 L405 545 L555 700 V980 H255Z"/><path d="M535 700 L700 560 L900 710 V980 H535Z"/>
+</g>
+<g stroke="#8c9aa0" stroke-opacity=".20" fill="none" stroke-width="4">
+<path d="M0 790 Q180 740 360 790 T900 780"/><path d="M70 900 H830"/><path d="M120 1010 H780"/>
+</g>
+<g fill="#e8edf0" opacity=".62">
+<circle cx="90" cy="180" r="3"/><circle cx="210" cy="280" r="4"/><circle cx="340" cy="150" r="3"/><circle cx="470" cy="330" r="3"/><circle cx="610" cy="190" r="4"/><circle cx="770" cy="360" r="3"/>
+</g>
+<g fill="none" stroke="#d5a85d" stroke-width="10" stroke-linecap="round" opacity=".72">
+<path d="M160 790 Q450 610 740 790"/>
+</g>
+<g fill="#d8b36d" opacity=".82"><circle cx="450" cy="790" r="8"/><circle cx="250" cy="850" r="5"/><circle cx="650" cy="850" r="5"/></g>
+<g fill="#11191e" stroke="#56636a" stroke-width="3">
+<circle cx="430" cy="690" r="35"/><path d="M395 730 L430 790 L465 730Z"/>
+<circle cx="560" cy="745" r="28"/><path d="M535 775 L560 825 L585 775Z"/>
+</g>
+<g transform="translate(370 470)">
+<rect x="0" y="0" width="160" height="92" rx="8" fill="#735333" stroke="#d6ad69" stroke-width="5" transform="rotate(-8 80 46)"/>
+<text x="80" y="57" text-anchor="middle" fill="#f0d5a0" font-family="sans-serif" font-size="22" font-weight="700">木牌</text>
+</g>
+<text x="60" y="100" fill="#f0d7a5" font-family="sans-serif" font-size="18" letter-spacing="4" opacity=".75">BJ-003 · 桥下的人声</text>
+<text x="60" y="1115" fill="#f5f2ea" font-family="sans-serif" font-size="38" font-weight="700">01 · 木牌掉了</text>
+<text x="60" y="1155" fill="#b5c0c5" font-family="sans-serif" font-size="17">lost wooden sign</text>
+<text x="60" y="1182" fill="#7f8b91" font-family="sans-serif" font-size="13">故事化复原插画 · 非史料影像</text>
+</svg>
