@@ -59,6 +59,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
 .storyText{position:absolute;z-index:4;left:25px;right:25px;bottom:158px}
 .scene{font-size:11px;color:var(--gold);letter-spacing:.11em;margin-bottom:10px;font-weight:760}
 .body{font-size:21px;line-height:1.68;text-shadow:0 2px 16px rgba(0,0,0,.68)}
+.karaChar.future{display:none}.karaChar.visible{display:inline}
 .player{position:absolute;z-index:8;left:0;right:0;bottom:0;padding:6px 14px calc(13px + env(safe-area-inset-bottom))}
 .playerGlass{
   background:linear-gradient(180deg,rgba(26,32,37,.78),rgba(12,17,21,.91));
@@ -244,16 +245,39 @@ const WORDS={
   "吆喝":["yāo he","to call out to attract customers","rao hàng"],
   "掌柜":["zhǎng guì","shopkeeper","chủ cửa hàng"]
 };
-function highlightWords(text){
+function highlightWords(text, visibleCount=text.length){
   const keys=Object.keys(WORDS).sort((a,b)=>b.length-a.length);
-  let out="",i=0;
+  let out="",i=0,shown=0;
   while(i<text.length){
     let found=null;
     for(const k of keys)if(text.startsWith(k,i)){found=k;break}
-    if(found){out+='<span class="tapWord" data-word="'+found+'">'+found+'</span>';i+=found.length}
-    else{out+=text[i];i++}
+    const token=found||text[i];
+    const tokenChars=Array.from(token);
+    const tokenHtml=tokenChars.map(ch=>{
+      const visible=shown<visibleCount;
+      shown++;
+      return '<span class="karaChar'+(visible?' visible':' future')+'">'+ch.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span>';
+    }).join('');
+    if(found) out+='<span class="tapWord" data-word="'+found+'">'+tokenHtml+'</span>';
+    else out+=tokenHtml;
+    i+=token.length;
   }
   return out;
+}
+function renderTextProgress(t){
+  const s=story();
+  if(sceneIndex<0||sceneIndex>=s.scenes.length)return;
+  const starts=sceneStarts();
+  const start=starts[sceneIndex]||0;
+  const end=(sceneIndex<s.scenes.length-1)?starts[sceneIndex+1]:(audio.duration||start+1);
+  const duration=Math.max(.2,end-start);
+  const ratio=Math.max(0,Math.min(1,(t-start)/duration));
+  const text=s.scenes[sceneIndex].t;
+  const visibleCount=Math.max(1,Math.min(text.length,Math.floor(text.length*ratio)));
+  const body=document.getElementById("body");
+  body.innerHTML=highlightWords(text,visibleCount);
+  body.classList.add("wordReady");
+  bindWordLongPress();
 }
 function bindWordLongPress(){
   document.querySelectorAll(".tapWord").forEach(el=>{
@@ -310,7 +334,7 @@ function startStory(key){
   sceneIndex=-1;
   const s=story();
 
-  speechMode=(key==="bj003");
+  speechMode=false;
   document.getElementById("story").classList.toggle("speechMode",speechMode);
   audio.pause();
   audio.src=s.voices[voiceIndex];
@@ -364,14 +388,7 @@ function togglePlay(){
 function cycleSpeed(){
   speedIndex=(speedIndex+1)%speeds.length;
   document.getElementById("speed").textContent=speeds[speedIndex].toFixed(1)+"×";
-  if(speechMode && ("speechSynthesis" in window)){
-    const wasSpeaking=window.speechSynthesis.speaking;
-    const wasPaused=window.speechSynthesis.paused;
-    window.speechSynthesis.cancel();
-    if(wasSpeaking||wasPaused)speakScene(sceneIndex<0?0:sceneIndex);
-  }else{
-    audio.playbackRate=speeds[speedIndex];
-  }
+  audio.playbackRate=speeds[speedIndex];
 }
 
 function cycleVoice(){
@@ -389,7 +406,9 @@ function cycleVoice(){
     }
     return;
   }
-  const ratio=(audio.duration&&isFinite(audio.duration))?audio.currentTime/audio.duration:0;
+  const oldTime=audio.currentTime||0;
+  const oldDuration=(audio.duration&&isFinite(audio.duration))?audio.duration:0;
+  const ratio=oldDuration?oldTime/oldDuration:0;
   const wasPlaying=!audio.paused;
   voiceIndex=(voiceIndex+1)%s.voices.length;
   audio.src=s.voices[voiceIndex];
@@ -398,11 +417,16 @@ function cycleVoice(){
   audio.playbackRate=speeds[speedIndex];
   updateVoiceUI();
   setupMedia();
-  audio.addEventListener("loadedmetadata",function once(){
-    audio.removeEventListener("loadedmetadata",once);
-    if(audio.duration&&isFinite(audio.duration))audio.currentTime=ratio*audio.duration;
+  const restoreVoicePosition=()=>{
+    if(audio.duration&&isFinite(audio.duration)){
+      audio.currentTime=Math.max(0,Math.min(audio.duration-0.05,ratio*audio.duration));
+      renderScene(sceneForTime(audio.currentTime));
+      renderTextProgress(audio.currentTime);
+    }
     if(wasPlaying)resumePlayback();
-  },{once:true});
+  };
+  if(audio.readyState>=1)restoreVoicePosition();
+  else audio.addEventListener("loadedmetadata",restoreVoicePosition,{once:true});
 }
 
 function prepareSpeechVoices(){
@@ -527,8 +551,8 @@ function setupMedia(){
     pause:()=>audio.pause(),
     previoustrack:()=>seekScene(-1),
     nexttrack:()=>seekScene(1),
-    seekbackward:(d)=>audio.currentTime=Math.max(0,audio.currentTime-(d.seekOffset||10)),
-    seekforward:(d)=>audio.currentTime=Math.min(audio.duration||Infinity,audio.currentTime+(d.seekOffset||10))
+    seekbackward:(d)=>{audio.currentTime=Math.max(0,audio.currentTime-(d.seekOffset||10));renderTextProgress(audio.currentTime)},
+    seekforward:(d)=>{audio.currentTime=Math.min(audio.duration||Infinity,audio.currentTime+(d.seekOffset||10));renderTextProgress(audio.currentTime)}
   };
   Object.entries(handlers).forEach(([k,v])=>{try{navigator.mediaSession.setActionHandler(k,v)}catch(e){}});
 }
