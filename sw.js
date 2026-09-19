@@ -19,7 +19,15 @@ const SHELL=[
   "./assets/scenes/bj002/s05-ask.svg",
   "./assets/scenes/bj002/s06-clothshop.svg",
   "./assets/scenes/bj002/s07-firstwork.svg",
-  "./assets/scenes/bj002/s08-night.svg"
+  "./assets/scenes/bj002/s08-night.svg",
+  "./assets/scenes/bj003/s01-sign.svg",
+  "./assets/scenes/bj003/s02-tea.svg",
+  "./assets/scenes/bj003/s03-street.svg",
+  "./assets/scenes/bj003/s04-bridge.svg",
+  "./assets/scenes/bj003/s05-directions.svg",
+  "./assets/scenes/bj003/s06-found.svg",
+  "./assets/scenes/bj003/s07-shop.svg",
+  "./assets/scenes/bj003/s08-south.svg"
 ];
 
 self.addEventListener("install",event=>{
