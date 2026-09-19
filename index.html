@@ -84,6 +84,11 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
 .sceneDot:active{opacity:.55}
 .swipeHint{position:absolute;z-index:5;right:22px;top:78px;font-size:9px;color:rgba(247,243,234,.55);opacity:0;transition:opacity .35s;text-shadow:0 2px 10px #000}
 .swipeHint.show{opacity:1}
+
+.wordSheet{position:absolute;z-index:20;left:14px;right:14px;bottom:18px;padding:17px 18px 16px;border:1px solid rgba(255,255,255,.12);border-radius:24px;background:rgba(12,17,21,.94);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 22px 70px rgba(0,0,0,.55);transform:translateY(130%);transition:transform .28s ease}
+.wordSheet.show{transform:translateY(0)}
+.wordMain{display:flex;align-items:baseline;gap:10px}.wordHan{font-size:27px;font-weight:850}.wordPy{font-size:14px;color:#e7bd73}.wordMean{margin-top:7px;font-size:14px;line-height:1.5;color:#e5e8e9}.wordVi{margin-top:4px;font-size:12px;line-height:1.5;color:#9da8af}.wordClose{position:absolute;right:12px;top:10px;border:0;background:transparent;color:#9da8af;font-size:22px;padding:6px}
+.body.wordReady .tapWord{border-bottom:1px dotted rgba(231,189,115,.55);cursor:pointer}
 </style>
 </head>
 <body>
@@ -123,7 +128,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
     <div class="count" id="count">1 / 8</div>
   </div>
   <div class="status" id="status">声音 1 · 沉稳男声</div>
-  <div class="sceneNav" id="sceneNav" aria-label="场景进度"></div><div class="storyText">
+  <div class="sceneNav" id="sceneNav" aria-label="场景进度"></div><div class="wordSheet" id="wordSheet" role="dialog" aria-live="polite"><button class="wordClose" onclick="closeWord()">×</button><div class="wordMain"><span class="wordHan" id="wordHan"></span><span class="wordPy" id="wordPy"></span></div><div class="wordMean" id="wordMean"></div><div class="wordVi" id="wordVi"></div></div><div class="storyText">
     <div class="scene" id="scene"></div>
     <div class="body" id="body"></div>
   </div>
@@ -220,6 +225,59 @@ const STORIES={
     ]
   }
 };
+
+const WORDS={
+  "钟楼":["zhōng lóu","tower with a bell","tháp chuông"],
+  "胡同":["hú tòng","traditional Beijing alley","ngõ / hẻm truyền thống ở Bắc Kinh"],
+  "早点":["zǎo diǎn","breakfast / morning food","đồ ăn sáng"],
+  "柴":["chái","firewood","củi"],
+  "脚夫":["jiǎo fū","porter / laborer carrying goods","người khuân vác"],
+  "外乡人":["wài xiāng rén","person from another place","người từ nơi khác đến"],
+  "前门":["qián mén","Qianmen, a historic Beijing gate area","Tiền Môn, khu vực cổng lịch sử ở Bắc Kinh"],
+  "大栅栏":["dà shí làn","Dashilar, historic commercial area","Đại Sách Lan, khu thương mại lịch sử"],
+  "绸布庄":["chóu bù zhuāng","silk and cloth shop","cửa hàng lụa và vải"],
+  "门槛":["mén kǎn","door threshold","bậc cửa"],
+  "棉衣":["mián yī","padded cotton clothes","áo bông"],
+  "炭":["tàn","charcoal","than"],
+  "炉火":["lú huǒ","fire in a stove","lửa bếp"],
+  "屋檐":["wū yán","eaves","mái hiên"],
+  "吆喝":["yāo he","to call out to attract customers","rao hàng"],
+  "掌柜":["zhǎng guì","shopkeeper","chủ cửa hàng"]
+};
+function highlightWords(text){
+  const keys=Object.keys(WORDS).sort((a,b)=>b.length-a.length);
+  let out="",i=0;
+  while(i<text.length){
+    let found=null;
+    for(const k of keys)if(text.startsWith(k,i)){found=k;break}
+    if(found){out+='<span class="tapWord" data-word="'+found+'">'+found+'</span>';i+=found.length}
+    else{out+=text[i];i++}
+  }
+  return out;
+}
+function bindWordLongPress(){
+  document.querySelectorAll(".tapWord").forEach(el=>{
+    let timer=null;
+    const start=()=>{timer=setTimeout(()=>openWord(el.dataset.word),420)};
+    const cancel=()=>{if(timer){clearTimeout(timer);timer=null}};
+    el.addEventListener("touchstart",start,{passive:true});
+    el.addEventListener("touchend",cancel,{passive:true});
+    el.addEventListener("touchcancel",cancel,{passive:true});
+    el.addEventListener("mousedown",start);
+    el.addEventListener("mouseup",cancel);
+    el.addEventListener("mouseleave",cancel);
+    el.addEventListener("click",()=>openWord(el.dataset.word));
+  });
+}
+function openWord(word){
+  const d=WORDS[word];if(!d)return;
+  document.getElementById("wordHan").textContent=word;
+  document.getElementById("wordPy").textContent=d[0];
+  document.getElementById("wordMean").textContent=d[1];
+  document.getElementById("wordVi").textContent=d[2];
+  document.getElementById("wordSheet").classList.add("show");
+}
+function closeWord(){document.getElementById("wordSheet").classList.remove("show")}
 
 const audio=document.getElementById("audio");
 const speeds=[.8,1,1.2,1.5];
@@ -407,7 +465,9 @@ function renderScene(i){
   sceneIndex=i;
   document.getElementById("storyBg").style.backgroundImage='url("'+s.images[i]+'")';
   document.getElementById("scene").textContent=s.scenes[i].n;
-  document.getElementById("body").textContent=s.scenes[i].t;
+  document.getElementById("body").innerHTML=highlightWords(s.scenes[i].t);
+  document.getElementById("body").classList.add("wordReady");
+  bindWordLongPress();
   document.getElementById("count").textContent=(i+1)+" / "+s.scenes.length;
   renderSceneNav();
   preloadScene(i+1);
