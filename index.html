@@ -407,8 +407,11 @@ function cycleVoice(){
     return;
   }
   const oldTime=audio.currentTime||0;
-  const oldDuration=(audio.duration&&isFinite(audio.duration))?audio.duration:0;
-  const ratio=oldDuration?oldTime/oldDuration:0;
+  const oldStarts=sceneStarts();
+  const oldScene=sceneForTime(oldTime);
+  const oldSceneStart=oldStarts[oldScene]||0;
+  const oldSceneEnd=(oldScene<oldStarts.length-1)?oldStarts[oldScene+1]:(audio.duration||oldSceneStart+1);
+  const sceneRatio=Math.max(0,Math.min(1,(oldTime-oldSceneStart)/Math.max(.2,oldSceneEnd-oldSceneStart)));
   const wasPlaying=!audio.paused;
   voiceIndex=(voiceIndex+1)%s.voices.length;
   audio.src=s.voices[voiceIndex];
@@ -419,8 +422,12 @@ function cycleVoice(){
   setupMedia();
   const restoreVoicePosition=()=>{
     if(audio.duration&&isFinite(audio.duration)){
-      audio.currentTime=Math.max(0,Math.min(audio.duration-0.05,ratio*audio.duration));
-      renderScene(sceneForTime(audio.currentTime));
+      const newStarts=sceneStarts();
+      const newStart=newStarts[oldScene]||0;
+      const newEnd=(oldScene<newStarts.length-1)?newStarts[oldScene+1]:audio.duration;
+      audio.currentTime=Math.max(0,Math.min(audio.duration-0.05,newStart+sceneRatio*Math.max(.2,newEnd-newStart)));
+      sceneIndex=-1;
+      renderScene(oldScene);
       renderTextProgress(audio.currentTime);
     }
     if(wasPlaying)resumePlayback();
