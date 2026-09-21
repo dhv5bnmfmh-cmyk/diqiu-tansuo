@@ -589,6 +589,7 @@ audio.addEventListener("timeupdate",()=>{
   document.getElementById("elapsed").textContent=fmt(t);
   document.getElementById("remaining").textContent="-"+fmt(Math.max(0,d-t));
   renderScene(sceneForTime(t));
+  renderTextProgress(t);
   if("mediaSession" in navigator && navigator.mediaSession.setPositionState && d&&isFinite(d)){
     try{navigator.mediaSession.setPositionState({duration:d,playbackRate:audio.playbackRate,position:Math.min(t,d)})}catch(e){}
   }
