@@ -59,7 +59,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
 .storyText{position:absolute;z-index:4;left:25px;right:25px;bottom:158px}
 .scene{font-size:11px;color:var(--gold);letter-spacing:.11em;margin-bottom:10px;font-weight:760}
 .body{font-size:21px;line-height:1.68;text-shadow:0 2px 16px rgba(0,0,0,.68)}
-.karaChar{display:inline;opacity:0;filter:blur(1.8px);color:rgba(247,243,234,.28);transition:opacity .32s ease,filter .32s ease,color .32s ease}.karaChar.visible{opacity:1;filter:blur(0);color:inherit}.karaChar.future{opacity:0}
+.karaChar{display:inline;opacity:.38;filter:blur(.35px);color:rgba(247,243,234,.52);transition:opacity .55s ease,filter .55s ease,color .55s ease}.karaChar.visible{opacity:1;filter:blur(0);color:inherit}.karaChar.future{opacity:.38;filter:blur(.35px);color:rgba(247,243,234,.52)}
 .player{position:absolute;z-index:8;left:0;right:0;bottom:0;padding:6px 14px calc(13px + env(safe-area-inset-bottom))}
 .playerGlass{
   background:linear-gradient(180deg,rgba(26,32,37,.78),rgba(12,17,21,.91));
@@ -396,15 +396,17 @@ function cycleVoice(){
   const s=story();
   if(speechMode){
     prepareSpeechVoices();
-    if(speechVoices.length){
-      speechVoiceIndex=(speechVoiceIndex+1)%speechVoices.length;
-      voiceIndex=speechVoiceIndex;
-      updateVoiceUI();
-      if(window.speechSynthesis.speaking||window.speechSynthesis.paused){
-        window.speechSynthesis.cancel();
-        speakScene(sceneIndex<0?0:sceneIndex);
-      }
+    if(!speechVoices.length){
+      showVoiceStatus("此设备没有可用的中文系统声音");
+      return;
     }
+    speechVoiceIndex=(speechVoiceIndex+1)%speechVoices.length;
+    voiceIndex=speechVoiceIndex;
+    const target=sceneIndex<0?0:sceneIndex;
+    const wasSpeaking=window.speechSynthesis.speaking||window.speechSynthesis.paused;
+    window.speechSynthesis.cancel();
+    updateVoiceUI();
+    if(wasSpeaking || target>=0)speakScene(target);
     return;
   }
   const oldTime=audio.currentTime||0;
@@ -440,9 +442,19 @@ function cycleVoice(){
 function prepareSpeechVoices(){
   if(!("speechSynthesis" in window))return;
   const all=window.speechSynthesis.getVoices();
-  const mainland=all.filter(v=>/^zh-CN/i.test(v.lang));
-  const chinese=all.filter(v=>/^zh/i.test(v.lang));
-  speechVoices=mainland.length?mainland:(chinese.length?chinese:[]);
+  const zh=all.filter(v=>/^zh-(CN|Hans)/i.test(v.lang));
+  const preferred=["Ting-Ting","Meijia","Sin-ji","婷婷","美佳","欣欣","小琪"];
+  const ranked=[...zh].sort((a,b)=>{
+    const ai=preferred.findIndex(n=>a.name.toLowerCase().includes(n.toLowerCase()));
+    const bi=preferred.findIndex(n=>b.name.toLowerCase().includes(n.toLowerCase()));
+    return (ai<0?99:ai)-(bi<0?99:bi);
+  });
+  const seen=new Set();
+  speechVoices=ranked.filter(v=>{
+    const key=(v.name+"|"+v.lang).toLowerCase();
+    if(seen.has(key))return false;
+    seen.add(key);return true;
+  });
   if(speechVoiceIndex>=speechVoices.length)speechVoiceIndex=0;
 }
 function speakScene(i){
@@ -451,38 +463,48 @@ function speakScene(i){
   if(i<0||i>=s.scenes.length)return;
   window.speechSynthesis.cancel();
   renderScene(i);
-  const u=new SpeechSynthesisUtterance(s.scenes[i].t);
+  const text=s.scenes[i].t;
+  const u=new SpeechSynthesisUtterance(text);
   prepareSpeechVoices();
-  if(speechVoices.length)u.voice=speechVoices[speechVoiceIndex];
+  const v=speechVoices[speechVoiceIndex];
+  if(v){u.voice=v;u.lang=v.lang||"zh-CN";}else{u.lang="zh-CN";}
   u.rate=speeds[speedIndex];
   u.pitch=1;
-  u.lang=(u.voice&&u.voice.lang)||"zh-CN";
-  let lastBoundary=0;
-  u.onstart=()=>{document.getElementById("play").textContent="⏸";renderTextProgress(0)};
+  u.volume=1;
+  let revealed=0;
+  const renderCinema=(n)=>{
+    const body=document.getElementById("body");
+    const chunk=8;
+    const count=Math.max(0,Math.min(text.length,Math.floor(Math.max(0,n)/chunk)*chunk));
+    body.innerHTML=highlightWords(text,count);
+    body.classList.add("wordReady");
+    bindWordLongPress();
+  };
+  u.onstart=()=>{sceneIndex=i;document.getElementById("play").textContent="⏸";renderCinema(0)};
   u.onboundary=(e)=>{
     if(typeof e.charIndex==="number"){
-      lastBoundary=e.charIndex;
-      const text=s.scenes[i].t;
-      const body=document.getElementById("body");
-      body.innerHTML=highlightWords(text,lastBoundary+1);
-      body.classList.add("wordReady");
-      bindWordLongPress();
+      revealed=Math.max(revealed,e.charIndex+1);
+      renderCinema(revealed);
     }
   };
-  u.onend=()=>{if(sceneIndex<i)return;if(i<s.scenes.length-1){speakScene(i+1)}else{document.getElementById("play").textContent="↻"}};
+  u.onend=()=>{if(sceneIndex!==i)return;if(i<s.scenes.length-1){speakScene(i+1)}else{document.getElementById("play").textContent="↻"}};
+  u.onerror=()=>{document.getElementById("play").textContent="▶";showVoiceStatus("朗读声音切换失败，请再点一次声音");};
   window.speechSynthesis.speak(u);
 }
 if("speechSynthesis" in window)window.speechSynthesis.onvoiceschanged=prepareSpeechVoices;
 
+function showVoiceStatus(message){
+  const s=document.getElementById("status");
+  s.textContent=message;
+  s.classList.add("show");
+  clearTimeout(window.__voiceStatusTimer);
+  window.__voiceStatusTimer=setTimeout(()=>s.classList.remove("show"),1600);
+}
 function updateVoiceUI(){
   prepareSpeechVoices();
-  const label=speechVoices[voiceIndex]?.name||("中文声音 "+(voiceIndex+1));
-  document.getElementById("voice").textContent="声音 "+(voiceIndex+1);
-
-  const s=document.getElementById("status");
-  s.textContent=label;
-  s.classList.add("show");
-  setTimeout(()=>s.classList.remove("show"),1300);
+  const v=speechVoices[speechVoiceIndex];
+  document.getElementById("voice").textContent=v?"中文 "+(speechVoiceIndex+1):"中文声音";
+  showVoiceStatus(v?(v.name+" · "+v.lang):"等待中文系统声音");
 }
 
 function sceneStarts(){
