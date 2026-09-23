@@ -59,7 +59,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
 .storyText{position:absolute;z-index:4;left:25px;right:25px;bottom:158px}
 .scene{font-size:11px;color:var(--gold);letter-spacing:.11em;margin-bottom:10px;font-weight:760}
 .body{font-size:21px;line-height:1.68;text-shadow:0 2px 16px rgba(0,0,0,.68)}
-.karaChar.future{display:none}.karaChar.visible{display:inline}
+.karaChar{display:inline;opacity:0;filter:blur(1.8px);color:rgba(247,243,234,.28);transition:opacity .32s ease,filter .32s ease,color .32s ease}.karaChar.visible{opacity:1;filter:blur(0);color:inherit}.karaChar.future{opacity:0}
 .player{position:absolute;z-index:8;left:0;right:0;bottom:0;padding:6px 14px calc(13px + env(safe-area-inset-bottom))}
 .playerGlass{
   background:linear-gradient(180deg,rgba(26,32,37,.78),rgba(12,17,21,.91));
@@ -266,6 +266,7 @@ function highlightWords(text, visibleCount=text.length){
 }
 function renderTextProgress(t){
   const s=story();
+  if(speechMode)return;
   if(sceneIndex<0||sceneIndex>=s.scenes.length)return;
   const starts=sceneStarts();
   const start=starts[sceneIndex]||0;
@@ -306,7 +307,7 @@ function closeWord(){document.getElementById("wordSheet").classList.remove("show
 const audio=document.getElementById("audio");
 const speeds=[.8,1,1.2,1.5];
 let storyKey="bj001",voiceIndex=0,speedIndex=1,sceneIndex=-1;
-let speechMode=false,speechVoices=[],speechVoiceIndex=0;
+let speechMode=true,speechVoices=[],speechVoiceIndex=0;
 
 function story(){return STORIES[storyKey]}
 function weights(){return story().scenes.map(s=>s.t.replace(/[\s“”。，！？：；、]/g,"").length+10)}
@@ -334,7 +335,7 @@ function startStory(key){
   sceneIndex=-1;
   const s=story();
 
-  speechMode=false;
+  speechMode=true;
   document.getElementById("story").classList.toggle("speechMode",speechMode);
   audio.pause();
   audio.src=s.voices[voiceIndex];
@@ -397,7 +398,7 @@ function cycleVoice(){
     prepareSpeechVoices();
     if(speechVoices.length){
       speechVoiceIndex=(speechVoiceIndex+1)%speechVoices.length;
-      voiceIndex=(speechVoiceIndex%3);
+      voiceIndex=speechVoiceIndex;
       updateVoiceUI();
       if(window.speechSynthesis.speaking||window.speechSynthesis.paused){
         window.speechSynthesis.cancel();
@@ -439,8 +440,9 @@ function cycleVoice(){
 function prepareSpeechVoices(){
   if(!("speechSynthesis" in window))return;
   const all=window.speechSynthesis.getVoices();
-  speechVoices=all.filter(v=>/^zh/i.test(v.lang));
-  if(!speechVoices.length)speechVoices=all;
+  const mainland=all.filter(v=>/^zh-CN/i.test(v.lang));
+  const chinese=all.filter(v=>/^zh/i.test(v.lang));
+  speechVoices=mainland.length?mainland:(chinese.length?chinese:[]);
   if(speechVoiceIndex>=speechVoices.length)speechVoiceIndex=0;
 }
 function speakScene(i){
@@ -455,16 +457,30 @@ function speakScene(i){
   u.rate=speeds[speedIndex];
   u.pitch=1;
   u.lang=(u.voice&&u.voice.lang)||"zh-CN";
-  u.onstart=()=>{document.getElementById("play").textContent="⏸"};
+  let lastBoundary=0;
+  u.onstart=()=>{document.getElementById("play").textContent="⏸";renderTextProgress(0)};
+  u.onboundary=(e)=>{
+    if(typeof e.charIndex==="number"){
+      lastBoundary=e.charIndex;
+      const text=s.scenes[i].t;
+      const body=document.getElementById("body");
+      body.innerHTML=highlightWords(text,lastBoundary+1);
+      body.classList.add("wordReady");
+      bindWordLongPress();
+    }
+  };
   u.onend=()=>{if(sceneIndex<i)return;if(i<s.scenes.length-1){speakScene(i+1)}else{document.getElementById("play").textContent="↻"}};
   window.speechSynthesis.speak(u);
 }
 if("speechSynthesis" in window)window.speechSynthesis.onvoiceschanged=prepareSpeechVoices;
 
 function updateVoiceUI(){
+  prepareSpeechVoices();
+  const label=speechVoices[voiceIndex]?.name||("中文声音 "+(voiceIndex+1));
   document.getElementById("voice").textContent="声音 "+(voiceIndex+1);
+
   const s=document.getElementById("status");
-  s.textContent=VOICE_NAMES[voiceIndex];
+  s.textContent=label;
   s.classList.add("show");
   setTimeout(()=>s.classList.remove("show"),1300);
 }
