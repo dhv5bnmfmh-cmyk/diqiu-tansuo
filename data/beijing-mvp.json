@@ -1,0 +1,31 @@
+{
+  "city": "北京",
+  "version": "1.0",
+  "storyPolicy": {
+    "realPlacesOnly": true,
+    "realPeopleOnly": true,
+    "fictionalCharactersMustBeLabeled": true,
+    "sourceRequired": true,
+    "copyrightRequired": true
+  },
+  "stories": [
+    {
+      "id": "BJ-001",
+      "title": "天亮以前的钟楼",
+      "type": "literary_scene",
+      "status": "prototype"
+    },
+    {
+      "id": "BJ-002",
+      "title": "前门来了一个外乡人",
+      "type": "literary_scene",
+      "status": "prototype"
+    },
+    {
+      "id": "BJ-003",
+      "title": "紫禁城：墙里面的时间",
+      "type": "historical_overview",
+      "status": "prototype"
+    }
+  ]
+}
